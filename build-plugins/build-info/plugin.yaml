@@ -1,0 +1,24 @@
+tasks:
+  check:
+    action: !io.github.yuroyami.libmpvkt.buildplugins.buildinfo.checkBuildInfo
+      moduleName: ${module.name}
+      version: ${module.settings.publishing.version}
+      minSdk: ${pluginSettings.minSdk}
+      depinfo: ${project.rootDir}/buildscripts/include/depinfo.sh
+      sourceFile: ${module.rootDir}/${pluginSettings.file}
+
+  update:
+    action: !io.github.yuroyami.libmpvkt.buildplugins.buildinfo.updateBuildInfo
+      moduleName: ${module.name}
+      version: ${module.settings.publishing.version}
+      minSdk: ${pluginSettings.minSdk}
+      depinfo: ${project.rootDir}/buildscripts/include/depinfo.sh
+      sourceFile: ${module.rootDir}/${pluginSettings.file}
+
+checks:
+  - name: buildInfo
+    performedBy: check
+
+commands:
+  - name: updateBuildInfo
+    performedBy: update

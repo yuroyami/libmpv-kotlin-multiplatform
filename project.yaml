@@ -1,0 +1,22 @@
+# The library modules and the local build plugins of libmpvKt.
+modules:
+  - build-plugins/abi-check
+  - build-plugins/android-abi-check
+  - build-plugins/android-natives
+  - build-plugins/build-info
+  - build-plugins/build-support
+  - build-plugins/dokka
+  - libmpvkt
+  - libmpvkt-android-natives
+  - libmpvkt-canvas
+  - libmpvkt-canvas-android-natives
+  - libmpvkt-compose
+  - libmpvkt-native
+  - libmpvkt-view
+
+plugins:
+  - //build-plugins/abi-check
+  - //build-plugins/android-abi-check
+  - //build-plugins/android-natives
+  - //build-plugins/build-info
+  - //build-plugins/dokka

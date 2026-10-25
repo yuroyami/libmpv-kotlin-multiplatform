@@ -1,0 +1,26 @@
+tasks:
+  dumpAndroid:
+    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.dumpAndroidAbi
+      moduleName: ${module.name}
+      buildDir: ${project.rootDir}/build
+      dumpFile: ${taskOutputDir}/android.api
+
+  checkAndroid:
+    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.checkAndroidAbi
+      moduleName: ${module.name}
+      builtDump: ${tasks.dumpAndroid.action.dumpFile}
+      committedDump: ${module.rootDir}/${pluginSettings.dumpDir}/${module.name}.api
+
+  updateAndroid:
+    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.updateAndroidAbi
+      builtDump: ${tasks.dumpAndroid.action.dumpFile}
+      committedDump: ${tasks.checkAndroid.action.committedDump}
+
+checks:
+  # Run `./kotlin build -p android` first.
+  - name: androidAbi
+    performedBy: checkAndroid
+
+commands:
+  - name: updateAndroidAbi
+    performedBy: updateAndroid

@@ -1,0 +1,36 @@
+# The Android libraries of libmpvkt-native, as lib/<abi>/*.so in a plain jar. AGP unpacks lib/<abi>/
+# of a jar dependency into the APK, which an AAR built by the Kotlin toolchain cannot carry itself.
+# libmpvkt-native depends on it for Android only, so apps never add it. The jar also carries the
+# keep rules in META-INF/proguard/, which AGP reads from jar dependencies.
+product: jvm/lib
+
+apply:
+  - //libmpvkt.module-template.yaml
+  - //library.module-template.yaml
+
+settings:
+  publishing:
+    pom:
+      name: libmpvkt-android-natives
+      description: "The Android libraries of libmpvkt-native: mpv, FFmpeg and the JNI library for arm64-v8a, armeabi-v7a, x86 and x86_64. It comes with libmpvkt-native; never add it yourself. The native libraries are GPL."
+
+plugins:
+  android-natives:
+    enabled: true
+    nativeLibsDir: libmpvkt-native/native-libs
+    files:
+      - libavcodec.so
+      - libavdevice.so
+      - libavfilter.so
+      - libavformat.so
+      - libavutil.so
+      - libswresample.so
+      - libswscale.so
+      - libmpv.so
+      - libmpvkt_jni.so
+      - libc++_shared.so
+    minApi: 21
+    # Its presence proves that the C side was compiled for this Kotlin package.
+    probeSymbol: Java_io_github_yuroyami_libmpvkt_jni_MpvNative_create
+    # Only the NDK r29 libc++ has __from_chars_floating_point. An older one crashes libmpv at load.
+    libcxxMarker: from_chars_floating

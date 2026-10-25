@@ -1,0 +1,84 @@
+public final class io/github/yuroyami/libmpvkt/BuildInfo {
+	public static final field DAV1D Ljava/lang/String;
+	public static final field FFMPEG Ljava/lang/String;
+	public static final field FREETYPE Ljava/lang/String;
+	public static final field FRIBIDI Ljava/lang/String;
+	public static final field HARFBUZZ Ljava/lang/String;
+	public static final field INSTANCE Lio/github/yuroyami/libmpvkt/BuildInfo;
+	public static final field LIBASS Ljava/lang/String;
+	public static final field LIBMPVKT Ljava/lang/String;
+	public static final field LIBPLACEBO Ljava/lang/String;
+	public static final field LIBUNIBREAK Ljava/lang/String;
+	public static final field LUA Ljava/lang/String;
+	public static final field MBEDTLS Ljava/lang/String;
+	public static final field MIN_SDK I
+	public static final field MPV Ljava/lang/String;
+	public static final field NDK Ljava/lang/String;
+	public final fun getABIS ()Ljava/util/List;
+}
+
+public final class io/github/yuroyami/libmpvkt/jni/MpvNative {
+	public static final field INSTANCE Lio/github/yuroyami/libmpvkt/jni/MpvNative;
+	public final fun abortAsyncCommand (JJ)V
+	public final fun clientApiVersion ()J
+	public final fun clientId (J)J
+	public final fun clientName (J)Ljava/lang/String;
+	public final fun command (J[Ljava/lang/String;)I
+	public final fun commandAsync (JJ[Ljava/lang/String;)I
+	public final fun commandNode (J[B)[B
+	public final fun commandNodeAsync (JJ[B)I
+	public final fun commandString (JLjava/lang/String;)I
+	public final fun create ()J
+	public final fun createClient (JLjava/lang/String;)J
+	public final fun createWeakClient (JLjava/lang/String;)J
+	public final fun delProperty (JLjava/lang/String;)I
+	public final fun destroy (J)V
+	public final fun errorString (I)Ljava/lang/String;
+	public final fun eventName (I)Ljava/lang/String;
+	public final fun getPropertyAsync (JJLjava/lang/String;)I
+	public final fun getPropertyNode (JLjava/lang/String;)[B
+	public final fun getPropertyOsdString (JLjava/lang/String;)Ljava/lang/String;
+	public final fun getPropertyString (JLjava/lang/String;)Ljava/lang/String;
+	public final fun hookAdd (JJLjava/lang/String;I)I
+	public final fun hookContinue (JJ)I
+	public final fun initAndroid (Landroid/content/Context;)V
+	public final fun initialize (J)I
+	public final fun loadConfigFile (JLjava/lang/String;)I
+	public final fun observeProperty (JJLjava/lang/String;I)I
+	public final fun releaseSurfaceHandle (J)V
+	public final fun requestEvent (JIZ)I
+	public final fun requestLogMessages (JLjava/lang/String;)I
+	public final fun setOptionNode (JLjava/lang/String;[B)I
+	public final fun setOptionString (JLjava/lang/String;Ljava/lang/String;)I
+	public final fun setPropertyAsync (JJLjava/lang/String;[B)I
+	public final fun setPropertyNode (JLjava/lang/String;[B)I
+	public final fun setPropertyString (JLjava/lang/String;Ljava/lang/String;)I
+	public final fun streamCbAddRo (JLjava/lang/String;Lio/github/yuroyami/libmpvkt/stream/MpvStreamProvider;)I
+	public final fun surfaceHandle (Landroid/view/Surface;)J
+	public final fun terminateDestroy (J)V
+	public final fun timeUs (J)J
+	public final fun unobserveProperty (JJ)I
+	public final fun waitEvent (JD)[B
+	public final fun wakeup (J)V
+}
+
+public abstract interface annotation class io/github/yuroyami/libmpvkt/jni/MpvNativeApi : java/lang/annotation/Annotation {
+}
+
+public abstract interface class io/github/yuroyami/libmpvkt/stream/MpvStream {
+	public fun cancel ()V
+	public abstract fun close ()V
+	public abstract fun isSeekable ()Z
+	public abstract fun read (Ljava/nio/ByteBuffer;)I
+	public abstract fun seek (J)J
+	public abstract fun size ()J
+}
+
+public final class io/github/yuroyami/libmpvkt/stream/MpvStream$DefaultImpls {
+	public static fun cancel (Lio/github/yuroyami/libmpvkt/stream/MpvStream;)V
+}
+
+public abstract interface class io/github/yuroyami/libmpvkt/stream/MpvStreamProvider {
+	public abstract fun open (Ljava/lang/String;)Lio/github/yuroyami/libmpvkt/stream/MpvStream;
+}
+

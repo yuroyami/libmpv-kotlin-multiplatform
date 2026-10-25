@@ -1,0 +1,28 @@
+# The native half of libmpvKt: MpvNative, the raw binding, and BuildInfo. The prebuilt Android
+# libraries ride libmpvkt-android-natives, a plain jar that AGP unpacks into the APK.
+product:
+  type: kmp/lib
+  platforms: [ android ]
+
+apply:
+  - //libmpvkt.module-template.yaml
+  - //android.module-template.yaml
+  - //library.module-template.yaml
+
+# The Android libraries ship in a plain jar, which AGP unpacks into the APK's lib/ folder.
+dependencies@android:
+  - //libmpvkt-android-natives
+
+settings:
+  android:
+    namespace: io.github.yuroyami.libmpvkt.jni
+  publishing:
+    pom:
+      name: libmpvkt-native
+      description: "The native half of libmpvKt: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64 with 16 KB page alignment, and MpvNative, the raw binding. The native libraries are GPL."
+
+plugins:
+  android-abi-check: enabled
+  build-info:
+    enabled: true
+    file: src@android/io/github/yuroyami/libmpvkt/BuildInfo.kt

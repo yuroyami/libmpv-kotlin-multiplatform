@@ -1,0 +1,16 @@
+product: jvm/amper-plugin
+
+description: Packages prebuilt Android native libraries as lib/<abi>/ resources of a plain jar, and checks them.
+
+pluginInfo:
+  settingsClass: io.github.yuroyami.libmpvkt.buildplugins.androidnatives.AndroidNativesSettings
+
+dependencies:
+  - //build-plugins/build-support
+
+settings:
+  kotlin:
+    version: 2.4.21
+  jvm:
+    jdk:
+      version: 21

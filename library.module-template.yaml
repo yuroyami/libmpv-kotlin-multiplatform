@@ -1,0 +1,41 @@
+# Settings that every published libmpvKt library shares, on top of libmpvkt.module-template.yaml.
+# Each library sets its own POM name and description.
+
+# `./kotlin publish mavenLocal -m <module>` puts a build into ~/.m2 for tests in other projects.
+repositories:
+  - url: mavenLocal
+    publish: true
+    resolve: false
+
+settings:
+  kotlin:
+    explicitApi: strict
+  publishing:
+    enabled: true
+    group: io.github.yuroyami
+    version: 0.3.0
+    pom:
+      url: https://github.com/yuroyami/libmpvKt
+      licenses:
+        # The Kotlin wrapper, the JNI sources and the build scripts.
+        - name: Apache License 2.0
+          url: https://www.apache.org/licenses/LICENSE-2.0.txt
+        # The native libraries. mpv is GPL-2.0-or-later and its FFmpeg is built with
+        # --enable-gpl --enable-version3, so the combination is GPL-3.0-or-later. NOTICE lists each library.
+        - name: GNU General Public License v3.0 or later
+          url: https://www.gnu.org/licenses/gpl-3.0.txt
+      # Maven Central rejects a bundle with no developer. Identity only, no address.
+      developers:
+        - id: yuroyami
+          name: yuroyami
+          url: https://github.com/yuroyami
+      scm:
+        url: https://github.com/yuroyami/libmpvKt
+        connection: scm:git:https://github.com/yuroyami/libmpvKt.git
+        developerConnection: scm:git:ssh://git@github.com/yuroyami/libmpvKt.git
+    signArtifacts: true
+    publishSources: true
+    # manual uploads and validates the bundle, then waits for Publish on the Central Portal.
+    mavenCentral:
+      enabled: true
+      publishingMode: manual

@@ -89,7 +89,7 @@ else
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := mpvkt_render
-LOCAL_SRC_FILES := ../../../libmpvkt-canvas/src/androidMain/cpp/render.cpp
+LOCAL_SRC_FILES := ../../../libmpvkt-canvas/native/render.cpp
 LOCAL_CFLAGS    := -Wall -Wextra -Werror -fvisibility=hidden
 LOCAL_CPPFLAGS  += -std=c++20 -fvisibility-inlines-hidden
 LOCAL_SHARED_LIBRARIES := mpv
