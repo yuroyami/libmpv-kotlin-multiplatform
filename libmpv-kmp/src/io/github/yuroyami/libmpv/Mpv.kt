@@ -1,20 +1,20 @@
 package io.github.yuroyami.libmpv
 
-import android.content.Context
-import android.util.Log
-import android.view.Surface
-import io.github.yuroyami.libmpv.jni.MpvAndroidNative
 import io.github.yuroyami.libmpv.jni.MpvNative
 import io.github.yuroyami.libmpv.jni.MpvNativeApi
-import io.github.yuroyami.libmpv.stream.MpvStreamProvider
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicLong
+import kotlin.concurrent.Volatile
+import kotlinx.atomicfu.atomic
+import kotlinx.atomicfu.update
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CloseableCoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -30,6 +30,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * One libmpv core, or one client handle on a shared core (see [createClient]).
@@ -42,7 +45,7 @@ import kotlinx.coroutines.launch
  * mpv errors are [MpvResult] values. [close] waits for calls already inside native code on other
  * threads; calling anything after it throws [IllegalStateException].
  */
-@OptIn(MpvNativeApi::class)
+@OptIn(MpvNativeApi::class, ExperimentalCoroutinesApi::class)
 public class Mpv private constructor(
     private val handle: Long,
     private val ownsCore: Boolean,
@@ -52,23 +55,24 @@ public class Mpv private constructor(
 
     public val clientName: String = MpvNative.clientName(handle)
 
-    private val closing = AtomicBoolean(false)
+    private val closing = atomic(false)
 
     /** Every native call on [handle] runs inside this gate, so [close] can wait for it. */
     private val gate = CallGate()
 
     /** Clients made with [createClient]. mpv_terminate_destroy waits for every one, so [close] closes them first. */
-    private val clients: MutableSet<Mpv> = ConcurrentHashMap.newKeySet()
+    private val clients = LockedMap<Mpv, Unit>()
 
     @Volatile
     private var initialized = false
 
-    private val replyIds = AtomicLong(1)
+    private val replyIds = atomic(1L)
     private val replies = PendingReplies()
-    private val observers = ConcurrentHashMap<Long, (MpvNode) -> Unit>()
-    private val hooks = ConcurrentHashMap<Long, suspend (MpvEvent.Hook) -> Unit>()
+    private val observers = LockedMap<Long, (MpvNode) -> Unit>()
+    private val hooks = LockedMap<Long, suspend (MpvEvent.Hook) -> Unit>()
     private val hookScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val listeners = CopyOnWriteArrayList<(MpvEvent) -> Unit>()
+    /** Replaced on every add, so the event thread walks a list that never changes under it. */
+    private val listeners = atomic(emptyList<(MpvEvent) -> Unit>())
 
     /** Every event of this handle except log lines, in order. Slow collectors lose the oldest events, never the newest. */
     public val events: SharedFlow<MpvEvent>
@@ -78,7 +82,14 @@ public class Mpv private constructor(
     public val logs: SharedFlow<MpvEvent.LogMessage>
         field = MutableSharedFlow(extraBufferCapacity = 512, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    private val eventThread = Thread({ pump() }, "mpv-events-$clientName").apply { isDaemon = true }
+    /** The event thread and its loop, from [initialize] or [createClient] on. */
+    private class Pump(val dispatcher: CloseableCoroutineDispatcher, val job: Job)
+
+    @Volatile
+    private var eventPump: Pump? = null
+
+    /** [currentThreadKey] of the event thread, once its loop runs. */
+    private val pumpThreadKey = atomic(Long.MIN_VALUE)
 
     /** The raw `mpv_handle`, for the library's own renderer. Not for apps. */
     @InternalLibmpvKmpApi
@@ -91,6 +102,7 @@ public class Mpv private constructor(
     @InternalLibmpvKmpApi
     public fun <R> withNativeHandle(block: (Long) -> R): R = gate.call { block(handle) }
 
+    private val beforeCloseLock = SynchronizedObject()
     private val beforeClose = mutableListOf<() -> Unit>()
 
     /**
@@ -98,19 +110,19 @@ public class Mpv private constructor(
      * dies first. Dispose the handle when the owner of [block] closes first, so the core stops holding it.
      */
     public fun onBeforeClose(block: () -> Unit): DisposableHandle {
-        synchronized(beforeClose) {
-            check(!closing.get()) { "this Mpv is closed" }
+        synchronized(beforeCloseLock) {
+            check(!closing.value) { "this Mpv is closed" }
             beforeClose += block
         }
         return object : DisposableHandle {
             override fun dispose() {
-                synchronized(beforeClose) { beforeClose.remove(block) }
+                synchronized(beforeCloseLock) { beforeClose.remove(block) }
             }
         }
     }
 
     public val isInitialized: Boolean get() = initialized
-    public val isClosed: Boolean get() = closing.get()
+    public val isClosed: Boolean get() = closing.value
 
     // ---- lifecycle ----
 
@@ -129,7 +141,7 @@ public class Mpv private constructor(
         val r = MpvNative.initialize(handle)
         if (r >= 0) {
             initialized = true
-            eventThread.start()
+            startPump()
         }
         unitResult(r)
     }
@@ -142,29 +154,26 @@ public class Mpv private constructor(
         val h = MpvNative.createClient(handle, name)
         check(h != 0L) { "mpv_create_client failed" }
         Mpv(h, ownsCore = false, parent = this).also {
-            clients += it
+            clients[it] = Unit
             it.initialized = true
-            it.eventThread.start()
+            it.startPump()
         }
     }
 
     override fun close() {
         if (!closing.compareAndSet(false, true)) return
-        synchronized(beforeClose) { beforeClose.toList().also { beforeClose.clear() } }.forEach { runCatching(it) }
+        synchronized(beforeCloseLock) { beforeClose.toList().also { beforeClose.clear() } }.forEach { runCatching(it) }
         // New calls fail from here, and the calls already inside native code finish before the handle is freed.
         gate.close()
         // mpv_terminate_destroy waits for every client of the core, so the clients go first.
-        clients.toList().forEach { it.close() }
-        if (eventThread.isAlive && Thread.currentThread() !== eventThread) {
-            MpvNative.wakeup(handle)
-            eventThread.join(5_000)
-        }
+        clients.keys().forEach { it.close() }
+        stopPump()
         hookScope.cancel()
         replies.end()
         observers.clear()
         if (ownsCore) MpvNative.terminateDestroy(handle) else MpvNative.destroy(handle)
         parent?.clients?.remove(this)
-        releaseSurface()
+        releaseWindow()
     }
 
     // ---- properties ----
@@ -292,7 +301,10 @@ public class Mpv private constructor(
         return if (error < 0) MpvResult.Fail(MpvError.of(error), cmd.toString()) else MpvResult.Ok(node)
     }
 
-    public fun command(vararg args: String): MpvResult<Unit> = gate.call { unitResult(MpvNative.command(handle, arrayOf(*args))) }
+    public fun command(vararg args: String): MpvResult<Unit> {
+        val argv = arrayOf(*args)
+        return gate.call { unitResult(MpvNative.command(handle, argv)) }
+    }
 
     /**
      * Runs [cmd] and suspends until mpv replies. Cancelling the coroutine aborts the command where mpv
@@ -323,15 +335,12 @@ public class Mpv private constructor(
         return unitResult(r)
     }
 
-    public fun addStreamProtocol(protocol: String, provider: MpvStreamProvider): MpvResult<Unit> =
-        gate.call { unitResult(MpvNative.streamCbAddRo(handle, protocol, provider)) }
-
     /**
      * For [MPVLib]: [listener] sees every event synchronously on the event thread, in mpv's order,
      * before the flows do. An exception from it is logged.
      */
     internal fun addEventListener(listener: (MpvEvent) -> Unit) {
-        listeners += listener
+        listeners.update { it + listener }
     }
 
     /** For [MPVLib]: observes [name] in [format] under reply id 0, which only the event listeners see. Returns mpv's code. */
@@ -343,29 +352,31 @@ public class Mpv private constructor(
 
     // ---- the window ----
 
-    private var surfaceHandle: Long = 0
+    private var windowRef: Long = 0
+    private var releaseWindowRef: ((Long) -> Unit)? = null
 
-    /** The surface mpv draws into, or null. The surface handshake checks it, so a stale surface cannot detach a newer one. */
+    /** The window mpv draws into, or null. The platform's attach checks it, so a stale window cannot detach a newer one. */
     @Volatile
-    public var attachedSurface: Surface? = null
+    internal var attachedWindow: Any? = null
         private set
 
     /**
-     * Gives mpv [surface] to render into: sets `wid`, then `force-window=yes`, then `vo` to
-     * [vo]. Call [detachSurface] before the surface is destroyed.
+     * Gives mpv [window] to render into: sets `wid` to the reference [makeRef] returns, then
+     * `force-window=yes`, then `vo` to [vo]. [releaseRef] frees that reference once mpv lets go.
      */
-    public fun attachSurface(surface: Surface, vo: String = "gpu"): MpvResult<Unit> = gate.call {
-        // mpv can still be opening a window on the surface attached before this one, on its own
-        // thread. Its reference dies only once mpv has let go, or mpv reads a reference that is gone.
-        if (surfaceHandle != 0L) {
+    internal fun attachWindow(window: Any, vo: String, makeRef: () -> Long, releaseRef: (Long) -> Unit): MpvResult<Unit> = gate.call {
+        // mpv can still be opening a window on the one attached before, on its own thread. Its
+        // reference dies only once mpv has let go, or mpv reads a reference that is gone.
+        if (windowRef != 0L) {
             MpvNative.setPropertyString(handle, "vo", "null")
             MpvNative.setOptionString(handle, "force-window", "no")
             MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(0)))
         }
-        releaseSurface()
-        surfaceHandle = MpvAndroidNative.surfaceHandle(surface)
-        attachedSurface = surface
-        val r = MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(surfaceHandle)))
+        releaseWindow()
+        windowRef = makeRef()
+        releaseWindowRef = releaseRef
+        attachedWindow = window
+        val r = MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(windowRef)))
         if (r < 0) {
             unitResult(r)
         } else {
@@ -375,21 +386,22 @@ public class Mpv private constructor(
     }
 
     /** Takes the window away: `vo=null`, `force-window=no`, `wid=0`, and the reference is released. */
-    public fun detachSurface() {
+    internal fun detachWindow() {
         gate.call {
             MpvNative.setPropertyString(handle, "vo", "null")
             MpvNative.setOptionString(handle, "force-window", "no")
             MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(0)))
-            releaseSurface()
+            releaseWindow()
         }
     }
 
-    private fun releaseSurface() {
-        attachedSurface = null
-        if (surfaceHandle != 0L) {
-            MpvAndroidNative.releaseSurfaceHandle(surfaceHandle)
-            surfaceHandle = 0
-        }
+    private fun releaseWindow() {
+        attachedWindow = null
+        val ref = windowRef
+        windowRef = 0
+        val release = releaseWindowRef
+        releaseWindowRef = null
+        if (ref != 0L) release?.invoke(ref)
     }
 
     // ---- internals ----
@@ -431,7 +443,31 @@ public class Mpv private constructor(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun startPump() {
+        // One thread per handle: waitEvent blocks it until mpv has an event. On the JVM it is a daemon thread.
+        val dispatcher = newSingleThreadContext("mpv-events-$clientName")
+        eventPump = Pump(dispatcher, CoroutineScope(dispatcher).launch { pump() })
+    }
+
+    /** Wakes the event loop and waits up to five seconds for it, unless [close] runs on the event thread itself. */
+    private fun stopPump() {
+        val pump = eventPump ?: return
+        if (currentThreadKey() == pumpThreadKey.value) {
+            // The loop sees the closed gate once this event's listeners return. Its thread closes after that.
+            CoroutineScope(Dispatchers.Default).launch {
+                pump.job.join()
+                pump.dispatcher.close()
+            }
+            return
+        }
+        MpvNative.wakeup(handle)
+        runBlocking { withTimeoutOrNull(5_000) { pump.job.join() } }
+        pump.dispatcher.close()
+    }
+
     private fun pump() {
+        pumpThreadKey.value = currentThreadKey()
         while (!gate.isClosed) {
             // Sleeps until mpv has an event or close() wakes it; mpv keeps a wakeup that comes early.
             val event = EventDecoder.decode(MpvNative.waitEvent(handle, -1.0)) ?: continue
@@ -443,11 +479,11 @@ public class Mpv private constructor(
     }
 
     private fun dispatch(event: MpvEvent) {
-        for (listener in listeners) {
+        for (listener in listeners.value) {
             try {
                 listener(event)
             } catch (e: Exception) {
-                Log.e(TAG, "an event listener failed on $event", e)
+                logError("an event listener failed on $event", e)
             }
         }
         when (event) {
@@ -463,7 +499,7 @@ public class Mpv private constructor(
                         throw e
                     } catch (e: Exception) {
                         // A bug in the app's handler: log it, let mpv continue, and keep the app running.
-                        Log.e(TAG, "hook ${event.name} failed", e)
+                        logError("hook ${event.name} failed", e)
                     } finally {
                         gate.callIfOpen { MpvNative.hookContinue(handle, event.hookId) }
                     }
@@ -479,17 +515,12 @@ public class Mpv private constructor(
     }
 
     public companion object {
-        private const val TAG = "libmpv-kmp"
-
-        @Volatile
-        private var androidReady = false
-
-        /** A new core. Nothing runs until [initialize]. */
-        public fun create(context: Context): Mpv {
-            if (!androidReady) {
-                MpvAndroidNative.initAndroid(context.applicationContext)
-                androidReady = true
-            }
+        /**
+         * A new core. Nothing runs until [initialize]. On Android, create the first core with
+         * `Mpv.create(context)`, which hands the app's context to FFmpeg first.
+         */
+        public fun create(): Mpv {
+            requirePlatformReady()
             val h = MpvNative.create()
             check(h != 0L) { "mpv_create failed" }
             return Mpv(h, ownsCore = true)

@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import io.github.yuroyami.libmpv.InternalLibmpvKmpApi
 import io.github.yuroyami.libmpv.Mpv
+import io.github.yuroyami.libmpv.create
 import io.github.yuroyami.libmpv.getOrThrow
 import io.github.yuroyami.libmpv.view.MpvOptions
 import io.github.yuroyami.libmpv.view.closeInBackground

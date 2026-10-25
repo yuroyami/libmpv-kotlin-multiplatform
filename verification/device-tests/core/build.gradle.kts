@@ -46,6 +46,7 @@ kotlin {
                 implementation("io.github.yuroyami:libmpv-kmp:$libmpvKmpVersion")
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.kotlinx.atomicfu)
             }
         }
         getByName("androidDeviceTest") {

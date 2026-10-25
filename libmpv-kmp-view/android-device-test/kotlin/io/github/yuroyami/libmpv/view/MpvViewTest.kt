@@ -15,6 +15,8 @@ import io.github.yuroyami.libmpv.MpvCommands
 import io.github.yuroyami.libmpv.MpvEvent
 import io.github.yuroyami.libmpv.MpvProperties
 import io.github.yuroyami.libmpv.VideoOutput
+import io.github.yuroyami.libmpv.attachedSurface
+import io.github.yuroyami.libmpv.create
 import io.github.yuroyami.libmpv.getOrNull
 import io.github.yuroyami.libmpv.getOrThrow
 import java.io.File

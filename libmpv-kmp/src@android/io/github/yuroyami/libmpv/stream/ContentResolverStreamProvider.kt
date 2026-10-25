@@ -7,6 +7,7 @@ import android.system.ErrnoException
 import android.system.Os
 import android.system.OsConstants
 import android.system.StructPollfd
+import io.github.yuroyami.libmpv.addStreamProtocol
 import java.io.FileDescriptor
 import java.io.FileInputStream
 import java.nio.ByteBuffer

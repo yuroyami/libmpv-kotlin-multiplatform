@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.yuroyami.libmpv.HwdecMode
 import io.github.yuroyami.libmpv.KeepOpenMode
 import io.github.yuroyami.libmpv.Mpv
+import io.github.yuroyami.libmpv.create
 import io.github.yuroyami.libmpv.MpvCommands
 import io.github.yuroyami.libmpv.MpvEvent
 import io.github.yuroyami.libmpv.MpvLogLevel

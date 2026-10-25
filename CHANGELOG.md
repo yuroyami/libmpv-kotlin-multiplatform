@@ -24,6 +24,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The project builds with the Kotlin toolchain (the `./kotlin` script) instead of Gradle, on Kotlin 2.4.21. The device tests run in a separate Gradle build under `verification/`.
 - Each module commits a dump of its Android API under `api/android/`, and a check fails when the public API changes without a new dump.
 - `MpvNative.initAndroid`, `MpvNative.surfaceHandle` and `MpvNative.releaseSurfaceHandle` move to the new object `MpvAndroidNative` in the same package. `MpvNative` keeps every other function, and `libmpv-kmp-native` now also builds for the desktop JVM.
+- `Mpv` moves to common code, and `libmpv-kmp` now also builds for the desktop JVM. `Mpv.create()` is new and takes no context. On Android, create the first core with `Mpv.create(context)`; until then, `Mpv.create()` throws an `IllegalStateException` that says so.
+- These members of `Mpv` become extensions in the same package. Kotlin code in that package compiles as before. Code in another package adds one import per name, for example `import io.github.yuroyami.libmpv.create`:
+  - `Mpv.create(context)`, `attachSurface`, `detachSurface` and `attachedSurface` (Android only).
+  - `addStreamProtocol` (Android and the JVM).
+- `screenshot` and `thumbnail` stay Android extensions, but their JVM class changes from `MpvExtrasKt` to `MpvBitmapsKt`. Java callers update the class name.
 - `MpvNative.create` sets the C numeric locale before every `mpv_create`, not only once at `initAndroid`. mpv returns no core under any other numeric locale, and an app can change the locale at any time.
 
 ## [0.3.0] - 2026-09-26

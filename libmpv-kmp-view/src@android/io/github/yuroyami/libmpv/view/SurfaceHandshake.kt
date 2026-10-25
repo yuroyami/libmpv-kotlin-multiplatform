@@ -5,6 +5,9 @@ import io.github.yuroyami.libmpv.InternalLibmpvKmpApi
 import io.github.yuroyami.libmpv.Mpv
 import io.github.yuroyami.libmpv.MpvProperties
 import io.github.yuroyami.libmpv.VideoOutput
+import io.github.yuroyami.libmpv.attachSurface
+import io.github.yuroyami.libmpv.attachedSurface
+import io.github.yuroyami.libmpv.detachSurface
 
 /**
  * The three moments of a surface's life, as mpv needs them. The one copy both the View and the

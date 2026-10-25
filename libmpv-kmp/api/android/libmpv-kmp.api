@@ -650,19 +650,14 @@ public final class io/github/yuroyami/libmpv/MPVLib$MpvLogLevel {
 
 public final class io/github/yuroyami/libmpv/Mpv : java/lang/AutoCloseable {
 	public static final field Companion Lio/github/yuroyami/libmpv/Mpv$Companion;
-	public final fun addStreamProtocol (Ljava/lang/String;Lio/github/yuroyami/libmpv/stream/MpvStreamProvider;)Lio/github/yuroyami/libmpv/MpvResult;
-	public final fun attachSurface (Landroid/view/Surface;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
-	public static synthetic fun attachSurface$default (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
 	public fun close ()V
 	public final fun command (Lio/github/yuroyami/libmpv/MpvCommand;)Lio/github/yuroyami/libmpv/MpvResult;
 	public final fun command ([Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
 	public final fun commandAsync (Lio/github/yuroyami/libmpv/MpvCommand;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun createClient (Ljava/lang/String;)Lio/github/yuroyami/libmpv/Mpv;
 	public final fun delete (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
-	public final fun detachSurface ()V
 	public final fun get (Lio/github/yuroyami/libmpv/MpvProperty;)Lio/github/yuroyami/libmpv/MpvResult;
 	public final fun getAsync (Lio/github/yuroyami/libmpv/MpvProperty;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public final fun getAttachedSurface ()Landroid/view/Surface;
 	public final fun getClientName ()Ljava/lang/String;
 	public final fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
 	public final fun getLogs ()Lkotlinx/coroutines/flow/SharedFlow;
@@ -691,8 +686,16 @@ public final class io/github/yuroyami/libmpv/Mpv : java/lang/AutoCloseable {
 }
 
 public final class io/github/yuroyami/libmpv/Mpv$Companion {
-	public final fun create (Landroid/content/Context;)Lio/github/yuroyami/libmpv/Mpv;
+	public final fun create ()Lio/github/yuroyami/libmpv/Mpv;
 	public final fun getApiVersion ()J
+}
+
+public final class io/github/yuroyami/libmpv/MpvAndroidKt {
+	public static final fun attachSurface (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun attachSurface$default (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun create (Lio/github/yuroyami/libmpv/Mpv$Companion;Landroid/content/Context;)Lio/github/yuroyami/libmpv/Mpv;
+	public static final fun detachSurface (Lio/github/yuroyami/libmpv/Mpv;)V
+	public static final fun getAttachedSurface (Lio/github/yuroyami/libmpv/Mpv;)Landroid/view/Surface;
 }
 
 public final class io/github/yuroyami/libmpv/MpvAudioDevice {
@@ -722,6 +725,12 @@ public final class io/github/yuroyami/libmpv/MpvAudioDevice$ListCodec : io/githu
 	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
 	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
 	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvBitmapsKt {
+	public static final fun screenshot (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun screenshot$default (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun thumbnail (Lio/github/yuroyami/libmpv/Mpv;I)Lio/github/yuroyami/libmpv/MpvResult;
 }
 
 public final class io/github/yuroyami/libmpv/MpvChapter {
@@ -1173,9 +1182,6 @@ public final class io/github/yuroyami/libmpv/MpvException : java/lang/RuntimeExc
 public final class io/github/yuroyami/libmpv/MpvExtrasKt {
 	public static final fun expandPath (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
 	public static final fun expandText (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
-	public static final fun screenshot (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;)Lio/github/yuroyami/libmpv/MpvResult;
-	public static synthetic fun screenshot$default (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
-	public static final fun thumbnail (Lio/github/yuroyami/libmpv/Mpv;I)Lio/github/yuroyami/libmpv/MpvResult;
 }
 
 public final class io/github/yuroyami/libmpv/MpvLogLevel : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
@@ -1868,6 +1874,10 @@ public final class io/github/yuroyami/libmpv/MpvResultKt {
 	public static final fun isOk (Lio/github/yuroyami/libmpv/MpvResult;)Z
 	public static final fun map (Lio/github/yuroyami/libmpv/MpvResult;Lkotlin/jvm/functions/Function1;)Lio/github/yuroyami/libmpv/MpvResult;
 	public static final fun onFail (Lio/github/yuroyami/libmpv/MpvResult;Lkotlin/jvm/functions/Function1;)Lio/github/yuroyami/libmpv/MpvResult;
+}
+
+public final class io/github/yuroyami/libmpv/MpvStreamsKt {
+	public static final fun addStreamProtocol (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;Lio/github/yuroyami/libmpv/stream/MpvStreamProvider;)Lio/github/yuroyami/libmpv/MpvResult;
 }
 
 public final class io/github/yuroyami/libmpv/MpvTrack {

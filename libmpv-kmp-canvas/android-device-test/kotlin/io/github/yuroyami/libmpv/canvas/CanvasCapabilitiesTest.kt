@@ -10,6 +10,7 @@ import io.github.yuroyami.libmpv.Mpv
 import io.github.yuroyami.libmpv.MpvCommands
 import io.github.yuroyami.libmpv.MpvProperties
 import io.github.yuroyami.libmpv.MpvResult
+import io.github.yuroyami.libmpv.create
 import io.github.yuroyami.libmpv.getOrNull
 import io.github.yuroyami.libmpv.getOrThrow
 import io.github.yuroyami.libmpv.view.MpvOptions
