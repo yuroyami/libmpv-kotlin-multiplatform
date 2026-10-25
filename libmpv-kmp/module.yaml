@@ -2,9 +2,12 @@
 # providers and the deprecated MPVLib facade. It exports libmpv-kmp-native, so an app names one artifact.
 product:
   type: kmp/lib
-  platforms: [ android, jvm ]
+  platforms: [ android, jvm, macosArm64, iosArm64, iosSimulatorArm64 ]
 
-# src/ is shared by Android and the JVM. An alias of every platform would merge into src/.
+# Source folders that the default hierarchy does not have.
+aliases:
+  # The code that the JVM and Android share: the stream providers.
+  - jvmAndAndroid: [ jvm, android ]
 
 apply:
   - //libmpv-kmp.module-template.yaml
@@ -22,6 +25,8 @@ test-dependencies:
 settings:
   kotlin:
     freeCompilerArgs: [ -Xexpect-actual-classes ]
+    optIns:
+      - kotlinx.cinterop.ExperimentalForeignApi
   android:
     namespace: io.github.yuroyami.libmpv
   publishing:
@@ -29,6 +34,43 @@ settings:
       name: libmpv-kmp
       description: "The typed Kotlin API for libmpv on Android: Mpv, one class per mpv core. It brings libmpv-kmp-native, which holds mpv, FFmpeg, libass, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64. The native libraries are GPL."
 
+# -Xexport-kdoc keeps the KDoc in the native klibs.
+settings@native:
+  kotlin:
+    freeCompilerArgs: [ -Xexport-kdoc ]
+
+# The klib is named "io.github.yuroyami:libmpv-kmp", as a Gradle build would name it. Set per platform: on @native,
+# it would also rename the klibs of shared native code, which must keep their own names.
+
+settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp, -Xshort-module-name=libmpv-kmp ]
+
+settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp, -Xshort-module-name=libmpv-kmp ]
+
+settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp, -Xshort-module-name=libmpv-kmp ]
+
+# Tests compile into their own klib, which needs a different name.
+
+test-settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_test, -Xshort-module-name=libmpv_kmp_test ]
+
+test-settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_test, -Xshort-module-name=libmpv_kmp_test ]
+
+test-settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_test, -Xshort-module-name=libmpv_kmp_test ]
+
 plugins:
-  abi-check: enabled
+  abi-check:
+    enabled: true
+    # The `// Targets:` header of api/<module>.klib.api.
+    klibPlatforms: [ iosArm64, iosSimulatorArm64, macosArm64 ]
   android-abi-check: enabled

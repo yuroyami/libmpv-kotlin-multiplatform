@@ -1,5 +1,7 @@
 package io.github.yuroyami.libmpv
 
+import kotlin.jvm.JvmInline
+
 internal fun mismatch(expected: String, node: MpvNode): Nothing =
     throw IllegalArgumentException("expected $expected, mpv answered ${node::class.simpleName}($node)")
 

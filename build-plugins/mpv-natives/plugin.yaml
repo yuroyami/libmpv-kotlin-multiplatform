@@ -1,4 +1,5 @@
-# Tasks of libmpv-kmp-native. The link tasks read the static mpv trees in buildscripts/prefix/ and never build them.
+# Tasks of libmpv-kmp-native. The link and interop tasks read the static mpv trees in buildscripts/prefix/
+# and never build them.
 
 tasks:
   jniMacosArm64:
@@ -45,6 +46,37 @@ tasks:
       workDir: ${taskOutputDir}/work
       resourcesDir: ${taskOutputDir}/resources
 
+  mpvInteropMacosArm64:
+    action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.writeMpvInterop
+      konanTarget: macos_arm64
+      homebrewPrefix: ${pluginSettings.homebrewPrefix}
+      mpvHeaders: ${module.rootDir}/native/include
+      prefixTree: ${project.rootDir}/buildscripts/prefix/macos-arm64
+      defFile: ${taskOutputDir}/def/mpv.def
+
+  mpvInteropIosArm64:
+    action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.writeMpvInterop
+      konanTarget: ios_arm64
+      homebrewPrefix: ${pluginSettings.homebrewPrefix}
+      mpvHeaders: ${module.rootDir}/native/include
+      prefixTree: ${project.rootDir}/buildscripts/prefix/ios-arm64
+      defFile: ${taskOutputDir}/def/mpv.def
+
+  mpvInteropIosSimulatorArm64:
+    action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.writeMpvInterop
+      konanTarget: ios_simulator_arm64
+      homebrewPrefix: ${pluginSettings.homebrewPrefix}
+      mpvHeaders: ${module.rootDir}/native/include
+      prefixTree: ${project.rootDir}/buildscripts/prefix/ios-simulator-arm64
+      defFile: ${taskOutputDir}/def/mpv.def
+
+  nativeInterop:
+    action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.checkNativeInterop
+      defFiles:
+        - ${tasks.mpvInteropMacosArm64.action.defFile}
+        - ${tasks.mpvInteropIosArm64.action.defFile}
+        - ${tasks.mpvInteropIosSimulatorArm64.action.defFile}
+
   desktopJni:
     action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.checkDesktopJni
       platforms: [ macos-arm64, linux-x64, linux-arm64, windows-x64 ]
@@ -61,6 +93,14 @@ tasks:
 
 # The JNI libraries go into the JVM jar under libmpv-kmp-native/<platform>/.
 generated:
+  # The cinterop binding of mpv's client API, one def per Apple target.
+  cinteropDefinitions:
+    - defFile: ${tasks.mpvInteropMacosArm64.action.defFile}
+      fragment: "@macosArm64"
+    - defFile: ${tasks.mpvInteropIosArm64.action.defFile}
+      fragment: "@iosArm64"
+    - defFile: ${tasks.mpvInteropIosSimulatorArm64.action.defFile}
+      fragment: "@iosSimulatorArm64"
   resources:
     - directory: ${tasks.jniMacosArm64.action.resourcesDir}
       fragment: "@jvm"
@@ -80,3 +120,6 @@ commands:
   # The release gate: every platform has a library linked from a static tree.
   - name: checkDesktopJni
     performedBy: desktopJni
+  # The release gate of the Apple klibs: every def binds a static tree.
+  - name: checkNativeInterop
+    performedBy: nativeInterop

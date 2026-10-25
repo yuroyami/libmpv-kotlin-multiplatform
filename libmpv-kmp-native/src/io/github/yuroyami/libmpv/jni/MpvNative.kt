@@ -1,66 +1,62 @@
 package io.github.yuroyami.libmpv.jni
 
-import io.github.yuroyami.libmpv.stream.MpvStreamProvider
-
 /**
- * The libmpv client API, one `external` function per call, every handle a `Long`.
+ * The libmpv client API, one function per call, every handle a `Long`.
  *
  * Nodes cross as byte arrays in the format `node_codec.cpp` and `NodeCodec.kt` share. Functions
  * returning `Int` return the `mpv_error` code. Nothing here validates a handle: a wrong or closed
  * handle is undefined behaviour in libmpv, which is why `Mpv` owns every handle and this object
- * is opt-in. Android's own calls live in `MpvAndroidNative`.
+ * is opt-in.
+ *
+ * On the JVM and Android the functions are JNI calls into `libmpv_kmp_jni`, and Android's own calls
+ * live in `MpvAndroidNative`. On macOS and iOS they call libmpv directly, through cinterop.
  */
-// The C++ in native/jni finds these functions by their JNI names, so the class name and package stay fixed.
 @MpvNativeApi
-public object MpvNative {
-    init {
-        loadMpvJni()
-    }
+public expect object MpvNative {
+    public fun clientApiVersion(): Long
+    public fun create(): Long
+    public fun createClient(handle: Long, name: String?): Long
+    public fun createWeakClient(handle: Long, name: String?): Long
+    public fun clientName(handle: Long): String
+    public fun clientId(handle: Long): Long
+    public fun initialize(handle: Long): Int
+    public fun destroy(handle: Long)
+    public fun terminateDestroy(handle: Long)
+    public fun loadConfigFile(handle: Long, path: String): Int
+    public fun timeUs(handle: Long): Long
 
-    public external fun clientApiVersion(): Long
-    public external fun create(): Long
-    public external fun createClient(handle: Long, name: String?): Long
-    public external fun createWeakClient(handle: Long, name: String?): Long
-    public external fun clientName(handle: Long): String
-    public external fun clientId(handle: Long): Long
-    public external fun initialize(handle: Long): Int
-    public external fun destroy(handle: Long)
-    public external fun terminateDestroy(handle: Long)
-    public external fun loadConfigFile(handle: Long, path: String): Int
-    public external fun timeUs(handle: Long): Long
+    public fun setOptionString(handle: Long, name: String, value: String): Int
+    public fun setOptionNode(handle: Long, name: String, node: ByteArray): Int
 
-    public external fun setOptionString(handle: Long, name: String, value: String): Int
-    public external fun setOptionNode(handle: Long, name: String, node: ByteArray): Int
+    public fun command(handle: Long, args: Array<String>): Int
+    /** Returns a result envelope: `i32` error, then the result node. */
+    public fun commandNode(handle: Long, args: ByteArray): ByteArray
+    public fun commandString(handle: Long, command: String): Int
+    public fun commandAsync(handle: Long, replyId: Long, args: Array<String>): Int
+    public fun commandNodeAsync(handle: Long, replyId: Long, args: ByteArray): Int
+    public fun abortAsyncCommand(handle: Long, replyId: Long)
 
-    public external fun command(handle: Long, args: Array<String>): Int
-    public external fun commandNode(handle: Long, args: ByteArray): ByteArray
-    public external fun commandString(handle: Long, command: String): Int
-    public external fun commandAsync(handle: Long, replyId: Long, args: Array<String>): Int
-    public external fun commandNodeAsync(handle: Long, replyId: Long, args: ByteArray): Int
-    public external fun abortAsyncCommand(handle: Long, replyId: Long)
+    /** Returns a result envelope: `i32` error, then the property as a node. */
+    public fun getPropertyNode(handle: Long, name: String): ByteArray
+    public fun getPropertyString(handle: Long, name: String): String?
+    public fun getPropertyOsdString(handle: Long, name: String): String?
+    public fun setPropertyNode(handle: Long, name: String, node: ByteArray): Int
+    public fun setPropertyString(handle: Long, name: String, value: String): Int
+    public fun getPropertyAsync(handle: Long, replyId: Long, name: String): Int
+    public fun setPropertyAsync(handle: Long, replyId: Long, name: String, node: ByteArray): Int
+    public fun delProperty(handle: Long, name: String): Int
+    public fun observeProperty(handle: Long, replyId: Long, name: String, format: Int): Int
+    public fun unobserveProperty(handle: Long, replyId: Long): Int
 
-    public external fun getPropertyNode(handle: Long, name: String): ByteArray
-    public external fun getPropertyString(handle: Long, name: String): String?
-    public external fun getPropertyOsdString(handle: Long, name: String): String?
-    public external fun setPropertyNode(handle: Long, name: String, node: ByteArray): Int
-    public external fun setPropertyString(handle: Long, name: String, value: String): Int
-    public external fun getPropertyAsync(handle: Long, replyId: Long, name: String): Int
-    public external fun setPropertyAsync(handle: Long, replyId: Long, name: String, node: ByteArray): Int
-    public external fun delProperty(handle: Long, name: String): Int
-    public external fun observeProperty(handle: Long, replyId: Long, name: String, format: Int): Int
-    public external fun unobserveProperty(handle: Long, replyId: Long): Int
+    public fun requestEvent(handle: Long, eventId: Int, enable: Boolean): Int
+    public fun requestLogMessages(handle: Long, minLevel: String): Int
+    /** Blocks up to [timeoutSeconds]. Returns an event envelope: `i32` id, `i64` reply id, `i32` error, then the event node. */
+    public fun waitEvent(handle: Long, timeoutSeconds: Double): ByteArray
+    public fun wakeup(handle: Long)
 
-    public external fun requestEvent(handle: Long, eventId: Int, enable: Boolean): Int
-    public external fun requestLogMessages(handle: Long, minLevel: String): Int
-    public external fun waitEvent(handle: Long, timeoutSeconds: Double): ByteArray
-    public external fun wakeup(handle: Long)
+    public fun hookAdd(handle: Long, replyId: Long, name: String, priority: Int): Int
+    public fun hookContinue(handle: Long, hookId: Long): Int
 
-    public external fun hookAdd(handle: Long, replyId: Long, name: String, priority: Int): Int
-    public external fun hookContinue(handle: Long, hookId: Long): Int
-
-    public external fun errorString(code: Int): String
-    public external fun eventName(eventId: Int): String
-
-    /** Registers [provider] for `protocol://` URIs on this core. The provider is held for the life of the core. */
-    public external fun streamCbAddRo(handle: Long, protocol: String, provider: MpvStreamProvider): Int
+    public fun errorString(code: Int): String
+    public fun eventName(eventId: Int): String
 }

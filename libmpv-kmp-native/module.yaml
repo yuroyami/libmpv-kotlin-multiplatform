@@ -2,9 +2,12 @@
 # libraries ride libmpv-kmp-android-natives, a plain jar that AGP unpacks into the APK.
 product:
   type: kmp/lib
-  platforms: [ android, jvm ]
+  platforms: [ android, jvm, macosArm64, iosArm64, iosSimulatorArm64 ]
 
-# src/ is the JNI binding that the JVM and Android share. An alias of every platform would merge into src/.
+# Source folders that the default hierarchy does not have.
+aliases:
+  # The JNI binding that the JVM and Android share.
+  - jvmAndAndroid: [ jvm, android ]
 
 apply:
   - //libmpv-kmp.module-template.yaml
@@ -18,6 +21,8 @@ dependencies@android:
 settings:
   kotlin:
     freeCompilerArgs: [ -Xexpect-actual-classes ]
+    optIns:
+      - kotlinx.cinterop.ExperimentalForeignApi
   android:
     namespace: io.github.yuroyami.libmpv.jni
   publishing:
@@ -25,10 +30,47 @@ settings:
       name: libmpv-kmp-native
       description: "The native half of libmpv-kotlin-multiplatform: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64 with 16 KB page alignment, and MpvNative, the raw binding. The native libraries are GPL."
 
+# -Xexport-kdoc keeps the KDoc in the native klibs.
+settings@native:
+  kotlin:
+    freeCompilerArgs: [ -Xexport-kdoc ]
+
+# The klib is named "io.github.yuroyami:libmpv-kmp-native", as a Gradle build would name it. Set per platform: on @native,
+# it would also rename the klibs of shared native code, which must keep their own names.
+
+settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp-native, -Xshort-module-name=libmpv-kmp-native ]
+
+settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp-native, -Xshort-module-name=libmpv-kmp-native ]
+
+settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=io.github.yuroyami:libmpv-kmp-native, -Xshort-module-name=libmpv-kmp-native ]
+
+# Tests compile into their own klib, which needs a different name.
+
+test-settings@macosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_native_test, -Xshort-module-name=libmpv_kmp_native_test ]
+
+test-settings@iosArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_native_test, -Xshort-module-name=libmpv_kmp_native_test ]
+
+test-settings@iosSimulatorArm64:
+  kotlin:
+    freeCompilerArgs: [ -module-name=libmpv_kmp_native_test, -Xshort-module-name=libmpv_kmp_native_test ]
+
 plugins:
   # The desktop JNI library in the JVM jar, linked from buildscripts/prefix/<platform>. See build-plugins/mpv-natives.
   mpv-natives: enabled
-  abi-check: enabled
+  abi-check:
+    enabled: true
+    # The `// Targets:` header of api/<module>.klib.api.
+    klibPlatforms: [ iosArm64, iosSimulatorArm64, macosArm64 ]
   android-abi-check: enabled
   build-info:
     enabled: true

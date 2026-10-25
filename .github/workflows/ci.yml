@@ -1,4 +1,4 @@
-# Every push and pull request: the gate, the JVM core tests on macOS, the natives with their packaging
+# Every push and pull request: the gate, the JVM, macOS and iOS core on macOS, the natives with their packaging
 # and the sample, and the device tests on an emulator.
 #
 # Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
@@ -39,7 +39,7 @@ jobs:
       - run: scripts/check-gate.sh tier1
 
   desktop:
-    name: JVM core tests on macOS, German locale
+    name: JVM, macOS and iOS core on macOS
     runs-on: macos-15
     timeout-minutes: 30
     steps:
@@ -56,6 +56,10 @@ jobs:
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
         env:
           LC_ALL: de_DE.UTF-8
+      - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p macosArm64
+      # No iOS mpv tree exists yet, so the iOS klibs bind the headers only. An iOS test cannot link.
+      - run: ./kotlin build -m libmpv-kmp-native -m libmpv-kmp -p iosArm64 -p iosSimulatorArm64
+      - run: ./kotlin check klibAbi -m libmpv-kmp-native -m libmpv-kmp
 
   natives:
     uses: ./.github/workflows/build-natives.yml
