@@ -1,6 +1,6 @@
 # libmpv-kotlin-multiplatform
 
-Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFmpeg, libass, dav1d and the rest, compiled for all four Android ABIs, with a Kotlin API where every property, command and event has a type.
+Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFmpeg, libass, dav1d and the rest, compiled for all four Android ABIs, with a Kotlin API where every property, command and event has a type. The same API also builds for the desktop JVM, macOS and iOS.
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/libmpv-kmp?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.yuroyami/libmpv-kmp)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/libmpv-kotlin-multiplatform/ci.yml?label=CI)](https://github.com/yuroyami/libmpv-kotlin-multiplatform/actions/workflows/ci.yml)
@@ -14,8 +14,19 @@ Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFm
 - Subtitles through libass, AV1 through dav1d, https through Mbed TLS, scripts through Lua 5.2, and hardware decoding through MediaCodec.
 - A Kotlin API with a type for every property, command and event. Errors come back as values, and events arrive as flows.
 - Three ways to show the video: an Android View that also works in XML layouts, Compose surfaces, and an experimental Compose canvas.
+- `Mpv` and the typed API in common Kotlin code, for Android, the desktop JVM, macOS and iOS.
 
 The native libraries are built in public CI from pinned upstream versions. Each GitHub release carries the exact zips that the Maven Central artifacts are made from.
+
+## Platforms
+
+| Platform | What carries mpv | State |
+|---|---|---|
+| Android 5.0 and newer | `libmpv-kmp-android-natives`: ten libraries per ABI | Ready |
+| Desktop JVM: macOS arm64, Linux x64 and arm64, Windows x64 | `mpv_kmp_jni` inside the `libmpv-kmp-native` jar, with mpv linked in | The API is ready. No release carries mpv yet. |
+| macOS arm64, iOS arm64, iOS simulator arm64 | the `libmpv-kmp-native` klibs, with mpv linked in | The API is ready. No release carries mpv yet. |
+
+The static builds of mpv for the desktop and Apple platforms do not exist yet, and the release workflow refuses to publish until they do. In a checkout on an arm64 Mac, the JVM and macOS targets already run against Homebrew's mpv (`brew install mpv`). The tests run that way.
 
 ## Install
 
@@ -36,7 +47,7 @@ dependencies:
   - io.github.yuroyami:libmpv-kmp-compose:0.4.0
 ```
 
-In a Kotlin Multiplatform module, use `dependencies@android:` instead of `dependencies:`.
+In a Kotlin Multiplatform module, `libmpv-kmp` goes in the common dependencies (`commonMain`, or `dependencies:` in a toolchain module). The view, Compose and canvas artifacts are Android only, so they go in the Android dependencies (`androidMain`, or `dependencies@android:`).
 
 Versions 0.3.0 and older are not on Maven Central. They stay in the old repository at `https://yuroyami.github.io/maven`.
 
@@ -47,7 +58,7 @@ Versions 0.3.0 and older are not on Maven Central. They stay in the old reposito
 | `libmpv-kmp-canvas` | `MpvCanvas`, the experimental Compose canvas | 26 |
 | `libmpv-kmp` | `Mpv` on its own, for apps that handle the surface themselves | 21 |
 
-Your app needs compile SDK 35 or newer and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. In a Gradle Kotlin Multiplatform project, the line goes in `androidMain.dependencies`. You need no ProGuard rules: the artifacts bring their own.
+Your app needs compile SDK 35 or newer and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. You need no ProGuard rules on Android: the artifacts bring their own.
 
 ## Show a video
 
@@ -123,8 +134,8 @@ mpv.playback.collect { state -> showStatus(state.status, state.positionSeconds) 
 
 | What you want | Call |
 |---|---|
-| Start and stop a core | `Mpv.create(context)`, `initialize()`, `close()`, or `use { }` |
-| Give mpv a window | `attachSurface(surface)`, `detachSurface()` |
+| Start and stop a core | `Mpv.create(context)` on Android, `Mpv.create()` elsewhere, then `initialize()`, `close()`, or `use { }` |
+| Give mpv a window (Android) | `attachSurface(surface)`, `detachSurface()` |
 | Read or write a property | `mpv[MpvProperties.Duration].getOrNull()`, `mpv[MpvProperties.Pause] = true` |
 | Set an option before init | `setOption(MpvProperties.Hwdec, HwdecMode.Auto)` |
 | Run a command | `command(MpvCommands.seek(10.0))`, `commandAsync(...)` |
@@ -133,8 +144,10 @@ mpv.playback.collect { state -> showStatus(state.status, state.positionSeconds) 
 | Follow playback | `playback.collect { it.status }` |
 | Receive mpv's log | `requestLogMessages(MpvLogLevel.Info)`, then `logs.collect { }` |
 | Rewrite a URL before it opens | `hook("on_load") { }` |
-| Feed mpv your own bytes | `addStreamProtocol("content", ContentResolverStreamProvider(context))` |
+| Feed mpv your own bytes (Android and the JVM) | `addStreamProtocol("content", ContentResolverStreamProvider(context))` |
 | Ask what is inside | `BuildInfo.MPV`, `BuildInfo.FFMPEG`, `BuildInfo.ABIS` |
+
+`Mpv.create(context)`, `attachSurface`, `detachSurface`, `attachedSurface` and `addStreamProtocol` are extension functions. Outside the package `io.github.yuroyami.libmpv`, each one needs an import, for example `import io.github.yuroyami.libmpv.create`.
 
 The catalogs cover 399 properties and 71 commands. Anything missing from them still works by name: `mpv.getNode("some-property")`, `mpv.command(MpvCommand.of("some-command", "arg"))`. The [mpv manual](https://mpv.io/manual/stable/) documents every property, option and command. [The typed API](docs/typed-api.md) covers hooks, streams and the rest.
 
@@ -157,7 +170,9 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 - `libc++_shared.so` comes inside. If another dependency ships one too, the build stops with a merge error. That error protects you, because libmpv crashes at load with an older libc++. If you must choose one, `packaging { jniLibs { pickFirsts += "**/libc++_shared.so" } }` does it, and the copy that wins must come from NDK r29 or newer.
 - Rotation restarts playback, unless the activity declares `android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"` or the core lives somewhere that outlives the activity.
 - The deprecated `MPVLib` allows one core per process. `Mpv` has no such limit.
-- Android only. There is no desktop or iOS artifact.
+- Video shows on Android only for now. On the desktop JVM, macOS and iOS, start the core with `vo=null`: audio, properties, commands, events and the playback state work as on Android.
+- Stream providers (`addStreamProtocol`) work on Android and the desktop JVM, not on macOS or iOS.
+- No release carries mpv for the desktop or Apple platforms yet. See [Platforms](#platforms).
 
 ## What is inside
 

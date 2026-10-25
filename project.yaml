@@ -15,6 +15,7 @@ modules:
   - libmpv-kmp-native
   - libmpv-kmp-view
   - sample
+  - sample-desktop
 
 plugins:
   - //build-plugins/abi-check

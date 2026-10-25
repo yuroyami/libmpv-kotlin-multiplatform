@@ -1,6 +1,6 @@
 # libmpv-kotlin-multiplatform, for whoever works in this tree
 
-libmpv for Android as one Maven artifact. `libmpv-kmp-native/` holds the binding, `libmpv-kmp-android-natives/` packs its
+libmpv for Android as one Maven artifact, with the same core API on the desktop JVM, macOS and iOS. `libmpv-kmp-native/` holds the binding, `libmpv-kmp-android-natives/` packs its
 native libraries, `libmpv-kmp/` holds the typed API, `buildscripts/` compiles the natives, and `build-plugins/` holds the
 checks. The build is the Kotlin toolchain (`./kotlin`); only `verification/` is Gradle. `CONTRIBUTING.md` has the ground
 rules and the gate.
@@ -22,9 +22,9 @@ Each line is something that bit someone. Delete a line when it stops being true.
   the `Java_io_github_yuroyami_libmpv_jni_MpvNative_` symbol prefix, and `stream_cb.cpp` looks up
   `MpvStreamProvider` and `MpvStream` by name. Renaming the Kotlin package alone loads a library
   that crashes at the first call; `checkAndroidNatives` looks for one exported symbol to catch it.
-- `MpvNative` loads the native libraries in its static initialiser, so a JVM host test cannot touch
-  it, nor `Mpv` and `MPVLib` above it. Anything that reaches a core is a device test; logic kept
-  apart from the handle (`CallGate`, `PendingReplies`, `rgbaPixels`) is tested on the host.
+- On Android, `MpvNative` loads the native libraries in its static initialiser, so an Android host
+  test cannot touch it, nor `Mpv` and `MPVLib` above it. Anything that reaches an Android core is a
+  device test. The core tests in `test@core` reach a real core on the JVM and macOS instead.
 - `Mpv` allows several cores per process; `MPVLib` keeps 0.1.0's rule of one. A freed handle is
   still a crash, not an exception, which is why every call goes through `Mpv`'s call gate and
   `close()` waits for the calls already inside native code.
@@ -119,3 +119,14 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - Everything above `MPVLib` is Phase 2 (`PLAN-2-typed-api.md`, `PLAN-3-surfaces.md`,
   `PLAN-4-canvas.md`). Do not grow `MPVLib` into a player API; it is the compatibility surface
   and the typed `Mpv` class is where new capability goes.
+- Without a static tree in `buildscripts/prefix/<platform>`, the JVM and macOS builds link Homebrew's
+  mpv (dev mode, `# dev` in the manifest). Homebrew has 0.40.0 while the pin is 0.41.0, so the catalog
+  tests skip themselves there; they run fully only on Android or against a tree.
+- The vendored headers in `libmpv-kmp-native/native/include/mpv/` move with `v_mpv`. The `mpvHeaders`
+  check compares them with `buildscripts/deps/mpv` when that checkout exists.
+- `Android.mk` compiles the JNI sources as C++20, the desktop link as C++17. The four shared sources
+  stay within C++17, or only Android builds them.
+- The Linux and macOS JNI libraries export only the JNI functions (`exports.map`, `exports.macos`).
+  The Windows DLL also exports mpv's own dllexport functions, which is harmless there.
+- `MpvPlaybackState.Status.Ended` needs `keep-open=yes`: `eof-reached` is true only while the file stays loaded.
+  With `keep-open=no` the state falls back to Idle.

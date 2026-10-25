@@ -1,0 +1,10 @@
+# The desktop sample: plays a file with no window and prints every change of the playback state.
+# Run it with `./kotlin run -m sample-desktop -- [file]`. Without a file it plays two seconds of silence.
+# Not published.
+product: jvm/app
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+
+dependencies:
+  - //libmpv-kmp

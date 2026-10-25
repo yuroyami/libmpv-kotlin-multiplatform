@@ -2,6 +2,8 @@
 
 Nobody has to do this to use the library. It is here for changing a flag, bumping a version, or checking that the published bytes come from the published scripts.
 
+The scripts build the Android libraries. The desktop JVM and Apple libraries come from static mpv trees, which the section [The desktop and Apple libraries](#the-desktop-and-apple-libraries) describes.
+
 ## Prerequisites
 
 - Linux or macOS. Windows is not supported, WSL included.
@@ -53,3 +55,34 @@ Useful flags: `--clean` rebuilds a target's build directory, `-n` skips dependen
 `release-natives.yml` builds the same four ABIs on demand and attaches `libmpv-kmp-natives-<abi>.zip`, its `.sha256`, and the mpv and FFmpeg source tarballs to the GitHub release for the tag. `publish.yml` downloads those zips, verifies them, and assembles the natives jars from them. So the jars on Maven Central are made of the files anyone can inspect on the release page.
 
 `.github/scripts/fetch-natives.sh <tag>` puts a release's libraries into `libmpv-kmp-native/native-libs/` on any machine, which is the quickest way to work on the Kotlin side without building anything. That works from `v0.4.0` on. Older releases ship `libmpvkt-natives-<abi>.zip` with JNI symbols for the old package, so `checkAndroidNatives` refuses them for the current tree.
+
+## The desktop and Apple libraries
+
+The desktop JVM library is `mpv_kmp_jni`, built from the same C++ sources as Android, with mpv linked in statically. The Apple klibs bind mpv through cinterop. Both take mpv from a static mpv tree: one folder per platform, which no script in this repository builds yet.
+
+### The static mpv tree
+
+A static mpv tree lives at `buildscripts/prefix/<platform>/`. The folder names are `macos-arm64`, `linux-x64`, `linux-arm64`, `windows-x64`, `ios-arm64` and `ios-simulator-arm64`. A tree has:
+
+- mpv and every library below it as static archives (`.a`) under `lib/`.
+- `lib/pkgconfig/mpv.pc`. The link line is the output of `pkg-config --static --libs mpv` for that tree.
+- mpv at the version that `v_mpv` in `buildscripts/include/depinfo.sh` names, and the other libraries at their pins.
+
+### The tasks
+
+- `jniMacosArm64`, `jniLinuxX64`, `jniLinuxArm64` and `jniWindowsX64` link the JNI library of one platform. The output goes into the JVM jar under `libmpv-kmp-native/<platform>/`, beside a `manifest.txt`. The macOS link uses `xcrun clang++`. The Linux and Windows links use the clang and sysroots of the Kotlin/Native toolchain.
+- `mpvInteropMacosArm64`, `mpvInteropIosArm64` and `mpvInteropIosSimulatorArm64` write the cinterop definition of one Apple target.
+- A platform without a tree still builds. Its JNI library is missing, and its klib has the headers only, so an app that uses that klib does not link.
+
+The C++ compiles against the vendored headers in `libmpv-kmp-native/native/include/mpv/`, never against an installed mpv. When `v_mpv` changes, copy `client.h` and `stream_cb.h` again from `buildscripts/deps/mpv/include/mpv/`. The `mpvHeaders` check fails until the copies match.
+
+### Dev mode
+
+On an arm64 Mac without a tree, the macOS JNI library and the macOS klib link Homebrew's shared mpv instead. Run `brew install mpv` once. The manifest then starts with `# dev`. Homebrew's mpv can be older than the pin, and the catalog tests skip themselves when the versions differ.
+
+### The release checks
+
+- `./kotlin do checkDesktopJni` fails unless all four desktop platforms have a library linked from a tree. It also fails when a Linux or macOS library exports a symbol beside the JNI functions.
+- `./kotlin do checkNativeInterop` fails unless every Apple definition binds a tree.
+
+Dev mode and a missing tree both fail these checks, on purpose.

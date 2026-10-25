@@ -19,6 +19,10 @@ mpv.close()
 
 `Mpv` is `AutoCloseable`, so `use { }` closes it on the way out. Options are read at `initialize`; after that the same keys work as properties.
 
+`Mpv.create(context)` is Android only. It is an extension, so code outside the package `io.github.yuroyami.libmpv` imports it: `import io.github.yuroyami.libmpv.create`. The same goes for `attachSurface`, `detachSurface`, `attachedSurface`, `screenshot` and `thumbnail`.
+
+`Mpv.create()` takes no context and works on every platform. On Android it works once `Mpv.create(context)` has run in the process. On the desktop JVM, macOS and iOS, open the core with `vo=null`, because those platforms have no video output yet.
+
 ## Reading and writing properties
 
 ```kotlin
@@ -109,9 +113,13 @@ mpv.addStreamProtocol("content", ContentResolverStreamProvider(context))
 mpv.command(MpvCommands.loadFile("content://media/external/video/media/42"))
 ```
 
-`ContentResolverStreamProvider` ships with the library. Any other source is an `MpvStreamProvider` of your own: `open` returns an `MpvStream` with `read`, `seek`, `size` and `close`.
+`ContentResolverStreamProvider` ships with the library and is Android only. Any other source is an `MpvStreamProvider` of your own: `open` returns an `MpvStream` with `read`, `seek`, `size` and `close`.
+
+`addStreamProtocol` works on Android and the desktop JVM, not on macOS or iOS. It is an extension: import `io.github.yuroyami.libmpv.addStreamProtocol`.
 
 ## The window
+
+The window functions are Android only.
 
 ```kotlin
 override fun surfaceCreated(holder: SurfaceHolder) {

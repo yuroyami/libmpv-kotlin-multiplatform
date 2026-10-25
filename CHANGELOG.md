@@ -29,6 +29,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - `Mpv.create(context)`, `attachSurface`, `detachSurface` and `attachedSurface` (Android only).
   - `addStreamProtocol` (Android and the JVM).
 - `screenshot` and `thumbnail` stay Android extensions, but their JVM class changes from `MpvExtrasKt` to `MpvBitmapsKt`. Java callers update the class name.
+- `libmpv-kmp-native` and `libmpv-kmp` now also build for `macosArm64`, `iosArm64` and `iosSimulatorArm64`. On the desktop JVM, the JNI library `mpv_kmp_jni` ships inside the `libmpv-kmp-native` jar for macOS arm64, Linux x64 and arm64, and Windows x64. No release carries mpv for these platforms yet: the static mpv builds do not exist, and the release refuses to publish without them. These platforms have no video output yet.
+- Stream providers (`addStreamProtocol`, `MpvStreamProvider`, `MpvStream`) work on the desktop JVM.
+- A desktop app that shrinks its build with ProGuard keeps `MpvNative` and the stream types itself. `docs/getting-started.md` has the rules. The Android artifacts bring the same rules by themselves.
+- `sample-desktop` is a small JVM program that plays a file and prints each change of the playback state.
 - `MpvNative.create` sets the C numeric locale before every `mpv_create`, not only once at `initAndroid`. mpv returns no core under any other numeric locale, and an app can change the locale at any time.
 
 ## [0.3.0] - 2026-09-26

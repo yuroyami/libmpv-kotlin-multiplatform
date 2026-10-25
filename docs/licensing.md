@@ -12,6 +12,12 @@ The published AAR contains compiled mpv (GPL-2.0-or-later) and an FFmpeg configu
 
 For an app this means: shipping the AAR makes the app subject to the GPL, and the app has to make its own source available under GPL-compatible terms. If that is not acceptable, this artifact is not the one to use; an LGPL build of libmpv (`-Dgpl=false` in mpv, no `--enable-gpl` in FFmpeg) is possible and is listed as future work.
 
+## The desktop JVM and Apple libraries
+
+The desktop JNI library and the Apple klibs link mpv and its libraries statically. The same GPL-3.0-or-later applies to them, and to an app that ships them.
+
+The App Store terms conflict with the GPL. An iOS app in the App Store needs an LGPL build of libmpv, and no such build exists yet.
+
 ## The source offer
 
 Every GitHub release carries the mpv and FFmpeg source tarballs for the exact tags that were built, and `SOURCES.txt` names the tag and commit of every other library. The POM of every published version declares both licences.
