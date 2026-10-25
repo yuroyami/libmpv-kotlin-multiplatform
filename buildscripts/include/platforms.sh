@@ -18,6 +18,8 @@ loadplatform () {
 	export dir_suffix=-$1
 	export link_mode=static
 	export licence=lgpl
+	# Meson runs test programs only where the host can run them. An iOS binary does not run on a Mac.
+	meson_needs_wrapper=false
 
 	case "$1" in
 	macos-arm64)
@@ -30,6 +32,25 @@ loadplatform () {
 		meson_system=darwin meson_subsystem=macos meson_cpu_family=aarch64 meson_cpu=aarch64
 		cxx_aim_flags=$aim_flags
 		link_flags=$aim_flags
+		;;
+	ios-arm64|ios-simulator-arm64)
+		local sdk min
+		if [ "$1" == "ios-arm64" ]; then
+			export target_os=ios
+			sdk=iphoneos min=-mios-version-min=15.0 meson_subsystem=ios
+		else
+			export target_os=ios-simulator
+			sdk=iphonesimulator min=-mios-simulator-version-min=15.0 meson_subsystem=ios-simulator
+		fi
+		export host_triple=aarch64-apple-darwin
+		aim_flags="-arch arm64 -isysroot $(xcrun --sdk $sdk --show-sdk-path) $min"
+		export CC=clang CXX=clang++ AR=ar RANLIB=ranlib NM=nm STRIP=strip
+		meson_system=darwin meson_cpu_family=aarch64 meson_cpu=aarch64
+		meson_needs_wrapper=true
+		cxx_aim_flags=$aim_flags
+		link_flags=$aim_flags
+		# iOS has no system(), which Lua's os.execute needs.
+		dep_mpv=(ffmpeg libass libplacebo)
 		;;
 	*)
 		echo "Invalid or not yet supported platform: $1" >&2
@@ -76,6 +97,8 @@ nm = '$NM'
 strip = '$STRIP'
 pkgconfig = 'pkg-config'
 pkg-config = 'pkg-config'
+[properties]
+needs_exe_wrapper = $meson_needs_wrapper
 [host_machine]
 system = '$meson_system'
 subsystem = '$meson_subsystem'

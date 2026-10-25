@@ -7,6 +7,7 @@ import platform.posix.fclose
 import platform.posix.fopen
 import platform.posix.fwrite
 import platform.posix.getpid
+import kotlin.experimental.ExperimentalNativeApi
 
 internal actual fun createTestCore(): Mpv = Mpv.create()
 
@@ -22,3 +23,6 @@ internal actual fun writeTestFile(name: String, bytes: ByteArray): String {
 }
 
 internal actual val testRunsOnAndroid: Boolean = false
+
+@OptIn(ExperimentalNativeApi::class)
+internal actual val testCoreHasLua: Boolean = Platform.osFamily != OsFamily.IOS

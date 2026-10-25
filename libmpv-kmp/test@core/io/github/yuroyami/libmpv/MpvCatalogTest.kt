@@ -35,7 +35,11 @@ class MpvCatalogTest {
         val mpv = startPinned() ?: return
         try {
             val known = mpv[MpvProperties.PropertyList].getOrThrow().toSet()
-            val expected = if (testRunsOnAndroid) emptySet() else CatalogAvailability.notInStaticTrees
+            val expected = when {
+                testRunsOnAndroid -> emptySet()
+                testCoreHasLua -> CatalogAvailability.notInStaticTrees
+                else -> CatalogAvailability.notInStaticTrees + CatalogAvailability.withoutLua
+            }
             val missing = MpvProperties.all.map { it.name.substringBefore('/') }.filter { it !in known && it !in expected }
             assertTrue(missing.isEmpty(), "unknown to mpv ${mpv.getString("mpv-version")}: $missing")
         } finally { mpv.close() }

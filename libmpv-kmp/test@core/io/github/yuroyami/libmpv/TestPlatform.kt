@@ -8,3 +8,6 @@ internal expect fun writeTestFile(name: String, bytes: ByteArray): String
 
 /** True on an Android device, where the full Android build of mpv runs. */
 internal expect val testRunsOnAndroid: Boolean
+
+/** False where the build of mpv has no Lua scripting: the iOS trees, because iOS has no `system()`. */
+internal expect val testCoreHasLua: Boolean

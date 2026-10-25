@@ -9,7 +9,9 @@ aliases:
   # The code that the JVM and Android share: the stream providers.
   - jvmAndAndroid: [ jvm, android ]
   # The tests that start a real core, on every platform this host can run them. Android runs them in verification/.
-  - core: [ jvm, macosArm64 ]
+  - core: [ jvm, macosArm64, iosSimulatorArm64 ]
+  # The Apple platforms among those, for the test actuals that use Foundation and POSIX.
+  - appleCore: [ macosArm64, iosSimulatorArm64 ]
 
 apply:
   - //libmpv-kmp.module-template.yaml

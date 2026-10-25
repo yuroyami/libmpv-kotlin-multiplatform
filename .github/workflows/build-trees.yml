@@ -22,6 +22,8 @@ jobs:
       matrix:
         include:
           - { platform: macos-arm64, jni: true }
+          - { platform: ios-arm64, jni: false }
+          - { platform: ios-simulator-arm64, jni: false }
     steps:
       - uses: actions/checkout@v4
 

@@ -105,9 +105,10 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - Releases go to Maven Central, which never replaces or deletes a version. `publishingMode: manual`
   stops each upload on the Central Portal until the owner presses Publish there.
 - A source alias that names every platform of a module merges into `src/`, and its folder then cannot see
-  `src/`. `jvmAndAndroid` works only because the Apple targets are platforms too. Never write an alias of one platform.
-- Until the iOS prefix trees exist, every `./kotlin test` names its platforms (`-p android -p jvm -p macosArm64`).
-  The iOS klibs bind the mpv headers only, so an iOS test executable cannot link.
+  `src/`. `jvmAndAndroid`, `core` and `appleCore` work only because each leaves a platform out. Never write an
+  alias of one platform.
+- Every `./kotlin test` names its platforms (`-p jvm`, `-p macosArm64`, `-p iosSimulatorArm64`). `iosArm64` has
+  no test runner on a Mac, and the Android tests run in `verification/`.
 - The copied `abi-check` plugin does the JVM and klib dumps only. `android-abi-check` does the Android dump, because
   `abi-check` needs JVM classes and cannot run on an Android-only module.
 - Android's `jni.h` declares `AttachCurrentThread(JNIEnv **, ...)`, the desktop JDK's `(void **, ...)`. The

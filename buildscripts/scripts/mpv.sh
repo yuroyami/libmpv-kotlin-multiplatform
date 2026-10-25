@@ -58,3 +58,9 @@ if [ "$target_os" == "macos" ]; then
 	$AR rs $build/libmpv.a $build/utils-mac.o
 fi
 DESTDIR="$prefix_dir" ninja -C $build install
+
+# ao_audiounit uses AVAudioSession, but mpv's audiounit dependency names no AVFoundation, so a static
+# link outside Xcode fails. The framework goes into mpv.pc, as libplacebo.sh adds its C++ library.
+if [[ "$target_os" == ios* ]]; then
+	${SED:-sed} '/^Libs:/ s|$| -framework AVFoundation|' "$prefix_dir/lib/pkgconfig/mpv.pc" -i
+fi

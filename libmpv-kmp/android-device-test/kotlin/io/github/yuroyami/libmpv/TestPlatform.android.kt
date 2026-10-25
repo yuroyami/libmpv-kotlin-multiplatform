@@ -12,3 +12,5 @@ internal actual fun writeTestFile(name: String, bytes: ByteArray): String =
     File(context.cacheDir, name).apply { writeBytes(bytes) }.absolutePath
 
 internal actual val testRunsOnAndroid: Boolean = true
+
+internal actual val testCoreHasLua: Boolean = true

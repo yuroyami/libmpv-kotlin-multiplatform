@@ -54,18 +54,26 @@ jobs:
           key: kotlin-desktop-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
           restore-keys: |
             kotlin-desktop-
-      # The JNI library and the macOS klib link the static tree, never Homebrew's mpv.
+      # The JNI library and the Apple klibs link the static trees, never Homebrew's mpv.
       - uses: actions/download-artifact@v4
         with:
-          name: tree-macos-arm64
-      - run: mkdir -p buildscripts/prefix && tar -xzf tree-macos-arm64.tar.gz -C buildscripts/prefix
+          pattern: tree-*
+          merge-multiple: true
+      - run: |
+          mkdir -p buildscripts/prefix
+          for tree in tree-macos-arm64 tree-ios-arm64 tree-ios-simulator-arm64; do tar -xzf "$tree.tar.gz" -C buildscripts/prefix; done
       # mpv returns no core under a numeric locale other than C. The JVM takes the user's locale, so test a decimal comma.
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
         env:
           LC_ALL: de_DE.UTF-8
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p macosArm64
-      # No iOS mpv tree exists yet, so the iOS klibs bind the headers only. An iOS test cannot link.
-      - run: ./kotlin build -m libmpv-kmp-native -m libmpv-kmp -p iosArm64 -p iosSimulatorArm64
+      - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p iosSimulatorArm64
+      - run: ./kotlin build -m libmpv-kmp-native -m libmpv-kmp -p iosArm64
+      - name: Check that every Apple klib binds a tree
+        run: |
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do checkNativeInterop
       - run: ./kotlin check klibAbi -m libmpv-kmp-native -m libmpv-kmp
 
   natives:
