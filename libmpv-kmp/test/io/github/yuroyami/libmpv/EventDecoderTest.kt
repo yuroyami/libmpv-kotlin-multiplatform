@@ -6,9 +6,11 @@ import kotlin.test.assertNull
 
 class EventDecoderTest {
     private fun envelope(id: Int, replyId: Long = 0, error: Int = 0, node: MpvNode = MpvNode.None): ByteArray {
-        val head = java.nio.ByteBuffer.allocate(16).order(java.nio.ByteOrder.LITTLE_ENDIAN).putInt(id).putLong(replyId).putInt(error).array()
+        val head = littleEndian(id.toLong(), 4) + littleEndian(replyId, 8) + littleEndian(error.toLong(), 4)
         return head + NodeCodec.encode(node)
     }
+
+    private fun littleEndian(v: Long, bytes: Int) = ByteArray(bytes) { (v ushr (8 * it)).toByte() }
 
     @Test
     fun everyEventKindDecodes() {

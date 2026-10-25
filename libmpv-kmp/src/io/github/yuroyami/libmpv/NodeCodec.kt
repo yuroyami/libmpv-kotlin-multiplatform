@@ -1,8 +1,5 @@
 package io.github.yuroyami.libmpv
 
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-
 /**
  * The byte form nodes take across JNI. Tags are `mpv_format` values, integers are little-endian;
  * the C++ side (`node_codec.cpp`) implements the same table. One buffer per call, no reflection.
@@ -42,36 +39,39 @@ public object NodeCodec {
     }
 
     private class Writer {
-        private var buf = ByteBuffer.allocate(256).order(ByteOrder.LITTLE_ENDIAN)
+        private var buf = ByteArray(256)
+        private var size = 0
 
         private fun ensure(n: Int) {
-            if (buf.remaining() >= n) return
-            val bigger = ByteBuffer.allocate(maxOf(buf.capacity() * 2, buf.position() + n)).order(ByteOrder.LITTLE_ENDIAN)
-            buf.flip()
-            bigger.put(buf)
-            buf = bigger
+            if (buf.size - size >= n) return
+            buf = buf.copyOf(maxOf(buf.size * 2, size + n))
         }
 
         private fun u8(v: Int) {
             ensure(1)
-            buf.put(v.toByte())
+            buf[size++] = v.toByte()
         }
 
         private fun u32(v: Int) {
             ensure(4)
-            buf.putInt(v)
+            for (i in 0 until 4) buf[size++] = (v ushr (8 * i)).toByte()
         }
 
         private fun i64(v: Long) {
             ensure(8)
-            buf.putLong(v)
+            for (i in 0 until 8) buf[size++] = (v ushr (8 * i)).toByte()
+        }
+
+        private fun raw(b: ByteArray) {
+            ensure(b.size)
+            b.copyInto(buf, size)
+            size += b.size
         }
 
         private fun str(s: String) {
-            val b = s.toByteArray(Charsets.UTF_8)
+            val b = s.encodeToByteArray()
             u32(b.size)
-            ensure(b.size)
-            buf.put(b)
+            raw(b)
         }
 
         fun node(n: MpvNode) {
@@ -80,40 +80,51 @@ public object NodeCodec {
                 is MpvNode.Str -> { u8(STRING); str(n.value) }
                 is MpvNode.Flag -> { u8(FLAG); u8(if (n.value) 1 else 0) }
                 is MpvNode.Int64 -> { u8(INT64); i64(n.value) }
-                is MpvNode.Dbl -> { u8(DOUBLE); i64(java.lang.Double.doubleToRawLongBits(n.value)) }
+                is MpvNode.Dbl -> { u8(DOUBLE); i64(n.value.toRawBits()) }
                 is MpvNode.Arr -> { u8(ARRAY); u32(n.values.size); n.values.forEach { node(it) } }
                 is MpvNode.Dict -> { u8(MAP); u32(n.values.size); n.values.forEach { (k, v) -> str(k); node(v) } }
-                is MpvNode.Bytes -> { u8(BYTES); u32(n.value.size); ensure(n.value.size); buf.put(n.value) }
+                is MpvNode.Bytes -> { u8(BYTES); u32(n.value.size); raw(n.value) }
             }
         }
 
-        fun toByteArray(): ByteArray = ByteArray(buf.position()).also { buf.flip(); buf.get(it) }
+        fun toByteArray(): ByteArray = buf.copyOf(size)
     }
 
     /** Deeper than anything mpv sends; a guard against a malformed buffer, not a format limit. */
     private const val MAX_DEPTH = 64
 
-    private class Reader(bytes: ByteArray) {
-        private val buf = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+    private class Reader(private val buf: ByteArray) {
+        private var pos = 0
         private var depth = 0
 
+        private val remaining: Int get() = buf.size - pos
+
         private fun need(n: Int) {
-            require(buf.remaining() >= n) { "truncated node buffer: needed $n bytes at ${buf.position()}, ${buf.remaining()} left" }
+            require(remaining >= n) { "truncated node buffer: needed $n bytes at $pos, $remaining left" }
         }
 
         fun u8(): Int {
             need(1)
-            return buf.get().toInt() and 0xff
+            return buf[pos++].toInt() and 0xff
         }
 
         fun i32(): Int {
             need(4)
-            return buf.getInt()
+            var v = 0
+            for (i in 0 until 4) v = v or ((buf[pos++].toInt() and 0xff) shl (8 * i))
+            return v
         }
 
         fun i64(): Long {
             need(8)
-            return buf.getLong()
+            var v = 0L
+            for (i in 0 until 8) v = v or ((buf[pos++].toLong() and 0xff) shl (8 * i))
+            return v
+        }
+
+        private fun bytes(n: Int): ByteArray {
+            need(n)
+            return buf.copyOfRange(pos, pos + n).also { pos += n }
         }
 
         private fun u32(): Int {
@@ -123,17 +134,14 @@ public object NodeCodec {
         }
 
         private fun str(): String {
-            val n = u32()
-            need(n)
-            val b = ByteArray(n)
-            buf.get(b)
-            return String(b, Charsets.UTF_8)
+            // Invalid UTF-8 decodes to U+FFFD, as String(bytes, UTF_8) does on the JVM.
+            return bytes(u32()).decodeToString()
         }
 
         /** A count of entries that each take at least [minBytes], checked before anything is allocated. */
         private fun count(minBytes: Int): Int {
             val n = u32()
-            require(n <= buf.remaining() / minBytes) { "node count $n cannot fit in ${buf.remaining()} bytes" }
+            require(n <= remaining / minBytes) { "node count $n cannot fit in $remaining bytes" }
             return n
         }
 
@@ -146,11 +154,11 @@ public object NodeCodec {
                     STRING -> MpvNode.Str(str())
                     FLAG -> MpvNode.Flag(u8() != 0)
                     INT64 -> MpvNode.Int64(i64())
-                    DOUBLE -> MpvNode.Dbl(java.lang.Double.longBitsToDouble(i64()))
+                    DOUBLE -> MpvNode.Dbl(Double.fromBits(i64()))
                     ARRAY -> MpvNode.Arr(List(count(minBytes = 1)) { node() })
                     MAP -> MpvNode.Dict(LinkedHashMap<String, MpvNode>().also { m -> repeat(count(minBytes = 5)) { m[str()] = node() } })
-                    BYTES -> MpvNode.Bytes(ByteArray(u32().also { need(it) }).also { buf.get(it) })
-                    else -> throw IllegalArgumentException("unknown node tag $tag at ${buf.position() - 1}")
+                    BYTES -> MpvNode.Bytes(bytes(u32()))
+                    else -> throw IllegalArgumentException("unknown node tag $tag at ${pos - 1}")
                 }
             } finally {
                 depth--

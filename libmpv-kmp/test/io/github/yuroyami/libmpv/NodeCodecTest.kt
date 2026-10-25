@@ -83,4 +83,17 @@ class NodeCodecTest {
         val shallow = (1..10).fold<Int, MpvNode>(MpvNode.None) { inner, _ -> MpvNode.Arr(listOf(inner)) }
         roundTrip(shallow)
     }
+
+    @Test
+    fun invalidUtf8DecodesToReplacementCharacters() {
+        // STRING, length 2, then 0xC3 without its continuation byte, then '('.
+        val bytes = byteArrayOf(1, 2, 0, 0, 0, 0xC3.toByte(), 0x28)
+        assertEquals(MpvNode.Str("\uFFFD("), NodeCodec.decode(bytes))
+    }
+
+    @Test
+    fun nonAsciiTextRoundTrips() {
+        val node = MpvNode.Str("日本語の字幕 ✓")
+        assertEquals(node, NodeCodec.decode(NodeCodec.encode(node)))
+    }
 }
