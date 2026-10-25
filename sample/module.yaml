@@ -1,0 +1,29 @@
+# The Android sample. One screen per layer: MPVLib, MpvView on each surface type, MpvSurface in
+# Compose, MpvPlayer and the canvas. Each screen runs in its own process, because each holds a core.
+# Not published. The release build runs R8 with no rules of its own, which checks that the
+# libraries' keep rules are enough.
+product: android/app
+
+apply:
+  - //libmpvkt.module-template.yaml
+  - //android.module-template.yaml
+
+dependencies:
+  - //libmpvkt
+  - //libmpvkt-view
+  - //libmpvkt-compose
+  - //libmpvkt-canvas
+  - $libs.androidx.activity.compose
+  - $libs.compose.material
+
+settings:
+  compose:
+    enabled: true
+  android:
+    namespace: io.github.yuroyami.libmpvkt.sample
+    applicationId: io.github.yuroyami.libmpvkt.sample
+    # 26, not the library's 21: the canvas screen needs AHardwareBuffer.
+    minSdk: 26
+    targetSdk: 37
+    versionCode: 1
+    versionName: "1.0"

@@ -21,11 +21,15 @@ api=$(adb shell getprop ro.build.version.sdk | tr -d '\r')
 echo "device: $model, API $api"
 
 abi=$(adb shell getprop ro.product.cpu.abi | tr -d '\r')
-echo "building the sample for $abi"
-./gradlew :sample:assembleDebug -Plibmpvkt.abis="$abi" --console=plain -q
+echo "building the sample"
+KOTLIN_CLI_NO_WELCOME_BANNER=1 ./kotlin build -m sample
+apk=$(find build/tasks -path '*_sample_buildAndroidDebug*' -name '*.apk' -type f | head -1)
+[ -n "$apk" ] || { echo "no debug APK of the sample under build/tasks" >&2; exit 1; }
+# The sample carries every ABI that native-libs holds in full; the device's own must be one of them.
+unzip -l "$apk" | grep -q "lib/$abi/libmpv.so" || { echo "the sample carries no $abi natives" >&2; exit 1; }
 
 echo "installing"
-adb install -r sample/build/outputs/apk/debug/sample-debug.apk >/dev/null
+adb install -r "$apk" >/dev/null
 
 staging=/data/local/tmp/canvas-measure.mp4
 video_in_app=/data/user/0/$PKG/files/canvas-measure.mp4

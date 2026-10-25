@@ -13,6 +13,7 @@ modules:
   - libmpvkt-compose
   - libmpvkt-native
   - libmpvkt-view
+  - sample
 
 plugins:
   - //build-plugins/abi-check
