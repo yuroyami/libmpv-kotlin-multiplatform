@@ -1,0 +1,4 @@
+// <version> arrived in libstdc++ 9; the Kotlin/Native Linux sysroots ship libstdc++ 8. libplacebo includes
+// it only for feature-test macros, and <ciso646> brings libstdc++'s own (bits/c++config.h).
+#pragma once
+#include <ciso646>

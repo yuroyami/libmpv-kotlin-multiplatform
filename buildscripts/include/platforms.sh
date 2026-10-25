@@ -52,6 +52,32 @@ loadplatform () {
 		# iOS has no system(), which Lua's os.execute needs.
 		dep_mpv=(ffmpeg libass libplacebo)
 		;;
+	linux-x64|linux-arm64)
+		export target_os=linux
+		# Kotlin/Native's clang and sysroot, written by ./kotlin do crossToolchains.
+		if [ ! -f "$prefix_dir/toolchain.env" ]; then
+			echo "No $prefix_dir/toolchain.env. Run ./kotlin do crossToolchains first." >&2
+			exit 1
+		fi
+		. "$prefix_dir/toolchain.env"
+		if [ "$1" == "linux-x64" ]; then
+			export host_triple=x86_64-linux-gnu
+			meson_cpu_family=x86_64 meson_cpu=x86_64
+		else
+			export host_triple=aarch64-linux-gnu
+			meson_cpu_family=aarch64 meson_cpu=aarch64
+		fi
+		export CC=$CROSS_CC CXX=$CROSS_CXX AR=$CROSS_AR RANLIB=$CROSS_RANLIB NM=$CROSS_NM
+		# Nothing strips a static archive, and Kotlin/Native's LLVM has no strip.
+		export STRIP=/usr/bin/true
+		# The archives end up inside a shared library, so every object is position independent.
+		aim_flags="$CROSS_CFLAGS -fPIC"
+		cxx_aim_flags="$CROSS_CXXFLAGS -fPIC -isystem $PWD/include/compat/libstdcxx8"
+		link_flags="-target $CROSS_TRIPLE --sysroot=$CROSS_SYSROOT $CROSS_LDFLAGS"
+		meson_system=linux meson_subsystem=linux
+		meson_needs_wrapper=true
+		dep_mpv=(ffmpeg libass lua libplacebo alsa)
+		;;
 	*)
 		echo "Invalid or not yet supported platform: $1" >&2
 		exit 1
@@ -66,12 +92,11 @@ loadplatform () {
 }
 
 setup_platform_prefix () {
-	if [ ! -d "$prefix_dir" ]; then
-		mkdir -p "$prefix_dir"
-		# enforce flat structure (/usr/local -> /)
-		ln -s . "$prefix_dir/usr"
-		ln -s . "$prefix_dir/local"
-	fi
+	# enforce flat structure (/usr/local -> /). The folder can exist already: crossToolchains writes
+	# toolchain.env into it first.
+	mkdir -p "$prefix_dir"
+	[ -e "$prefix_dir/usr" ] || ln -s . "$prefix_dir/usr"
+	[ -e "$prefix_dir/local" ] || ln -s . "$prefix_dir/local"
 
 	cat >"$prefix_dir/crossfile.tmp" <<CROSSFILE
 [built-in options]

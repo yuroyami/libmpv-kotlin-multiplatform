@@ -143,7 +143,7 @@ usage () {
 		"--deps-only    Build everything mpv needs, then stop (CI caches this)" \
 		"--clean        Clean build dirs before compiling" \
 		"--arch <arch>  Build for specified architecture (default: $arch; supported: armv7l, arm64, x86, x86_64)" \
-		"--platform <p> Build a static LGPL mpv tree instead (macos-arm64, ios-arm64, ios-simulator-arm64). The default target is then mpv"
+		"--platform <p> Build a static LGPL mpv tree instead (macos-arm64, ios-arm64, ios-simulator-arm64, linux-x64, linux-arm64). The default target is then mpv"
 	exit 0
 }
 

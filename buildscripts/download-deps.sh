@@ -44,6 +44,7 @@ fetch_tar unibreak "https://github.com/adah1972/libunibreak/releases/download/li
 clone libass     https://github.com/libass/libass.git                 "$v_libass"
 fetch_tar lua    "https://www.lua.org/ftp/lua-$v_lua.tar.gz"
 clone libplacebo https://code.videolan.org/videolan/libplacebo.git    "v$v_libplacebo" --recurse-submodules --shallow-submodules
+clone alsa       https://github.com/alsa-project/alsa-lib.git         "v$v_alsa"
 clone mpv        https://github.com/mpv-player/mpv.git                "v$v_mpv"
 
 cd ..

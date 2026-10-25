@@ -10,12 +10,19 @@ class KonanProperties(private val properties: Properties) {
     fun crossDependencies(host: String, target: String): List<String> =
         properties.getProperty("dependencies.$host-$target").orEmpty().split(Regex("\\s+")).filter { it.isNotEmpty() }.map(::resolve)
 
+    /** The LLVM package that a [host] such as `macos_arm64` compiles with. */
+    fun llvm(host: String): String = properties.getProperty("llvm.$host.user") ?: error("konan.properties has no llvm.$host.user")
+
     fun downloadUrl(packageName: String): String = "${properties.getProperty("dependenciesUrl").trimEnd('/')}/$packageName.tar.gz"
 
     private fun resolve(token: String): String =
         if (token.startsWith("$")) resolve(properties.getProperty(token.drop(1)) ?: error("konan.properties has no ${token.drop(1)}")) else token
 
     companion object {
+        /** The archive of the Kotlin/Native [kotlinVersion] for [host], such as `macos-aarch64`. */
+        fun distributionUrl(kotlinVersion: String, host: String): String =
+            "https://download.jetbrains.com/kotlin/native/builds/releases/$kotlinVersion/$host/kotlin-native-prebuilt-$host-$kotlinVersion.tar.gz"
+
         fun parse(text: String): KonanProperties = KonanProperties(Properties().apply { load(StringReader(text)) })
 
         /** The properties of the Kotlin/Native [kotlinVersion] under [konanRoot], whatever host it was made for. */

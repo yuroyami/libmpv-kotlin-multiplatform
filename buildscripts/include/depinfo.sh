@@ -17,6 +17,8 @@ v_freetype=2.14.3
 v_fribidi=1.0.16
 v_unibreak=7.0
 v_lua=5.2.4
+# Linux trees only (buildall.sh --platform linux-*): the audio output of mpv there.
+v_alsa=1.2.16.1
 
 ## Dependency tree. buildall.sh builds a target's dependencies first, in this order.
 
@@ -29,6 +31,7 @@ dep_harfbuzz=()
 dep_unibreak=()
 dep_libass=(freetype2 fribidi harfbuzz unibreak)
 dep_lua=()
+dep_alsa=()
 dep_libplacebo=()
 dep_mpv=(ffmpeg libass lua libplacebo)
 dep_jni=(mpv)
@@ -39,4 +42,4 @@ prefix_id="ndk${v_ndk}-ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo
 
 ## The cache identity of everything below mpv in a static platform tree (buildall.sh --platform), as
 ## prefix_id is for Android: the pins and every build tool pin, without the NDK.
-tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}"
+tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-alsa${v_alsa}"

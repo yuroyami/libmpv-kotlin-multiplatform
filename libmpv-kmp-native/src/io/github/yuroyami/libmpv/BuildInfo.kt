@@ -21,6 +21,8 @@ public object BuildInfo {
     public const val FRIBIDI: String = "1.0.16"
     public const val LIBUNIBREAK: String = "7.0"
     public const val LUA: String = "5.2.4"
+    /** alsa-lib, linked into the Linux libraries only. */
+    public const val ALSA_LIB: String = "1.2.16.1"
     /** The Android NDK the libraries were compiled with. */
     public const val NDK: String = "29.0.14206865"
     /** The lowest Android API level the libraries were compiled for. */

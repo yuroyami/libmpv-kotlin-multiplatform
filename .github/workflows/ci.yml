@@ -1,4 +1,5 @@
-# Every push and pull request: the gate, the static mpv trees, the JVM, macOS and iOS core on macOS, the natives with their packaging
+# Every push and pull request: the gate, the static mpv trees, the JVM, macOS and iOS core on macOS, the JVM core on Linux,
+# the natives with their packaging
 # and the sample, and the device tests on an emulator.
 #
 # Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
@@ -75,6 +76,32 @@ jobs:
           # shellcheck disable=SC1010
           ./kotlin do checkNativeInterop
       - run: ./kotlin check klibAbi -m libmpv-kmp-native -m libmpv-kmp
+
+  linux:
+    name: JVM core on Linux
+    needs: trees
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-linux-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-linux-
+            kotlin-gate-
+      # The trees job links the Linux library on macOS. This job has no tree, so the build here links nothing.
+      - uses: actions/download-artifact@v4
+        with:
+          name: jni-linux-x64
+          path: jni
+      # The configuration files of the system alsa-lib. LinuxAudioTest replaces the top file with ALSA_CONFIG_PATH.
+      - run: sudo apt-get update && sudo apt-get install -y libasound2t64
+      - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
+        env:
+          JAVA_TOOL_OPTIONS: -Dlibmpv-kmp.jni.path=${{ github.workspace }}/jni/libmpv_kmp_jni.so
+          ALSA_CONFIG_PATH: ${{ runner.temp }}/asound.conf
 
   natives:
     uses: ./.github/workflows/build-natives.yml

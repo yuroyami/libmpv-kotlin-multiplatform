@@ -1,5 +1,5 @@
 # Builds the static LGPL mpv trees (buildall.sh --platform), one macOS job each, and uploads each as
-# the tree-<platform> artifact. A desktop platform also links its JNI library from the tree and
+# the tree-<platform> artifact. The Linux trees cross compile with Kotlin/Native's clang and sysroots. A desktop platform also links its JNI library from the tree and
 # uploads it as jni-<platform>. Called by ci.yml on every push.
 #
 # Everything below mpv is cached under tree_id and the hash of the scripts, as build-natives.yml
@@ -24,6 +24,8 @@ jobs:
           - { platform: macos-arm64, jni: true }
           - { platform: ios-arm64, jni: false }
           - { platform: ios-simulator-arm64, jni: false }
+          - { platform: linux-x64, jni: true, cross: true }
+          - { platform: linux-arm64, jni: true, cross: true }
     steps:
       - uses: actions/checkout@v4
 
@@ -57,6 +59,29 @@ jobs:
           path: buildscripts/deps
           key: ${{ steps.sources.outputs.cache-primary-key }}
 
+      - uses: actions/cache@v4
+        if: matrix.jni
+        with:
+          path: ~/Library/Caches/JetBrains/Kotlin
+          key: kotlin-trees-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-trees-
+            kotlin-desktop-
+
+      # The Kotlin/Native distribution with its LLVM and the Linux and Windows sysroots, about 1 GB.
+      - uses: actions/cache@v4
+        if: matrix.cross
+        with:
+          path: ~/.konan
+          key: konan-${{ hashFiles('libmpv-kmp.module-template.yaml') }}
+
+      - name: Write the cross toolchains
+        if: matrix.cross
+        run: |
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do crossToolchains
+
       - name: Restore the tree below mpv
         id: tree
         uses: actions/cache/restore@v4
@@ -88,15 +113,6 @@ jobs:
           path: tree-${{ matrix.platform }}.tar.gz
           if-no-files-found: error
           retention-days: 7
-
-      - uses: actions/cache@v4
-        if: matrix.jni
-        with:
-          path: ~/Library/Caches/JetBrains/Kotlin
-          key: kotlin-trees-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
-          restore-keys: |
-            kotlin-trees-
-            kotlin-desktop-
 
       - name: Link the JNI library from the tree
         if: matrix.jni

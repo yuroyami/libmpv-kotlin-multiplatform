@@ -74,6 +74,7 @@ else
 	)
 	case "$target_os" in
 		macos|ios*) args+=(--enable-{videotoolbox,audiotoolbox}) ;;
+		linux) args+=(--enable-pic) ;;
 		windows) args+=(--disable-pthreads --enable-w32threads) ;;
 	esac
 fi
