@@ -81,6 +81,9 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - The sample's screens each run in their own process, because each holds a core.
 - The sample is minSdk 26 while the library is 21: its canvas screen needs `AHardwareBuffer`, and
   `activity-compose` alone would already ask for 23.
+- The toolchain's `compose: enabled` also adds `org.jetbrains.compose` runtime and `components-resources`
+  to the POM, which puts a content provider into every app. The Compose modules apply only the Compose
+  compiler, through `compose.module-template.yaml`, and depend on androidx Compose themselves.
 - `Mpv.events` has no replay: subscribe before the command that produces the event, or it is gone.
 - The catalog test is the truth about names. When it fails, fix the table in the catalog, never the
   test: it reads mpv's own `property-list` and `command-list`.

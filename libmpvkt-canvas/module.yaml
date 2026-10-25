@@ -8,6 +8,7 @@ apply:
   - //libmpvkt.module-template.yaml
   - //android.module-template.yaml
   - //library.module-template.yaml
+  - //compose.module-template.yaml
 
 dependencies:
   - //libmpvkt-view: exported
@@ -27,9 +28,6 @@ settings:
     namespace: io.github.yuroyami.libmpvkt.canvas
     # AHardwareBuffer and libnativewindow start at API 26.
     minSdk: 26
-  compose:
-    enabled: true
-    version: 1.9.0
   publishing:
     pom:
       name: libmpvkt-canvas

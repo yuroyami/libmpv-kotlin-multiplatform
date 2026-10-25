@@ -1,0 +1,12 @@
+# The Compose compiler for the published Compose modules, without `compose: enabled`. That setting
+# also adds org.jetbrains.compose runtime and components-resources to the POM, and components-resources
+# puts a content provider into every app. The modules depend on androidx Compose themselves instead.
+# These are the plugin and options that `compose: enabled` passes. Keep the version at the Kotlin version.
+settings:
+  kotlin:
+    compilerPlugins:
+      - id: androidx.compose.compiler.plugins.kotlin
+        dependency: org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable:2.4.21
+        options:
+          generateFunctionKeyMetaAnnotations: "true"
+          sourceInformation: "true"
