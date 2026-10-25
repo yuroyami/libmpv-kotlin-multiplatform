@@ -1,11 +1,11 @@
-# libmpvKt
+# libmpv-kotlin-multiplatform
 
 libmpv for Android as one Maven artifact: mpv, FFmpeg, libass, libplacebo and their dependencies, prebuilt for `arm64-v8a`, `armeabi-v7a`, `x86` and `x86_64`, behind a typed Kotlin API.
 
 The artifacts are on Maven Central:
 
 ```kotlin
-implementation("io.github.yuroyami:libmpvkt:0.4.0")
+implementation("io.github.yuroyami:libmpv-kmp:0.4.0")
 ```
 
 - [The typed API](typed-api.md): `Mpv`, the catalogs, events as flows, playback state, streams and hooks.
@@ -15,4 +15,4 @@ implementation("io.github.yuroyami:libmpvkt:0.4.0")
 - [Building the natives](building-natives.md): the scripts, the pins, the cache, and how CI runs them.
 - [Releasing](releasing.md): how a version reaches Maven Central.
 - [Licensing](licensing.md): what is Apache-2.0, what is GPL, and what that means for an app.
-- [API reference](https://yuroyami.github.io/libmpvKt/api/): every public declaration.
+- [API reference](https://yuroyami.github.io/libmpv-kotlin-multiplatform/api/): every public declaration.

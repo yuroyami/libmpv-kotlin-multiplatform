@@ -1,0 +1,28 @@
+# The typed API: Mpv, the node model, the catalogs, the events, the playback state, the stream
+# providers and the deprecated MPVLib facade. It exports libmpv-kmp-native, so an app names one artifact.
+product:
+  type: kmp/lib
+  platforms: [ android ]
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+  - //android.module-template.yaml
+  - //library.module-template.yaml
+
+dependencies:
+  - //libmpv-kmp-native: exported
+  - $libs.kotlinx.coroutines.core: exported
+
+test-dependencies:
+  - $libs.kotlinx.coroutines.test
+
+settings:
+  android:
+    namespace: io.github.yuroyami.libmpv
+  publishing:
+    pom:
+      name: libmpv-kmp
+      description: "The typed Kotlin API for libmpv on Android: Mpv, one class per mpv core. It brings libmpv-kmp-native, which holds mpv, FFmpeg, libass, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64. The native libraries are GPL."
+
+plugins:
+  android-abi-check: enabled

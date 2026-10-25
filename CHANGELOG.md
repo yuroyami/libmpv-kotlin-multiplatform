@@ -1,13 +1,25 @@
 # Changelog
 
-All notable changes to libmpvKt are documented here.
+All notable changes to libmpv-kotlin-multiplatform (named libmpvKt up to 0.3.0) are documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). libmpvKt is pre-1.0: a minor version may change the public API, and this file says so when it happens.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The library is pre-1.0: a minor version may change the public API, and this file says so when it happens.
 
 ## [Unreleased]
 
-- Releases move to Maven Central, under the same group and artifact names. Add `mavenCentral()` and drop the `https://yuroyami.github.io/maven` repository. Versions 0.3.0 and older stay in that repository.
-- Two new artifacts come in by themselves: `libmpvkt-android-natives` holds the ten native libraries of `libmpvkt-native`, and `libmpvkt-canvas-android-natives` holds `libmpvkt_render.so`. They are plain jars with the libraries under `lib/<abi>/` and the keep rules under `META-INF/proguard/`. The file names of the libraries do not change, so an exclusion list that names them still holds.
+- The library is renamed to libmpv-kotlin-multiplatform. Update the dependency lines, the imports, and any list of library files:
+
+  | Before | After |
+  |---|---|
+  | repository `yuroyami/libmpvKt` | `yuroyami/libmpv-kotlin-multiplatform` |
+  | package `io.github.yuroyami.libmpvkt` | `io.github.yuroyami.libmpv` |
+  | artifacts `libmpvkt`, `libmpvkt-native`, `libmpvkt-view`, `libmpvkt-compose`, `libmpvkt-canvas` | `libmpv-kmp`, `libmpv-kmp-native`, `libmpv-kmp-view`, `libmpv-kmp-compose`, `libmpv-kmp-canvas` |
+  | `libmpvkt_jni.so`, `libmpvkt_render.so` | `libmpv_kmp_jni.so`, `libmpv_kmp_render.so` |
+  | `InternalLibmpvKtApi`, `BuildInfo.LIBMPVKT` | `InternalLibmpvKmpApi`, `BuildInfo.LIBMPV_KMP` |
+  | logcat tag `libmpvKt` | `libmpv-kmp` |
+
+  The group stays `io.github.yuroyami`. The other eight native libraries keep their names.
+- Releases move to Maven Central. Add `mavenCentral()` and drop the `https://yuroyami.github.io/maven` repository. Versions 0.3.0 and older stay in that repository, under the old names.
+- Two new artifacts come in by themselves: `libmpv-kmp-android-natives` holds the ten native libraries of `libmpv-kmp-native`, and `libmpv-kmp-canvas-android-natives` holds `libmpv_kmp_render.so`. They are plain jars with the libraries under `lib/<abi>/` and the keep rules under `META-INF/proguard/`.
 - The AARs keep their classes in `libs/<artifact>-jvm.jar` and have no `aar-metadata.properties`. Gradle therefore no longer checks that the app's compile SDK is 35 or newer. The floor still applies, so check it yourself.
 - The project builds with the Kotlin toolchain (the `./kotlin` script) instead of Gradle, on Kotlin 2.4.21. The device tests run in a separate Gradle build under `verification/`.
 - Each module commits a dump of its Android API under `api/android/`, and a check fails when the public API changes without a new dump.

@@ -5,7 +5,7 @@
   the guide site and the repository. Without it the API reference is a dead end:
   you can go deeper, but never back out to prose.
 
-  https://yuroyami.github.io/libmpvKt/ and https://github.com/yuroyami/libmpvKt are substituted per repository by
+  https://yuroyami.github.io/libmpv-kotlin-multiplatform/ and https://github.com/yuroyami/libmpv-kotlin-multiplatform are substituted per repository by
   _kite-docs/sync.sh. Edit the source in _kite-docs/, not the copies. _kite-docs/ lives in the owner's
   Kite workspace, next to this repository rather than inside it.
 -->
@@ -28,8 +28,8 @@
             <@version/>
         </div>
         <nav class="kite-nav-links" aria-label="Kite documentation">
-            <a href="https://yuroyami.github.io/libmpvKt/">Guide</a>
-            <a href="https://github.com/yuroyami/libmpvKt">GitHub</a>
+            <a href="https://yuroyami.github.io/libmpv-kotlin-multiplatform/">Guide</a>
+            <a href="https://github.com/yuroyami/libmpv-kotlin-multiplatform">GitHub</a>
         </nav>
         <div class="navigation-controls">
             <@source_set_selector.display/>

@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildtools
+package io.github.yuroyami.libmpv.buildtools
 
 /** The Kotlin source of `BuildInfo`, from the text of depinfo.sh. Throws [IllegalStateException] naming any absent pin. */
 fun renderBuildInfo(depinfo: String, version: String, minSdk: Int): String =
@@ -17,15 +17,15 @@ object BuildInfoSource {
         fun pin(key: String): String = pins[key] ?: error("depinfo.sh has no v_$key")
         return """
             |// Written by `./kotlin do updateBuildInfo` from buildscripts/include/depinfo.sh. Do not edit.
-            |package io.github.yuroyami.libmpvkt
+            |package io.github.yuroyami.libmpv
             |
             |/**
-            | * What this build of libmpvKt contains. Readable before [MPVLib.create]. Once the core is
+            | * What this build of libmpv-kotlin-multiplatform contains. Readable before [MPVLib.create]. Once the core is
             | * initialised, mpv reports the same through its `mpv-version` and `ffmpeg-version` properties.
             | */
             |public object BuildInfo {
-            |    /** The libmpvKt artifact version. */
-            |    public const val LIBMPVKT: String = "$version"
+            |    /** The libmpv-kotlin-multiplatform artifact version. */
+            |    public const val LIBMPV_KMP: String = "$version"
             |    /** The mpv release, without the leading v. */
             |    public const val MPV: String = "${pin("mpv")}"
             |    /** The FFmpeg release, without the leading n. */

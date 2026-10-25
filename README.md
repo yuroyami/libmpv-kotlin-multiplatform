@@ -1,12 +1,12 @@
-# libmpvKt
+# libmpv-kotlin-multiplatform
 
 Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFmpeg, libass, dav1d and the rest, compiled for all four Android ABIs, with a Kotlin API where every property, command and event has a type.
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/libmpvkt?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.yuroyami/libmpvkt)
-[![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/libmpvKt/ci.yml?label=CI)](https://github.com/yuroyami/libmpvKt/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/libmpv-kmp?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.yuroyami/libmpv-kmp)
+[![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/libmpv-kotlin-multiplatform/ci.yml?label=CI)](https://github.com/yuroyami/libmpv-kotlin-multiplatform/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0%20wrapper%2C%20GPL%20binaries-blue)](NOTICE)
 
-**[Documentation](https://yuroyami.github.io/libmpvKt/)** · [API reference](https://yuroyami.github.io/libmpvKt/api/) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
+**[Documentation](https://yuroyami.github.io/libmpv-kotlin-multiplatform/)** · [API reference](https://yuroyami.github.io/libmpv-kotlin-multiplatform/api/) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
 ## What you get
 
@@ -19,13 +19,13 @@ The native libraries are built in public CI from pinned upstream versions. Each 
 
 ## Install
 
-The artifacts are on Maven Central. Add the artifact that matches how you show video. Each one pulls in `libmpvkt` and the native libraries by itself.
+The artifacts are on Maven Central. Add the artifact that matches how you show video. Each one pulls in `libmpv-kmp` and the native libraries by itself.
 
 With Gradle, in the app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.github.yuroyami:libmpvkt-compose:0.4.0")
+    implementation("io.github.yuroyami:libmpv-kmp-compose:0.4.0")
 }
 ```
 
@@ -33,7 +33,7 @@ With the Kotlin toolchain, in the app's `module.yaml`:
 
 ```yaml
 dependencies:
-  - io.github.yuroyami:libmpvkt-compose:0.4.0
+  - io.github.yuroyami:libmpv-kmp-compose:0.4.0
 ```
 
 In a Kotlin Multiplatform module, use `dependencies@android:` instead of `dependencies:`.
@@ -42,10 +42,10 @@ Versions 0.3.0 and older are not on Maven Central. They stay in the old reposito
 
 | Artifact | What it gives you | Min SDK |
 |---|---|---|
-| `libmpvkt-view` | `MpvView`, an Android View, and `MpvOptions` | 21 |
-| `libmpvkt-compose` | `MpvSurface` and `MpvPlayer`, for Compose | 21 |
-| `libmpvkt-canvas` | `MpvCanvas`, the experimental Compose canvas | 26 |
-| `libmpvkt` | `Mpv` on its own, for apps that handle the surface themselves | 21 |
+| `libmpv-kmp-view` | `MpvView`, an Android View, and `MpvOptions` | 21 |
+| `libmpv-kmp-compose` | `MpvSurface` and `MpvPlayer`, for Compose | 21 |
+| `libmpv-kmp-canvas` | `MpvCanvas`, the experimental Compose canvas | 26 |
+| `libmpv-kmp` | `Mpv` on its own, for apps that handle the surface themselves | 21 |
 
 Your app needs compile SDK 35 or newer and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. In a Gradle Kotlin Multiplatform project, the line goes in `androidMain.dependencies`. You need no ProGuard rules: the artifacts bring their own.
 
@@ -92,7 +92,7 @@ MpvPlayer(Modifier.fillMaxSize()) { view -> view.playFile(url) }
 `MpvCanvas` draws the video as a plain Compose image. You can rotate, blur, clip or capture it like any other drawing. It costs one extra GPU pass per frame, plus a CPU copy on API 26 to 28.
 
 ```kotlin
-val mpv = rememberMpv(MpvOptions.forCanvas())   // rememberMpv comes from libmpvkt-compose
+val mpv = rememberMpv(MpvOptions.forCanvas())   // rememberMpv comes from libmpv-kmp-compose
 val renderer = rememberMpvRenderer(mpv)
 LaunchedEffect(mpv) { mpv.command(MpvCommands.loadFile(url)) }
 MpvCanvas(renderer, Modifier.fillMaxSize().graphicsLayer { rotationZ = 15f })
@@ -178,7 +178,7 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 
 FFmpeg has its decoders, demuxers and MediaCodec hardware decoding. It has no encoders or muxers, except the few that mpv's screenshots and cache dumps use.
 
-The libraries in the published artifacts are stripped. From 0.3.0, every release page also has a `libmpvkt-symbols-<abi>.zip` with the unstripped copies, which carry the same build ids. Give them to your crash reporter, or read a crash with `ndk-stack -sym <unzipped>/<abi>`. The NDK keeps the unstripped `libc++_shared.so` itself.
+The libraries in the published artifacts are stripped. Every release page also has a `libmpv-kmp-symbols-<abi>.zip` with the unstripped copies (`libmpvkt-symbols-<abi>.zip` for 0.3.0), which carry the same build ids. Give them to your crash reporter, or read a crash with `ndk-stack -sym <unzipped>/<abi>`. The NDK keeps the unstripped `libc++_shared.so` itself.
 
 ## Building the natives yourself
 

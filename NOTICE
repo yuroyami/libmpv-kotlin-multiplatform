@@ -1,4 +1,4 @@
-libmpvKt
+libmpv-kotlin-multiplatform
 Copyright 2026 Yuroyami
 
 The Kotlin wrapper, the JNI sources and the build scripts in this repository are
@@ -8,7 +8,7 @@ licensed under the Apache License, Version 2.0. See LICENSE.
 mpv-android
 --------------------------------------------------------------------------------
 
-MPVLib.kt, the JNI sources under libmpvkt-native/native/jni and the shape of the
+MPVLib.kt, the JNI sources under libmpv-kmp-native/native/jni and the shape of the
 build scripts under buildscripts/ derive from mpv-android
 (https://github.com/mpv-android/mpv-android), which is licensed under the MIT
 License:
@@ -39,7 +39,7 @@ The native libraries inside the published AAR
 
 The AAR redistributes compiled copies of the projects below, built from
 unmodified release sources at the tags named in buildscripts/include/depinfo.sh.
-They are NOT covered by libmpvKt's Apache-2.0 licence. Because mpv is GPL and
+They are NOT covered by libmpv-kotlin-multiplatform's Apache-2.0 licence. Because mpv is GPL and
 FFmpeg is configured with --enable-gpl --enable-version3, the AAR as a whole can
 only be redistributed under the GNU General Public License, version 3 or later.
 An application that ships it is bound by that licence.
@@ -58,5 +58,5 @@ An application that ships it is bound by that licence.
   libc++        Apache-2.0 with LLVM exception, from the Android NDK
 
 The complete corresponding source of mpv and FFmpeg is attached to every
-libmpvKt GitHub release beside the binaries, and every other project is
+libmpv-kotlin-multiplatform GitHub release beside the binaries, and every other project is
 reachable at the tag named in BUILD-INFO.txt inside each release zip.

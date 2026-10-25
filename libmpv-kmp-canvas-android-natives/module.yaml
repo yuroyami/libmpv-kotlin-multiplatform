@@ -1,0 +1,22 @@
+# libmpv_kmp_render.so of libmpv-kmp-canvas, as lib/<abi>/ in a plain jar, with the canvas keep rules.
+# libmpv-kmp-canvas depends on it for Android only. The library links libmpv.so from
+# libmpv-kmp-android-natives at load time, so both must have the same version.
+product: jvm/lib
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+  - //library.module-template.yaml
+
+settings:
+  publishing:
+    pom:
+      name: libmpv-kmp-canvas-android-natives
+      description: "The Android render library of libmpv-kmp-canvas for arm64-v8a, armeabi-v7a, x86 and x86_64. It comes with libmpv-kmp-canvas; never add it yourself."
+
+plugins:
+  android-natives:
+    enabled: true
+    nativeLibsDir: libmpv-kmp-canvas/native-libs
+    files: [ libmpv_kmp_render.so ]
+    # AHardwareBuffer and libnativewindow start at API 26.
+    minApi: 26

@@ -1,18 +1,18 @@
 tasks:
   dumpAndroid:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.dumpAndroidAbi
+    action: !io.github.yuroyami.libmpv.buildplugins.androidabi.dumpAndroidAbi
       moduleName: ${module.name}
       buildDir: ${project.rootDir}/build
       dumpFile: ${taskOutputDir}/android.api
 
   checkAndroid:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.checkAndroidAbi
+    action: !io.github.yuroyami.libmpv.buildplugins.androidabi.checkAndroidAbi
       moduleName: ${module.name}
       builtDump: ${tasks.dumpAndroid.action.dumpFile}
       committedDump: ${module.rootDir}/${pluginSettings.dumpDir}/${module.name}.api
 
   updateAndroid:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.androidabi.updateAndroidAbi
+    action: !io.github.yuroyami.libmpv.buildplugins.androidabi.updateAndroidAbi
       builtDump: ${tasks.dumpAndroid.action.dumpFile}
       committedDump: ${tasks.checkAndroid.action.committedDump}
 

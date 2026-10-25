@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildplugins.buildinfo
+package io.github.yuroyami.libmpv.buildplugins.buildinfo
 
 import org.jetbrains.amper.plugins.Configurable
 

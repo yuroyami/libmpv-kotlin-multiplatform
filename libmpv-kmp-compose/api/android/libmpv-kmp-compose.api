@@ -1,0 +1,13 @@
+public final class io/github/yuroyami/libmpv/compose/MpvPlayerKt {
+	public static final fun MpvPlayer (Landroidx/compose/ui/Modifier;Lio/github/yuroyami/libmpv/view/MpvOptions;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/yuroyami/libmpv/compose/MpvSurfaceKt {
+	public static final synthetic fun MpvSurface-OfvnV4Q (Lio/github/yuroyami/libmpv/Mpv;Landroidx/compose/ui/Modifier;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;ZILandroidx/compose/runtime/Composer;II)V
+	public static final fun MpvSurface-_q5UN-c (Lio/github/yuroyami/libmpv/Mpv;Landroidx/compose/ui/Modifier;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;ZILandroidx/compose/runtime/Composer;II)V
+}
+
+public final class io/github/yuroyami/libmpv/compose/RememberMpvKt {
+	public static final fun rememberMpv (Lio/github/yuroyami/libmpv/view/MpvOptions;Landroidx/compose/runtime/Composer;II)Lio/github/yuroyami/libmpv/Mpv;
+}
+

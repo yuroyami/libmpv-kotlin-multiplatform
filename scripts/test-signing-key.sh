@@ -12,7 +12,7 @@ if [ -z "${KOTLIN_TOOLCHAIN_SIGNING_KEY:-}" ]; then
     _lm_gnupg=$(mktemp -d)
     chmod 700 "$_lm_gnupg"
     GNUPGHOME="$_lm_gnupg" gpg --batch --quiet --pinentry-mode loopback --passphrase '' \
-        --quick-gen-key "libmpvKt local check <local-check@invalid>" rsa3072 sign never 2> /dev/null
+        --quick-gen-key "libmpv-kotlin-multiplatform local check <local-check@invalid>" rsa3072 sign never 2> /dev/null
     KOTLIN_TOOLCHAIN_SIGNING_KEY=$(GNUPGHOME="$_lm_gnupg" gpg --batch --pinentry-mode loopback --passphrase '' \
         --armor --export-secret-keys 2> /dev/null)
     export KOTLIN_TOOLCHAIN_SIGNING_KEY

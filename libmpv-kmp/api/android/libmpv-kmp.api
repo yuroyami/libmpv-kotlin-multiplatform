@@ -1,0 +1,2704 @@
+public abstract interface class io/github/yuroyami/libmpv/AbLoopPoint {
+}
+
+public final class io/github/yuroyami/libmpv/AbLoopPoint$At : io/github/yuroyami/libmpv/AbLoopPoint {
+	public fun <init> (D)V
+	public final fun component1 ()D
+	public final fun copy (D)Lio/github/yuroyami/libmpv/AbLoopPoint$At;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/AbLoopPoint$At;DILjava/lang/Object;)Lio/github/yuroyami/libmpv/AbLoopPoint$At;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSeconds ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AbLoopPoint$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AbLoopPoint$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/AbLoopPoint;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/AbLoopPoint;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/AbLoopPoint$No : io/github/yuroyami/libmpv/AbLoopPoint {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AbLoopPoint$No;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/ApplyProfileMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Apply Lio/github/yuroyami/libmpv/ApplyProfileMode;
+	public static final field Restore Lio/github/yuroyami/libmpv/ApplyProfileMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ApplyProfileMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ApplyProfileMode;
+}
+
+public final class io/github/yuroyami/libmpv/AspectMethod : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bitstream Lio/github/yuroyami/libmpv/AspectMethod;
+	public static final field Container Lio/github/yuroyami/libmpv/AspectMethod;
+	public static final field Ignore Lio/github/yuroyami/libmpv/AspectMethod;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/AspectMethod;
+	public static fun values ()[Lio/github/yuroyami/libmpv/AspectMethod;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/AspectOverride {
+}
+
+public final class io/github/yuroyami/libmpv/AspectOverride$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AspectOverride$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/AspectOverride;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/AspectOverride;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/AspectOverride$Disabled : io/github/yuroyami/libmpv/AspectOverride {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AspectOverride$Disabled;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AspectOverride$Named : io/github/yuroyami/libmpv/AspectOverride {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/yuroyami/libmpv/AspectOverride$Named;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/AspectOverride$Named;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/AspectOverride$Named;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AspectOverride$Original : io/github/yuroyami/libmpv/AspectOverride {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AspectOverride$Original;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AspectOverride$Ratio : io/github/yuroyami/libmpv/AspectOverride {
+	public fun <init> (D)V
+	public final fun component1 ()D
+	public final fun copy (D)Lio/github/yuroyami/libmpv/AspectOverride$Ratio;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/AspectOverride$Ratio;DILjava/lang/Object;)Lio/github/yuroyami/libmpv/AspectOverride$Ratio;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AudioDisplayMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field EmbeddedFirst Lio/github/yuroyami/libmpv/AudioDisplayMode;
+	public static final field ExternalFirst Lio/github/yuroyami/libmpv/AudioDisplayMode;
+	public static final field No Lio/github/yuroyami/libmpv/AudioDisplayMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/AudioDisplayMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/AudioDisplayMode;
+}
+
+public final class io/github/yuroyami/libmpv/AudioParams {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/AudioParams;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/AudioParams;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/AudioParams;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChannelCount ()Ljava/lang/Integer;
+	public final fun getChannels ()Ljava/lang/String;
+	public final fun getFormat ()Ljava/lang/String;
+	public final fun getHrChannels ()Ljava/lang/String;
+	public final fun getSamplerate ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/AudioParams$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/AudioParams$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/AudioParams;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/AudioParams;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/AutoYesNo : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/AutoYesNo;
+	public static final field No Lio/github/yuroyami/libmpv/AutoYesNo;
+	public static final field Yes Lio/github/yuroyami/libmpv/AutoYesNo;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/AutoYesNo;
+	public static fun values ()[Lio/github/yuroyami/libmpv/AutoYesNo;
+}
+
+public final class io/github/yuroyami/libmpv/AutoloadMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field All Lio/github/yuroyami/libmpv/AutoloadMode;
+	public static final field Exact Lio/github/yuroyami/libmpv/AutoloadMode;
+	public static final field Fuzzy Lio/github/yuroyami/libmpv/AutoloadMode;
+	public static final field No Lio/github/yuroyami/libmpv/AutoloadMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/AutoloadMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/AutoloadMode;
+}
+
+public final class io/github/yuroyami/libmpv/BlendSubtitlesMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field No Lio/github/yuroyami/libmpv/BlendSubtitlesMode;
+	public static final field Video Lio/github/yuroyami/libmpv/BlendSubtitlesMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/BlendSubtitlesMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/BlendSubtitlesMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/BlendSubtitlesMode;
+}
+
+public final class io/github/yuroyami/libmpv/ChangeListOp : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Add Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Append Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Clr Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Pre Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Remove Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Set Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static final field Toggle Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ChangeListOp;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ChangeListOp;
+}
+
+public final class io/github/yuroyami/libmpv/ColorPrimaries : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field AcesAp0 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field AcesAp1 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Adobe Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Apple Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Auto Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Bt2020 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Bt470m Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Bt601_525 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Bt601_625 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Bt709 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Cie1931 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field DciP3 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field DisplayP3 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Ebu3213 Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field FilmC Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field Prophoto Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field SGamut Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static final field VGamut Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ColorPrimaries;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ColorPrimaries;
+}
+
+public final class io/github/yuroyami/libmpv/CycleDirection : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Down Lio/github/yuroyami/libmpv/CycleDirection;
+	public static final field Up Lio/github/yuroyami/libmpv/CycleDirection;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/CycleDirection;
+	public static fun values ()[Lio/github/yuroyami/libmpv/CycleDirection;
+}
+
+public final class io/github/yuroyami/libmpv/DeinterlaceMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/DeinterlaceMode;
+	public static final field No Lio/github/yuroyami/libmpv/DeinterlaceMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/DeinterlaceMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/DeinterlaceMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/DeinterlaceMode;
+}
+
+public final class io/github/yuroyami/libmpv/DemuxerCacheState {
+	public fun <init> (Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Double;ZZZLjava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;ZZ)V
+	public final fun component1 ()Ljava/lang/Double;
+	public final fun component10 ()Ljava/lang/Long;
+	public final fun component11 ()Ljava/util/List;
+	public final fun component12 ()Z
+	public final fun component13 ()Z
+	public final fun component2 ()Ljava/lang/Double;
+	public final fun component3 ()Ljava/lang/Double;
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Z
+	public final fun component7 ()Ljava/lang/Long;
+	public final fun component8 ()Ljava/lang/Long;
+	public final fun component9 ()Ljava/lang/Long;
+	public final fun copy (Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Double;ZZZLjava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;ZZ)Lio/github/yuroyami/libmpv/DemuxerCacheState;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/DemuxerCacheState;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Double;ZZZLjava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/Long;Ljava/util/List;ZZILjava/lang/Object;)Lio/github/yuroyami/libmpv/DemuxerCacheState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBofCache ()Z
+	public final fun getCacheDuration ()Ljava/lang/Double;
+	public final fun getCacheEnd ()Ljava/lang/Double;
+	public final fun getEof ()Z
+	public final fun getEofCache ()Z
+	public final fun getFileCacheBytes ()Ljava/lang/Long;
+	public final fun getFwBytes ()Ljava/lang/Long;
+	public final fun getIdle ()Z
+	public final fun getRawInputRate ()Ljava/lang/Long;
+	public final fun getReaderPts ()Ljava/lang/Double;
+	public final fun getSeekableRanges ()Ljava/util/List;
+	public final fun getTotalBytes ()Ljava/lang/Long;
+	public final fun getUnderrun ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/DemuxerCacheState$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/DemuxerCacheState$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/DemuxerCacheState;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/DemuxerCacheState;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/DitherMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field ErrorDiffusion Lio/github/yuroyami/libmpv/DitherMode;
+	public static final field Fruit Lio/github/yuroyami/libmpv/DitherMode;
+	public static final field No Lio/github/yuroyami/libmpv/DitherMode;
+	public static final field Ordered Lio/github/yuroyami/libmpv/DitherMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/DitherMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/DitherMode;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/EditionSelection {
+}
+
+public final class io/github/yuroyami/libmpv/EditionSelection$Auto : io/github/yuroyami/libmpv/EditionSelection {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/EditionSelection$Auto;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/EditionSelection$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/EditionSelection$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/EditionSelection;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/EditionSelection;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/EditionSelection$Index : io/github/yuroyami/libmpv/EditionSelection {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/yuroyami/libmpv/EditionSelection$Index;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/EditionSelection$Index;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/EditionSelection$Index;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/EndFileReason : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Eof Lio/github/yuroyami/libmpv/EndFileReason;
+	public static final field Error Lio/github/yuroyami/libmpv/EndFileReason;
+	public static final field Quit Lio/github/yuroyami/libmpv/EndFileReason;
+	public static final field Redirect Lio/github/yuroyami/libmpv/EndFileReason;
+	public static final field Stop Lio/github/yuroyami/libmpv/EndFileReason;
+	public static final field Unknown Lio/github/yuroyami/libmpv/EndFileReason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/EndFileReason;
+	public static fun values ()[Lio/github/yuroyami/libmpv/EndFileReason;
+}
+
+public final class io/github/yuroyami/libmpv/FilterOperation : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Add Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Clr Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Help Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Pre Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Remove Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Set Lio/github/yuroyami/libmpv/FilterOperation;
+	public static final field Toggle Lio/github/yuroyami/libmpv/FilterOperation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/FilterOperation;
+	public static fun values ()[Lio/github/yuroyami/libmpv/FilterOperation;
+}
+
+public final class io/github/yuroyami/libmpv/ForceWindowMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Immediate Lio/github/yuroyami/libmpv/ForceWindowMode;
+	public static final field No Lio/github/yuroyami/libmpv/ForceWindowMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/ForceWindowMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ForceWindowMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ForceWindowMode;
+}
+
+public final class io/github/yuroyami/libmpv/FrameStepMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Mute Lio/github/yuroyami/libmpv/FrameStepMode;
+	public static final field Play Lio/github/yuroyami/libmpv/FrameStepMode;
+	public static final field Seek Lio/github/yuroyami/libmpv/FrameStepMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/FrameStepMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/FrameStepMode;
+}
+
+public final class io/github/yuroyami/libmpv/FramedropMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Decoder Lio/github/yuroyami/libmpv/FramedropMode;
+	public static final field DecoderPlusVo Lio/github/yuroyami/libmpv/FramedropMode;
+	public static final field No Lio/github/yuroyami/libmpv/FramedropMode;
+	public static final field Vo Lio/github/yuroyami/libmpv/FramedropMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/FramedropMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/FramedropMode;
+}
+
+public final class io/github/yuroyami/libmpv/GaplessAudioMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field No Lio/github/yuroyami/libmpv/GaplessAudioMode;
+	public static final field Weak Lio/github/yuroyami/libmpv/GaplessAudioMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/GaplessAudioMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/GaplessAudioMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/GaplessAudioMode;
+}
+
+public final class io/github/yuroyami/libmpv/GpuApi : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/GpuApi;
+	public static final field Opengl Lio/github/yuroyami/libmpv/GpuApi;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/GpuApi;
+	public static fun values ()[Lio/github/yuroyami/libmpv/GpuApi;
+}
+
+public final class io/github/yuroyami/libmpv/HorizontalAlign : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Center Lio/github/yuroyami/libmpv/HorizontalAlign;
+	public static final field Left Lio/github/yuroyami/libmpv/HorizontalAlign;
+	public static final field Right Lio/github/yuroyami/libmpv/HorizontalAlign;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/HorizontalAlign;
+	public static fun values ()[Lio/github/yuroyami/libmpv/HorizontalAlign;
+}
+
+public final class io/github/yuroyami/libmpv/HrSeekMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Absolute Lio/github/yuroyami/libmpv/HrSeekMode;
+	public static final field Default Lio/github/yuroyami/libmpv/HrSeekMode;
+	public static final field No Lio/github/yuroyami/libmpv/HrSeekMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/HrSeekMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/HrSeekMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/HrSeekMode;
+}
+
+public final class io/github/yuroyami/libmpv/HwdecMode {
+	public static final field Companion Lio/github/yuroyami/libmpv/HwdecMode$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/yuroyami/libmpv/HwdecMode;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/HwdecMode$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/HwdecMode$Codec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode-uSVVAI8 (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/String;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode-uKZARiU (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/HwdecMode$Companion {
+	public final fun getAuto-VaVPFo8 ()Ljava/lang/String;
+	public final fun getAutoCopy-VaVPFo8 ()Ljava/lang/String;
+	public final fun getAutoSafe-VaVPFo8 ()Ljava/lang/String;
+	public final fun getMediacodec-VaVPFo8 ()Ljava/lang/String;
+	public final fun getMediacodecCopy-VaVPFo8 ()Ljava/lang/String;
+	public final fun getNo-VaVPFo8 ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/IdleMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field No Lio/github/yuroyami/libmpv/IdleMode;
+	public static final field Once Lio/github/yuroyami/libmpv/IdleMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/IdleMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/IdleMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/IdleMode;
+}
+
+public final class io/github/yuroyami/libmpv/IndexMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Default Lio/github/yuroyami/libmpv/IndexMode;
+	public static final field Recreate Lio/github/yuroyami/libmpv/IndexMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/IndexMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/IndexMode;
+}
+
+public abstract interface annotation class io/github/yuroyami/libmpv/InternalLibmpvKmpApi : java/lang/annotation/Annotation {
+}
+
+public final class io/github/yuroyami/libmpv/Justify : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/Justify;
+	public static final field Center Lio/github/yuroyami/libmpv/Justify;
+	public static final field Left Lio/github/yuroyami/libmpv/Justify;
+	public static final field Right Lio/github/yuroyami/libmpv/Justify;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/Justify;
+	public static fun values ()[Lio/github/yuroyami/libmpv/Justify;
+}
+
+public final class io/github/yuroyami/libmpv/KeepOpenMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Always Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public static final field No Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/KeepOpenMode;
+}
+
+public final class io/github/yuroyami/libmpv/LoadFileMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Append Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field AppendPlay Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field InsertAt Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field InsertAtPlay Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field InsertNext Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field InsertNextPlay Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static final field Replace Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/LoadFileMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/LoadFileMode;
+}
+
+public final class io/github/yuroyami/libmpv/LoadListMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Append Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field AppendPlay Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field InsertAt Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field InsertAtPlay Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field InsertNext Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field InsertNextPlay Lio/github/yuroyami/libmpv/LoadListMode;
+	public static final field Replace Lio/github/yuroyami/libmpv/LoadListMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/LoadListMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/LoadListMode;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/LoopCount {
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$AbLoopCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/LoopCount$AbLoopCodec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/LoopCount;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/LoopCount;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/LoopCount$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/LoopCount;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/LoopCount;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$Force : io/github/yuroyami/libmpv/LoopCount {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/LoopCount$Force;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$Inf : io/github/yuroyami/libmpv/LoopCount {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/LoopCount$Inf;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$No : io/github/yuroyami/libmpv/LoopCount {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/LoopCount$No;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/LoopCount$Times : io/github/yuroyami/libmpv/LoopCount {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/yuroyami/libmpv/LoopCount$Times;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/LoopCount$Times;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/LoopCount$Times;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCount ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MPVLib {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MPVLib;
+	public static final fun addLogObserver (Lio/github/yuroyami/libmpv/MPVLib$LogObserver;)V
+	public static final fun addObserver (Lio/github/yuroyami/libmpv/MPVLib$EventObserver;)V
+	public final fun attachSurface (Landroid/view/Surface;)V
+	public final fun command ([Ljava/lang/String;)V
+	public final fun create (Landroid/content/Context;)V
+	public final fun destroy ()V
+	public final fun detachSurface ()V
+	public static final fun event (I)V
+	public static final fun eventProperty (Ljava/lang/String;)V
+	public static final fun eventProperty (Ljava/lang/String;D)V
+	public static final fun eventProperty (Ljava/lang/String;J)V
+	public static final fun eventProperty (Ljava/lang/String;Ljava/lang/String;)V
+	public static final fun eventProperty (Ljava/lang/String;Z)V
+	public final fun getPropertyBoolean (Ljava/lang/String;)Ljava/lang/Boolean;
+	public final fun getPropertyDouble (Ljava/lang/String;)Ljava/lang/Double;
+	public final fun getPropertyInt (Ljava/lang/String;)Ljava/lang/Integer;
+	public final fun getPropertyString (Ljava/lang/String;)Ljava/lang/String;
+	public final fun grabThumbnail (I)Landroid/graphics/Bitmap;
+	public final fun init ()V
+	public static final fun logMessage (Ljava/lang/String;ILjava/lang/String;)V
+	public final fun observeProperty (Ljava/lang/String;I)V
+	public static final fun removeLogObserver (Lio/github/yuroyami/libmpv/MPVLib$LogObserver;)V
+	public static final fun removeObserver (Lio/github/yuroyami/libmpv/MPVLib$EventObserver;)V
+	public final fun setOptionString (Ljava/lang/String;Ljava/lang/String;)I
+	public final fun setPropertyBoolean (Ljava/lang/String;Z)V
+	public final fun setPropertyDouble (Ljava/lang/String;D)V
+	public final fun setPropertyInt (Ljava/lang/String;I)V
+	public final fun setPropertyString (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MPVLib$EventObserver {
+	public abstract fun event (I)V
+	public abstract fun eventProperty (Ljava/lang/String;)V
+	public abstract fun eventProperty (Ljava/lang/String;D)V
+	public abstract fun eventProperty (Ljava/lang/String;J)V
+	public abstract fun eventProperty (Ljava/lang/String;Ljava/lang/String;)V
+	public abstract fun eventProperty (Ljava/lang/String;Z)V
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MPVLib$LogObserver {
+	public abstract fun logMessage (Ljava/lang/String;ILjava/lang/String;)V
+}
+
+public final class io/github/yuroyami/libmpv/MPVLib$MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MPVLib$MpvEvent;
+	public static final field MPV_EVENT_AUDIO_RECONFIG I
+	public static final field MPV_EVENT_CLIENT_MESSAGE I
+	public static final field MPV_EVENT_COMMAND_REPLY I
+	public static final field MPV_EVENT_END_FILE I
+	public static final field MPV_EVENT_FILE_LOADED I
+	public static final field MPV_EVENT_GET_PROPERTY_REPLY I
+	public static final field MPV_EVENT_HOOK I
+	public static final field MPV_EVENT_IDLE I
+	public static final field MPV_EVENT_LOG_MESSAGE I
+	public static final field MPV_EVENT_NONE I
+	public static final field MPV_EVENT_PLAYBACK_RESTART I
+	public static final field MPV_EVENT_PROPERTY_CHANGE I
+	public static final field MPV_EVENT_QUEUE_OVERFLOW I
+	public static final field MPV_EVENT_SEEK I
+	public static final field MPV_EVENT_SET_PROPERTY_REPLY I
+	public static final field MPV_EVENT_SHUTDOWN I
+	public static final field MPV_EVENT_START_FILE I
+	public static final field MPV_EVENT_TICK I
+	public static final field MPV_EVENT_VIDEO_RECONFIG I
+}
+
+public final class io/github/yuroyami/libmpv/MPVLib$MpvFormat {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MPVLib$MpvFormat;
+	public static final field MPV_FORMAT_BYTE_ARRAY I
+	public static final field MPV_FORMAT_DOUBLE I
+	public static final field MPV_FORMAT_FLAG I
+	public static final field MPV_FORMAT_INT64 I
+	public static final field MPV_FORMAT_NODE I
+	public static final field MPV_FORMAT_NODE_ARRAY I
+	public static final field MPV_FORMAT_NODE_MAP I
+	public static final field MPV_FORMAT_NONE I
+	public static final field MPV_FORMAT_OSD_STRING I
+	public static final field MPV_FORMAT_STRING I
+}
+
+public final class io/github/yuroyami/libmpv/MPVLib$MpvLogLevel {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MPVLib$MpvLogLevel;
+	public static final field MPV_LOG_LEVEL_DEBUG I
+	public static final field MPV_LOG_LEVEL_ERROR I
+	public static final field MPV_LOG_LEVEL_FATAL I
+	public static final field MPV_LOG_LEVEL_INFO I
+	public static final field MPV_LOG_LEVEL_NONE I
+	public static final field MPV_LOG_LEVEL_TRACE I
+	public static final field MPV_LOG_LEVEL_V I
+	public static final field MPV_LOG_LEVEL_WARN I
+}
+
+public final class io/github/yuroyami/libmpv/Mpv : java/lang/AutoCloseable {
+	public static final field Companion Lio/github/yuroyami/libmpv/Mpv$Companion;
+	public final fun addStreamProtocol (Ljava/lang/String;Lio/github/yuroyami/libmpv/stream/MpvStreamProvider;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun attachSurface (Landroid/view/Surface;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun attachSurface$default (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public fun close ()V
+	public final fun command (Lio/github/yuroyami/libmpv/MpvCommand;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun command ([Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun commandAsync (Lio/github/yuroyami/libmpv/MpvCommand;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun createClient (Ljava/lang/String;)Lio/github/yuroyami/libmpv/Mpv;
+	public final fun delete (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun detachSurface ()V
+	public final fun get (Lio/github/yuroyami/libmpv/MpvProperty;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun getAsync (Lio/github/yuroyami/libmpv/MpvProperty;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getAttachedSurface ()Landroid/view/Surface;
+	public final fun getClientName ()Ljava/lang/String;
+	public final fun getEvents ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getLogs ()Lkotlinx/coroutines/flow/SharedFlow;
+	public final fun getNativeHandle ()J
+	public final fun getNode (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun getOsdString (Ljava/lang/String;)Ljava/lang/String;
+	public final fun getPlayback ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getString (Ljava/lang/String;)Ljava/lang/String;
+	public final fun hook (Ljava/lang/String;ILkotlin/jvm/functions/Function2;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun hook$default (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;ILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun initialize ()Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun isClosed ()Z
+	public final fun isInitialized ()Z
+	public final fun observe (Lio/github/yuroyami/libmpv/MpvProperty;)Lkotlinx/coroutines/flow/Flow;
+	public final fun observeNode (Ljava/lang/String;I)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun observeNode$default (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;IILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
+	public final fun onBeforeClose (Lkotlin/jvm/functions/Function0;)Lkotlinx/coroutines/DisposableHandle;
+	public final fun requestLogMessages (Lio/github/yuroyami/libmpv/MpvLogLevel;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun set (Lio/github/yuroyami/libmpv/MpvProperty;Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun setAsync (Lio/github/yuroyami/libmpv/MpvProperty;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun setNode (Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun setOption (Lio/github/yuroyami/libmpv/MpvProperty;Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun setOption (Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun setString (Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun withNativeHandle (Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+}
+
+public final class io/github/yuroyami/libmpv/Mpv$Companion {
+	public final fun create (Landroid/content/Context;)Lio/github/yuroyami/libmpv/Mpv;
+	public final fun getApiVersion ()J
+}
+
+public final class io/github/yuroyami/libmpv/MpvAudioDevice {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvAudioDevice;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvAudioDevice;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvAudioDevice;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvAudioDevice$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvAudioDevice$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvAudioDevice;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvAudioDevice;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvAudioDevice$ListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvAudioDevice$ListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvChapter {
+	public fun <init> (Ljava/lang/String;D)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()D
+	public final fun copy (Ljava/lang/String;D)Lio/github/yuroyami/libmpv/MpvChapter;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvChapter;Ljava/lang/String;DILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvChapter;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTimeSeconds ()D
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvChapter$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvChapter$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvChapter;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvChapter;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvChapter$ListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvChapter$ListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MpvChoice {
+	public abstract fun getMpvName ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MpvCodec {
+	public abstract fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public abstract fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommand {
+	public static final field Companion Lio/github/yuroyami/libmpv/MpvCommand$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun getArgs ()Ljava/util/List;
+	public final fun toNode ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommand$Companion {
+	public final fun named (Ljava/lang/String;[Lkotlin/Pair;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun of ([Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommandArg {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Z)Lio/github/yuroyami/libmpv/MpvCommandArg;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvCommandArg;Ljava/lang/String;Ljava/lang/String;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommandArg;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getOptional ()Z
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommandInfo {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Z)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Z
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Z)Lio/github/yuroyami/libmpv/MpvCommandInfo;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvCommandInfo;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommandInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArgs ()Ljava/util/List;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getVarargs ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommandInfo$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvCommandInfo$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvCommandInfo;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvCommandInfo;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommandInfo$ListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvCommandInfo$ListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvCommands {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvCommands;
+	public final fun abLoop ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun abLoopAlignCache ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun abLoopDumpCache (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun add (Ljava/lang/String;D)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun add$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;DILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun af (Lio/github/yuroyami/libmpv/FilterOperation;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun afCommand (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun afCommand$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun applyProfile (Ljava/lang/String;Lio/github/yuroyami/libmpv/ApplyProfileMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun applyProfile$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/ApplyProfileMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun audioAdd (Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun audioAdd$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun audioReload (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun audioReload$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun audioRemove (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun audioRemove$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun changeList (Ljava/lang/String;Lio/github/yuroyami/libmpv/ChangeListOp;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun cycle (Ljava/lang/String;Lio/github/yuroyami/libmpv/CycleDirection;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun cycle$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/CycleDirection;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun cycleValues (Ljava/lang/String;Ljava/util/List;Z)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun cycleValues$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun del (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun deleteWatchLaterConfig (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun deleteWatchLaterConfig$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun dropBuffers ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun dumpCache (DDLjava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun escapeAss (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun expandPath (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun expandText (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun frameBackStep ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun frameStep (ILio/github/yuroyami/libmpv/FrameStepMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun frameStep$default (Lio/github/yuroyami/libmpv/MpvCommands;ILio/github/yuroyami/libmpv/FrameStepMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun getAll ()Ljava/util/List;
+	public final fun ignore ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun keybind (Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun keydown (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun keypress (Ljava/lang/String;Ljava/lang/Double;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun keypress$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Ljava/lang/Double;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun keyup (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun keyup$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun loadConfigFile (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun loadFile (Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadFileMode;Ljava/lang/Integer;Ljava/util/Map;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun loadFile$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadFileMode;Ljava/lang/Integer;Ljava/util/Map;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun loadInputConf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun loadList (Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadListMode;Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun loadList$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadListMode;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun loadScript (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun multiply (Ljava/lang/String;D)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun osdOverlay (ILio/github/yuroyami/libmpv/OsdOverlayFormat;Ljava/lang/String;IIIZZ)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun osdOverlay$default (Lio/github/yuroyami/libmpv/MpvCommands;ILio/github/yuroyami/libmpv/OsdOverlayFormat;Ljava/lang/String;IIIZZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistClear ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistMove (II)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistNext (Lio/github/yuroyami/libmpv/PlaylistNextMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun playlistNext$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/PlaylistNextMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistNextPlaylist ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistPlayIndex (Lio/github/yuroyami/libmpv/PlaylistIndex;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistPrev (Lio/github/yuroyami/libmpv/PlaylistNextMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun playlistPrev$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/PlaylistNextMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistPrevPlaylist ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistRemove (Lio/github/yuroyami/libmpv/PlaylistIndex;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistShuffle ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun playlistUnshuffle ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun printText (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun quit (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun quit$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun quitWatchLater (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun quitWatchLater$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun rescanExternalFiles (Lio/github/yuroyami/libmpv/RescanMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun rescanExternalFiles$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/RescanMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun revertSeek (Lio/github/yuroyami/libmpv/RevertSeekMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun revertSeek$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/RevertSeekMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun screenshot (Lio/github/yuroyami/libmpv/ScreenshotMode;Z)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun screenshot$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/ScreenshotMode;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun screenshotRaw (Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun screenshotRaw$default (Lio/github/yuroyami/libmpv/MpvCommands;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun screenshotToFile (Ljava/lang/String;Lio/github/yuroyami/libmpv/ScreenshotMode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun screenshotToFile$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/ScreenshotMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun scriptBinding (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun scriptMessage ([Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun scriptMessageTo (Ljava/lang/String;[Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun seek (DLio/github/yuroyami/libmpv/SeekMode;Lio/github/yuroyami/libmpv/SeekPrecision;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun seek$default (Lio/github/yuroyami/libmpv/MpvCommands;DLio/github/yuroyami/libmpv/SeekMode;Lio/github/yuroyami/libmpv/SeekPrecision;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun set (Lio/github/yuroyami/libmpv/MpvProperty;Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun set (Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun showProgress ()Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun showText (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun showText$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun stop (Z)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun stop$default (Lio/github/yuroyami/libmpv/MpvCommands;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun subAdd (Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun subAdd$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun subReload (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun subReload$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun subRemove (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun subRemove$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun subSeek (ILio/github/yuroyami/libmpv/SubtitleSlot;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun subSeek$default (Lio/github/yuroyami/libmpv/MpvCommands;ILio/github/yuroyami/libmpv/SubtitleSlot;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun subStep (ILio/github/yuroyami/libmpv/SubtitleSlot;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun subStep$default (Lio/github/yuroyami/libmpv/MpvCommands;ILio/github/yuroyami/libmpv/SubtitleSlot;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun vf (Lio/github/yuroyami/libmpv/FilterOperation;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun vfCommand (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun vfCommand$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun videoAdd (Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun videoAdd$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/String;Lio/github/yuroyami/libmpv/SubAddMode;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun videoReload (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun videoReload$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun videoRemove (Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public static synthetic fun videoRemove$default (Lio/github/yuroyami/libmpv/MpvCommands;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvCommand;
+	public final fun writeWatchLaterConfig ()Lio/github/yuroyami/libmpv/MpvCommand;
+}
+
+public final class io/github/yuroyami/libmpv/MpvError : java/lang/Enum {
+	public static final field AO_INIT_FAILED Lio/github/yuroyami/libmpv/MpvError;
+	public static final field COMMAND Lio/github/yuroyami/libmpv/MpvError;
+	public static final field Companion Lio/github/yuroyami/libmpv/MpvError$Companion;
+	public static final field EVENT_QUEUE_FULL Lio/github/yuroyami/libmpv/MpvError;
+	public static final field GENERIC Lio/github/yuroyami/libmpv/MpvError;
+	public static final field INVALID_PARAMETER Lio/github/yuroyami/libmpv/MpvError;
+	public static final field LOADING_FAILED Lio/github/yuroyami/libmpv/MpvError;
+	public static final field NOMEM Lio/github/yuroyami/libmpv/MpvError;
+	public static final field NOTHING_TO_PLAY Lio/github/yuroyami/libmpv/MpvError;
+	public static final field NOT_IMPLEMENTED Lio/github/yuroyami/libmpv/MpvError;
+	public static final field OPTION_ERROR Lio/github/yuroyami/libmpv/MpvError;
+	public static final field OPTION_FORMAT Lio/github/yuroyami/libmpv/MpvError;
+	public static final field OPTION_NOT_FOUND Lio/github/yuroyami/libmpv/MpvError;
+	public static final field PROPERTY_ERROR Lio/github/yuroyami/libmpv/MpvError;
+	public static final field PROPERTY_FORMAT Lio/github/yuroyami/libmpv/MpvError;
+	public static final field PROPERTY_NOT_FOUND Lio/github/yuroyami/libmpv/MpvError;
+	public static final field PROPERTY_UNAVAILABLE Lio/github/yuroyami/libmpv/MpvError;
+	public static final field SUCCESS Lio/github/yuroyami/libmpv/MpvError;
+	public static final field UNINITIALIZED Lio/github/yuroyami/libmpv/MpvError;
+	public static final field UNKNOWN_FORMAT Lio/github/yuroyami/libmpv/MpvError;
+	public static final field UNSUPPORTED Lio/github/yuroyami/libmpv/MpvError;
+	public static final field VO_INIT_FAILED Lio/github/yuroyami/libmpv/MpvError;
+	public final fun getCode ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public final fun isError ()Z
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvError;
+	public static fun values ()[Lio/github/yuroyami/libmpv/MpvError;
+}
+
+public final class io/github/yuroyami/libmpv/MpvError$Companion {
+	public final fun of (I)Lio/github/yuroyami/libmpv/MpvError;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MpvEvent {
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$AudioReconfig : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$AudioReconfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$ClientMessage : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvEvent$ClientMessage;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$ClientMessage;Ljava/util/List;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$ClientMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArgs ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$CommandReply : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (JLio/github/yuroyami/libmpv/MpvError;Lio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()J
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun component3 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (JLio/github/yuroyami/libmpv/MpvError;Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvEvent$CommandReply;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$CommandReply;JLio/github/yuroyami/libmpv/MpvError;Lio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$CommandReply;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun getReplyId ()J
+	public final fun getResult ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$EndFile : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (Lio/github/yuroyami/libmpv/EndFileReason;Ljava/lang/String;JJI)V
+	public final fun component1 ()Lio/github/yuroyami/libmpv/EndFileReason;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun component4 ()J
+	public final fun component5 ()I
+	public final fun copy (Lio/github/yuroyami/libmpv/EndFileReason;Ljava/lang/String;JJI)Lio/github/yuroyami/libmpv/MpvEvent$EndFile;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$EndFile;Lio/github/yuroyami/libmpv/EndFileReason;Ljava/lang/String;JJIILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$EndFile;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileError ()Ljava/lang/String;
+	public final fun getPlaylistEntryId ()J
+	public final fun getPlaylistInsertId ()J
+	public final fun getPlaylistInsertNumEntries ()I
+	public final fun getReason ()Lio/github/yuroyami/libmpv/EndFileReason;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$FileLoaded : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$FileLoaded;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$GetPropertyReply : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (JLio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()J
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (JLio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvEvent$GetPropertyReply;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$GetPropertyReply;JLio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$GetPropertyReply;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getReplyId ()J
+	public final fun getValue ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$Hook : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (JLjava/lang/String;J)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun copy (JLjava/lang/String;J)Lio/github/yuroyami/libmpv/MpvEvent$Hook;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$Hook;JLjava/lang/String;JILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$Hook;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getHookId ()J
+	public final fun getName ()Ljava/lang/String;
+	public final fun getReplyId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$LogMessage : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvLogLevel;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvLogLevel;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvEvent$LogMessage;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$LogMessage;Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvLogLevel;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$LogMessage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLevel ()Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public final fun getPrefix ()Ljava/lang/String;
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$PlaybackRestart : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$PlaybackRestart;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$PropertyChange : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (JLjava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (JLjava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvEvent$PropertyChange;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$PropertyChange;JLjava/lang/String;Lio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$PropertyChange;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getReplyId ()J
+	public final fun getValue ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$QueueOverflow : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$QueueOverflow;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$Seek : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$Seek;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$SetPropertyReply : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (JLio/github/yuroyami/libmpv/MpvError;)V
+	public final fun component1 ()J
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun copy (JLio/github/yuroyami/libmpv/MpvError;)Lio/github/yuroyami/libmpv/MpvEvent$SetPropertyReply;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$SetPropertyReply;JLio/github/yuroyami/libmpv/MpvError;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$SetPropertyReply;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun getReplyId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$Shutdown : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$Shutdown;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$StartFile : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Lio/github/yuroyami/libmpv/MpvEvent$StartFile;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$StartFile;JILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$StartFile;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPlaylistEntryId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$Unknown : io/github/yuroyami/libmpv/MpvEvent {
+	public fun <init> (ILio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (ILio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvEvent$Unknown;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvEvent$Unknown;ILio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvEvent$Unknown;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()I
+	public final fun getNode ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvEvent$VideoReconfig : io/github/yuroyami/libmpv/MpvEvent {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvEvent$VideoReconfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvException : java/lang/RuntimeException {
+	public fun <init> (Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getError ()Lio/github/yuroyami/libmpv/MpvError;
+}
+
+public final class io/github/yuroyami/libmpv/MpvExtrasKt {
+	public static final fun expandPath (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun expandText (Lio/github/yuroyami/libmpv/Mpv;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun screenshot (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun screenshot$default (Lio/github/yuroyami/libmpv/Mpv;Lio/github/yuroyami/libmpv/ScreenshotMode;Lio/github/yuroyami/libmpv/ScreenshotRawFormat;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun thumbnail (Lio/github/yuroyami/libmpv/Mpv;I)Lio/github/yuroyami/libmpv/MpvResult;
+}
+
+public final class io/github/yuroyami/libmpv/MpvLogLevel : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Debug Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Error Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Fatal Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Info Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field None Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Trace Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Verbose Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static final field Warn Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public final fun getNumeric ()I
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvLogLevel;
+	public static fun values ()[Lio/github/yuroyami/libmpv/MpvLogLevel;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MpvNode {
+	public static final field Companion Lio/github/yuroyami/libmpv/MpvNode$Companion;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Arr : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode$Arr;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Arr;Ljava/util/List;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Arr;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValues ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Bytes : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> ([B)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()[B
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Companion {
+	public final fun of (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Dbl : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (D)V
+	public final fun component1 ()D
+	public final fun copy (D)Lio/github/yuroyami/libmpv/MpvNode$Dbl;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Dbl;DILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Dbl;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Dict : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (Ljava/util/Map;)V
+	public final fun component1 ()Ljava/util/Map;
+	public final fun copy (Ljava/util/Map;)Lio/github/yuroyami/libmpv/MpvNode$Dict;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Dict;Ljava/util/Map;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Dict;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValues ()Ljava/util/Map;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Flag : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (Z)V
+	public final fun component1 ()Z
+	public final fun copy (Z)Lio/github/yuroyami/libmpv/MpvNode$Flag;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Flag;ZILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Flag;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Int64 : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (J)V
+	public final fun component1 ()J
+	public final fun copy (J)Lio/github/yuroyami/libmpv/MpvNode$Int64;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Int64;JILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Int64;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$None : io/github/yuroyami/libmpv/MpvNode {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvNode$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNode$Str : io/github/yuroyami/libmpv/MpvNode {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvNode$Str;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvNode$Str;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode$Str;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvNodeKt {
+	public static final fun asBoolean (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Boolean;
+	public static final fun asBytes (Lio/github/yuroyami/libmpv/MpvNode;)[B
+	public static final fun asDouble (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Double;
+	public static final fun asList (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public static final fun asLong (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Long;
+	public static final fun asMap (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/Map;
+	public static final fun asString (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvPlaybackState {
+	public fun <init> (Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;ZLjava/lang/Integer;ZD)V
+	public final fun component1 ()Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Double;
+	public final fun component4 ()Ljava/lang/Double;
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun component7 ()Z
+	public final fun component8 ()D
+	public final fun copy (Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;ZLjava/lang/Integer;ZD)Lio/github/yuroyami/libmpv/MpvPlaybackState;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvPlaybackState;Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;ZLjava/lang/Integer;ZDILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvPlaybackState;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBufferingPercent ()Ljava/lang/Integer;
+	public final fun getDurationSeconds ()Ljava/lang/Double;
+	public final fun getPath ()Ljava/lang/String;
+	public final fun getPositionSeconds ()Ljava/lang/Double;
+	public final fun getSeekable ()Z
+	public final fun getSeeking ()Z
+	public final fun getSpeed ()D
+	public final fun getStatus ()Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvPlaybackState$Status : java/lang/Enum {
+	public static final field Buffering Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static final field Ended Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static final field Idle Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static final field Loading Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static final field Paused Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static final field Playing Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+	public static fun values ()[Lio/github/yuroyami/libmpv/MpvPlaybackState$Status;
+}
+
+public final class io/github/yuroyami/libmpv/MpvPlaylistEntry {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;JZZLjava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()J
+	public final fun component4 ()Z
+	public final fun component5 ()Z
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;JZZLjava/lang/String;)Lio/github/yuroyami/libmpv/MpvPlaylistEntry;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvPlaylistEntry;Ljava/lang/String;Ljava/lang/String;JZZLjava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvPlaylistEntry;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCurrent ()Z
+	public final fun getFilename ()Ljava/lang/String;
+	public final fun getId ()J
+	public final fun getPlaying ()Z
+	public final fun getPlaylistPath ()Ljava/lang/String;
+	public final fun getTitle ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvPlaylistEntry$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvPlaylistEntry$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvPlaylistEntry;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvPlaylistEntry;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvPlaylistEntry$ListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvPlaylistEntry$ListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperties {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvProperties;
+	public final fun getAbLoopA ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAbLoopB ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAbLoopCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAccessReferences ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAf ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAlang ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAll ()Ljava/util/List;
+	public final fun getAndroidSurfaceSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAoMute ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAoVolume ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioBitrate ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioBuffer ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioChannels ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioCodec ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioCodecName ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioDelay ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioDevice ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioDeviceList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioDisplay ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioExclusive ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioFileAuto ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioFormat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioNormalizeDownmix ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioOutParams ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioParams ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioPitchCorrection ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioSamplerate ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioSpeedCorrection ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioStreamSilence ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAudioWaitOpen ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAutoloadFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getAvsync ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getBlendSubtitles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getBrightness ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCache ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCacheBufferingState ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCachePause ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCachePauseInitial ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCachePauseWait ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCacheSecs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChapter ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChapterList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChapterMetadata ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChapterSeekThreshold ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChapters ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getChaptersFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getClock ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCommandList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getConfig ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getConfigDir ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getContainerFps ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getContrast ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCookies ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCookiesFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCoreIdle ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCorrectDownscaling ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCoverArtAuto ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCoverArtFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCscale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentAo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentDemuxer ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentEdition ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentGpuContext ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentTrackAudio ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentTrackSub ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentTrackSub2 ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentTrackVideo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getCurrentVo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDeband ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDebandGrain ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDebandIterations ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDebandRange ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDebandThreshold ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDecoderList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDeinterlace ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerCacheDuration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerCacheIdle ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerCacheState ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerCacheTime ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerHysteresisSecs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfAnalyzeduration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfBuffersize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfFormat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfHacks ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfO ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfProbeInfo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerLavfProbesize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerMaxBackBytes ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerMaxBytes ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerMkvSubtitlePreroll ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerMkvSubtitlePrerollSecs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerReadaheadSecs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerSeekableCache ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerStartTime ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerTerminationTimeout ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerThread ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDemuxerViaNetwork ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDheight ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDisplayFps ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDisplayFpsOverride ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDisplayHeight ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDisplaySyncActive ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDisplayWidth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDither ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDitherDepth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDscale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDuration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getDwidth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEdition ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEditionList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEditions ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEncoderList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEnd ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEofReached ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEstimatedDisplayFps ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEstimatedFrameCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEstimatedFrameNumber ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getEstimatedVfFps ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getExternalFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFfmpegVersion ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFileFormat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFileSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFilename ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFilenameNoExt ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFilteredMetadata ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getForceSeekable ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getForceWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFrameDropCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getFramedrop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGamma ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGaplessAudio ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGpuApi ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGpuContext ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGpuDebug ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGpuDumbMode ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getGpuShaderCacheDir ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHdrComputePeak ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHeight ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHrSeek ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHrSeekDemuxerOffset ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHrSeekFramedrop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHttpHeaderFields ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHttpProxy ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHue ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHwdec ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHwdecCodecs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHwdecCurrent ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getHwdecInterop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIccCacheDir ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIccProfile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIccProfileAuto ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIdle ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIdleActive ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getImageDisplayDuration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getImageSubsVideoResolution ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getIndex ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getInputBindings ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getInputCommands ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getInputConf ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getInputDefaultBindings ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getInterpolation ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getKeepOpen ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getKeepOpenPause ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getKeepaspect ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getKeepaspectWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLength ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLibassVersion ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLinearDownscaling ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoadAutoProfiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoadConsole ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoadScripts ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoadStatsOverlay ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoadUnsafePlaylists ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLogFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoopFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getLoopPlaylist ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMediaTitle ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMergeFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMetadata ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMistimedFrameCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMpvConfiguration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMpvVersion ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMsgLevel ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getMute ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getNetworkTimeout ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOpenglEs ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdBar ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdColor ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdDimensions ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdDuration ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdFont ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdFontSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdHeight ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdLevel ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdMsg1 ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdMsg2 ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdMsg3 ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdOnSeek ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdPar ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdPlayingMsg ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdScale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdScaleByWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdStatusMsg ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getOsdWidth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPanscan ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPartiallySeekable ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPath ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPause ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPausedForCache ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPercentPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPerfInfo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlatform ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaybackTime ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylist ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistCurrentPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistPath ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistPlayingPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaylistPos1 ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPlaytimeRemaining ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getProfile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getProfileList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getPropertyList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getProtocolList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getReferrer ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getReplaygain ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getReplaygainClip ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getReplaygainFallback ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getReplaygainPreamp ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getResetOnNextFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getResumePlayback ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSaturation ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSavePositionOnQuit ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScaleAntiring ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotDirectory ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotFormat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotHighBitDepth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotJpegQuality ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotPngCompression ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotSw ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotTagColorspace ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScreenshotTemplate ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScriptOpts ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getScripts ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubAssOverride ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubDelay ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubEnd ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubStart ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubText ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSecondarySubVisibility ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSeekable ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSeeking ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getShuffle ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSigmoidUpscaling ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSlang ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSpeed ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStart ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamBufferSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamEnd ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamLavfO ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamOpenFilename ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamPath ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStreamPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getStretchImageSubsToScreen ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAlignX ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAlignY ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssExtradata ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssForceMargins ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssOverride ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssScaleWithWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssStyleOverrides ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssStyles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssUseVideoData ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAssVsfilterColorCompat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubAuto ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubBackColor ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubBlur ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubBold ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubClearOnSeek ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubCodepage ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubColor ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubDelay ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubEnd ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFilePaths ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFiles ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFilterRegex ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFilterRegexEnable ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFilterSdh ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFilterSdhHarder ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFixTiming ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFont ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFontProvider ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFontSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFontsDir ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubForcedEventsOnly ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubFps ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubGauss ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubGray ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubHinting ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubItalic ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubJustify ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubLineSpacing ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubMarginX ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubMarginY ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubOutlineColor ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubOutlineSize ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubPastVideoEnd ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubPos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubScale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubScaleByWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubScaleWithWindow ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubShadowColor ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubShadowOffset ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubShaper ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubSpacing ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubSpeed ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubStart ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubText ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubTextAss ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubUseMargins ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getSubVisibility ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTargetColorspaceHint ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTargetPeak ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTargetPrim ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTargetTrc ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTimePos ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTimeRemaining ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTlsCaFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTlsCertFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTlsKeyFile ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTlsVerify ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getToneMapping ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getToneMappingParam ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTotalAvsyncChange ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTrackList ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTrackListCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getTscale ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getUserAgent ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getUserData ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVdLavcDr ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVdLavcFast ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVdLavcFramedrop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVdLavcSkiploopfilter ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVdLavcThreads ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVf ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoAlignX ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoAlignY ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoAspectMethod ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoAspectOverride ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoBitrate ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoCodec ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoCrop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoDecParams ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoFormat ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoFrameInfo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoMarginRatioBottom ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoMarginRatioLeft ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoMarginRatioRight ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoMarginRatioTop ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoOutParams ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoPanX ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoPanY ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoParams ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoRotate ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoScaleX ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoScaleY ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoSpeedCorrection ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoSync ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoSyncMaxAudioChange ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoSyncMaxVideoChange ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoUnscaled ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVideoZoom ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVlang ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVo ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVoConfigured ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVoDelayedFrameCount ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVoPasses ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVolume ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVolumeGain ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVolumeMax ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVsyncJitter ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getVsyncRatio ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWatchLaterDir ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWatchLaterOptions ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWid ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWidth ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWindowId ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getWorkingDirectory ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun getYtdl ()Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun option (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvProperty;
+	public final fun optionInfo (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvProperty;
+}
+
+public abstract class io/github/yuroyami/libmpv/MpvProperty : io/github/yuroyami/libmpv/MpvCodec {
+	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getName ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Choice : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Enum;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Ljava/lang/Enum;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun getValues ()Ljava/util/List;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Dbl : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Double;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (D)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Flag : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Boolean;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Z)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Int64 : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Long;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (J)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Node : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Str : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/String;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvProperty$Typed : io/github/yuroyami/libmpv/MpvProperty {
+	public fun <init> (Ljava/lang/String;Lio/github/yuroyami/libmpv/MpvCodec;)V
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/MpvResult {
+}
+
+public final class io/github/yuroyami/libmpv/MpvResult$Fail : io/github/yuroyami/libmpv/MpvResult {
+	public fun <init> (Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/yuroyami/libmpv/MpvError;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvResult$Fail;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvResult$Fail;Lio/github/yuroyami/libmpv/MpvError;Ljava/lang/String;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult$Fail;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDetail ()Ljava/lang/String;
+	public final fun getError ()Lio/github/yuroyami/libmpv/MpvError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvResult$Ok : io/github/yuroyami/libmpv/MpvResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult$Ok;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvResult$Ok;Ljava/lang/Object;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult$Ok;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvResultKt {
+	public static final fun getOrNull (Lio/github/yuroyami/libmpv/MpvResult;)Ljava/lang/Object;
+	public static final fun getOrThrow (Lio/github/yuroyami/libmpv/MpvResult;)Ljava/lang/Object;
+	public static final fun isOk (Lio/github/yuroyami/libmpv/MpvResult;)Z
+	public static final fun map (Lio/github/yuroyami/libmpv/MpvResult;Lkotlin/jvm/functions/Function1;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static final fun onFail (Lio/github/yuroyami/libmpv/MpvResult;Lkotlin/jvm/functions/Function1;)Lio/github/yuroyami/libmpv/MpvResult;
+}
+
+public final class io/github/yuroyami/libmpv/MpvTrack {
+	public fun <init> (ILio/github/yuroyami/libmpv/TrackType;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;ZZZZZZZZLjava/lang/String;ZLjava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/util/Map;)V
+	public final fun component1 ()I
+	public final fun component10 ()Z
+	public final fun component11 ()Z
+	public final fun component12 ()Z
+	public final fun component13 ()Z
+	public final fun component14 ()Ljava/lang/String;
+	public final fun component15 ()Z
+	public final fun component16 ()Ljava/lang/Integer;
+	public final fun component17 ()Ljava/lang/String;
+	public final fun component18 ()Ljava/lang/String;
+	public final fun component19 ()Ljava/lang/String;
+	public final fun component2 ()Lio/github/yuroyami/libmpv/TrackType;
+	public final fun component20 ()Ljava/lang/Integer;
+	public final fun component21 ()Ljava/lang/String;
+	public final fun component22 ()Ljava/lang/String;
+	public final fun component23 ()Ljava/lang/Integer;
+	public final fun component24 ()Ljava/lang/Integer;
+	public final fun component25 ()Ljava/lang/Integer;
+	public final fun component26 ()Ljava/lang/String;
+	public final fun component27 ()Ljava/lang/Integer;
+	public final fun component28 ()Ljava/lang/Double;
+	public final fun component29 ()Ljava/lang/Long;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component30 ()Ljava/lang/Integer;
+	public final fun component31 ()Ljava/lang/Double;
+	public final fun component32 ()Ljava/lang/String;
+	public final fun component33 ()Ljava/lang/Long;
+	public final fun component34 ()Ljava/lang/Integer;
+	public final fun component35 ()Ljava/util/Map;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Z
+	public final fun component7 ()Z
+	public final fun component8 ()Z
+	public final fun component9 ()Z
+	public final fun copy (ILio/github/yuroyami/libmpv/TrackType;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;ZZZZZZZZLjava/lang/String;ZLjava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/util/Map;)Lio/github/yuroyami/libmpv/MpvTrack;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/MpvTrack;ILio/github/yuroyami/libmpv/TrackType;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;ZZZZZZZZLjava/lang/String;ZLjava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/util/Map;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvTrack;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCodec ()Ljava/lang/String;
+	public final fun getCodecDesc ()Ljava/lang/String;
+	public final fun getCodecProfile ()Ljava/lang/String;
+	public final fun getDecoder ()Ljava/lang/String;
+	public final fun getDecoderDesc ()Ljava/lang/String;
+	public final fun getDemuxBitrate ()Ljava/lang/Long;
+	public final fun getDemuxChannelCount ()Ljava/lang/Integer;
+	public final fun getDemuxChannels ()Ljava/lang/String;
+	public final fun getDemuxFps ()Ljava/lang/Double;
+	public final fun getDemuxHeight ()Ljava/lang/Integer;
+	public final fun getDemuxPar ()Ljava/lang/Double;
+	public final fun getDemuxRotation ()Ljava/lang/Integer;
+	public final fun getDemuxSamplerate ()Ljava/lang/Integer;
+	public final fun getDemuxWidth ()Ljava/lang/Integer;
+	public final fun getExternalFilename ()Ljava/lang/String;
+	public final fun getFfIndex ()Ljava/lang/Integer;
+	public final fun getFormatName ()Ljava/lang/String;
+	public final fun getHlsBitrate ()Ljava/lang/Long;
+	public final fun getId ()I
+	public final fun getLang ()Ljava/lang/String;
+	public final fun getMainSelection ()Ljava/lang/Integer;
+	public final fun getMetadata ()Ljava/util/Map;
+	public final fun getProgramId ()Ljava/lang/Integer;
+	public final fun getSelected ()Z
+	public final fun getSrcId ()Ljava/lang/Integer;
+	public final fun getTitle ()Ljava/lang/String;
+	public final fun getType ()Lio/github/yuroyami/libmpv/TrackType;
+	public fun hashCode ()I
+	public final fun isAlbumArt ()Z
+	public final fun isDefault ()Z
+	public final fun isDependent ()Z
+	public final fun isExternal ()Z
+	public final fun isForced ()Z
+	public final fun isHearingImpaired ()Z
+	public final fun isImage ()Z
+	public final fun isVisualImpaired ()Z
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/MpvTrack$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvTrack$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvTrack;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvTrack;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/MpvTrack$ListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/MpvTrack$ListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/NodeCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/NodeCodec;
+	public final fun decode ([B)Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun decodeEnvelope ([B)Lio/github/yuroyami/libmpv/NodeCodec$ResultEnvelope;
+	public final fun decodeEvent ([B)Lio/github/yuroyami/libmpv/NodeCodec$EventEnvelope;
+	public final fun encode (Lio/github/yuroyami/libmpv/MpvNode;)[B
+}
+
+public final class io/github/yuroyami/libmpv/NodeCodec$EventEnvelope {
+	public fun <init> (IJILio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()I
+	public final fun component2 ()J
+	public final fun component3 ()I
+	public final fun component4 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (IJILio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/NodeCodec$EventEnvelope;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/NodeCodec$EventEnvelope;IJILio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/NodeCodec$EventEnvelope;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()I
+	public final fun getEventId ()I
+	public final fun getNode ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun getReplyId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/NodeCodec$ResultEnvelope {
+	public fun <init> (ILio/github/yuroyami/libmpv/MpvNode;)V
+	public final fun component1 ()I
+	public final fun component2 ()Lio/github/yuroyami/libmpv/MpvNode;
+	public final fun copy (ILio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/NodeCodec$ResultEnvelope;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/NodeCodec$ResultEnvelope;ILio/github/yuroyami/libmpv/MpvNode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/NodeCodec$ResultEnvelope;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()I
+	public final fun getNode ()Lio/github/yuroyami/libmpv/MpvNode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/NullableTrackCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/NullableTrackCodec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/MpvTrack;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/MpvTrack;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/OpenglEsMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/OpenglEsMode;
+	public static final field No Lio/github/yuroyami/libmpv/OpenglEsMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/OpenglEsMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/OpenglEsMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/OpenglEsMode;
+}
+
+public final class io/github/yuroyami/libmpv/OsdDimensions {
+	public fun <init> (IIDDIIII)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()D
+	public final fun component4 ()D
+	public final fun component5 ()I
+	public final fun component6 ()I
+	public final fun component7 ()I
+	public final fun component8 ()I
+	public final fun copy (IIDDIIII)Lio/github/yuroyami/libmpv/OsdDimensions;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/OsdDimensions;IIDDIIIIILjava/lang/Object;)Lio/github/yuroyami/libmpv/OsdDimensions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAspect ()D
+	public final fun getHeight ()I
+	public final fun getMarginBottom ()I
+	public final fun getMarginLeft ()I
+	public final fun getMarginRight ()I
+	public final fun getMarginTop ()I
+	public final fun getPar ()D
+	public final fun getWidth ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/OsdDimensions$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/OsdDimensions$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/OsdDimensions;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/OsdDimensions;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/OsdOnSeekMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bar Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+	public static final field Msg Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+	public static final field MsgBar Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+	public static final field No Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/OsdOnSeekMode;
+}
+
+public final class io/github/yuroyami/libmpv/OsdOverlayFormat : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field AssEvents Lio/github/yuroyami/libmpv/OsdOverlayFormat;
+	public static final field None Lio/github/yuroyami/libmpv/OsdOverlayFormat;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/OsdOverlayFormat;
+	public static fun values ()[Lio/github/yuroyami/libmpv/OsdOverlayFormat;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/PlaylistIndex {
+}
+
+public final class io/github/yuroyami/libmpv/PlaylistIndex$At : io/github/yuroyami/libmpv/PlaylistIndex {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/yuroyami/libmpv/PlaylistIndex$At;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/PlaylistIndex$At;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/PlaylistIndex$At;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/PlaylistIndex$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/PlaylistIndex$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/PlaylistIndex;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/PlaylistIndex;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/PlaylistIndex$Current : io/github/yuroyami/libmpv/PlaylistIndex {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/PlaylistIndex$Current;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/PlaylistIndex$None : io/github/yuroyami/libmpv/PlaylistIndex {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/PlaylistIndex$None;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/PlaylistNextMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Force Lio/github/yuroyami/libmpv/PlaylistNextMode;
+	public static final field Weak Lio/github/yuroyami/libmpv/PlaylistNextMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/PlaylistNextMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/PlaylistNextMode;
+}
+
+public final class io/github/yuroyami/libmpv/ProbeInfoMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/ProbeInfoMode;
+	public static final field No Lio/github/yuroyami/libmpv/ProbeInfoMode;
+	public static final field Nostreams Lio/github/yuroyami/libmpv/ProbeInfoMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/ProbeInfoMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ProbeInfoMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ProbeInfoMode;
+}
+
+public final class io/github/yuroyami/libmpv/ReplaygainMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Album Lio/github/yuroyami/libmpv/ReplaygainMode;
+	public static final field No Lio/github/yuroyami/libmpv/ReplaygainMode;
+	public static final field Track Lio/github/yuroyami/libmpv/ReplaygainMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ReplaygainMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ReplaygainMode;
+}
+
+public final class io/github/yuroyami/libmpv/RescanMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field KeepSelection Lio/github/yuroyami/libmpv/RescanMode;
+	public static final field Reselect Lio/github/yuroyami/libmpv/RescanMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/RescanMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/RescanMode;
+}
+
+public final class io/github/yuroyami/libmpv/RevertSeekMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Mark Lio/github/yuroyami/libmpv/RevertSeekMode;
+	public static final field MarkPermanent Lio/github/yuroyami/libmpv/RevertSeekMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/RevertSeekMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/RevertSeekMode;
+}
+
+public final class io/github/yuroyami/libmpv/Scaler : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bartlett Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Bicubic Lio/github/yuroyami/libmpv/Scaler;
+	public static final field BicubicFast Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Bilinear Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Blackman Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Box Lio/github/yuroyami/libmpv/Scaler;
+	public static final field CatmullRom Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Cosine Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaGinseng Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaHanning Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaLanczos Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaLanczos4sharpest Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaLanczossharp Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaLanczossoft Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaRobidoux Lio/github/yuroyami/libmpv/Scaler;
+	public static final field EwaRobidouxsharp Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Gaussian Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Ginseng Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Haasnsoft Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Hamming Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Hanning Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Hermite Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Jinc Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Kaiser Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Lanczos Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Mitchell Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Nearest Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Oversample Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Quadric Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Robidoux Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Robidouxsharp Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Sinc Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Sphinx Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Spline16 Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Spline36 Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Spline64 Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Triangle Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Tukey Lio/github/yuroyami/libmpv/Scaler;
+	public static final field Welch Lio/github/yuroyami/libmpv/Scaler;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/Scaler;
+	public static fun values ()[Lio/github/yuroyami/libmpv/Scaler;
+}
+
+public final class io/github/yuroyami/libmpv/ScreenshotFormat : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Avif Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static final field Jpeg Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static final field Jpg Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static final field Jxl Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static final field Png Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static final field Webp Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ScreenshotFormat;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ScreenshotFormat;
+}
+
+public final class io/github/yuroyami/libmpv/ScreenshotMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Subtitles Lio/github/yuroyami/libmpv/ScreenshotMode;
+	public static final field Video Lio/github/yuroyami/libmpv/ScreenshotMode;
+	public static final field Window Lio/github/yuroyami/libmpv/ScreenshotMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ScreenshotMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ScreenshotMode;
+}
+
+public final class io/github/yuroyami/libmpv/ScreenshotRawFormat : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bgr0 Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+	public static final field Bgra Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+	public static final field Rgba Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+	public static final field Rgba64 Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ScreenshotRawFormat;
+}
+
+public final class io/github/yuroyami/libmpv/SeekMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Absolute Lio/github/yuroyami/libmpv/SeekMode;
+	public static final field AbsolutePercent Lio/github/yuroyami/libmpv/SeekMode;
+	public static final field Relative Lio/github/yuroyami/libmpv/SeekMode;
+	public static final field RelativePercent Lio/github/yuroyami/libmpv/SeekMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SeekMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SeekMode;
+}
+
+public final class io/github/yuroyami/libmpv/SeekPrecision : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Default Lio/github/yuroyami/libmpv/SeekPrecision;
+	public static final field Exact Lio/github/yuroyami/libmpv/SeekPrecision;
+	public static final field Keyframes Lio/github/yuroyami/libmpv/SeekPrecision;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SeekPrecision;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SeekPrecision;
+}
+
+public final class io/github/yuroyami/libmpv/SeekableRange {
+	public fun <init> (DD)V
+	public final fun component1 ()D
+	public final fun component2 ()D
+	public final fun copy (DD)Lio/github/yuroyami/libmpv/SeekableRange;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/SeekableRange;DDILjava/lang/Object;)Lio/github/yuroyami/libmpv/SeekableRange;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEnd ()D
+	public final fun getStart ()D
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/SettingsNamesCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/SettingsNamesCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/String;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/StringListCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/StringListCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/List;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/List;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/StringMapCodec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/StringMapCodec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/util/Map;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode (Ljava/util/Map;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/SubAddMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/SubAddMode;
+	public static final field Cached Lio/github/yuroyami/libmpv/SubAddMode;
+	public static final field Select Lio/github/yuroyami/libmpv/SubAddMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubAddMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubAddMode;
+}
+
+public final class io/github/yuroyami/libmpv/SubAssOverrideMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Force Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static final field No Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static final field Scale Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static final field Strip Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubAssOverrideMode;
+}
+
+public final class io/github/yuroyami/libmpv/SubAssUseVideoData : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field All Lio/github/yuroyami/libmpv/SubAssUseVideoData;
+	public static final field AspectRatio Lio/github/yuroyami/libmpv/SubAssUseVideoData;
+	public static final field None Lio/github/yuroyami/libmpv/SubAssUseVideoData;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubAssUseVideoData;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubAssUseVideoData;
+}
+
+public final class io/github/yuroyami/libmpv/SubFontProvider : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/SubFontProvider;
+	public static final field Fontconfig Lio/github/yuroyami/libmpv/SubFontProvider;
+	public static final field None Lio/github/yuroyami/libmpv/SubFontProvider;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubFontProvider;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubFontProvider;
+}
+
+public final class io/github/yuroyami/libmpv/SubHinting : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Light Lio/github/yuroyami/libmpv/SubHinting;
+	public static final field Native Lio/github/yuroyami/libmpv/SubHinting;
+	public static final field None Lio/github/yuroyami/libmpv/SubHinting;
+	public static final field Normal Lio/github/yuroyami/libmpv/SubHinting;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubHinting;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubHinting;
+}
+
+public final class io/github/yuroyami/libmpv/SubShaper : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Complex Lio/github/yuroyami/libmpv/SubShaper;
+	public static final field Simple Lio/github/yuroyami/libmpv/SubShaper;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubShaper;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubShaper;
+}
+
+public final class io/github/yuroyami/libmpv/SubtitlePrerollMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Index Lio/github/yuroyami/libmpv/SubtitlePrerollMode;
+	public static final field No Lio/github/yuroyami/libmpv/SubtitlePrerollMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/SubtitlePrerollMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubtitlePrerollMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubtitlePrerollMode;
+}
+
+public final class io/github/yuroyami/libmpv/SubtitleSlot : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Primary Lio/github/yuroyami/libmpv/SubtitleSlot;
+	public static final field Secondary Lio/github/yuroyami/libmpv/SubtitleSlot;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/SubtitleSlot;
+	public static fun values ()[Lio/github/yuroyami/libmpv/SubtitleSlot;
+}
+
+public final class io/github/yuroyami/libmpv/TemporalScaler : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bartlett Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Bicubic Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Blackman Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Box Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field CatmullRom Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Cosine Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Gaussian Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Ginseng Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Hamming Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Hanning Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Hermite Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Jinc Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Kaiser Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Lanczos Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Linear Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Mitchell Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Nearest Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Oversample Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Quadric Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Robidoux Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Robidouxsharp Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Sinc Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Sphinx Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Spline16 Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Spline36 Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Spline64 Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Triangle Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Tukey Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static final field Welch Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/TemporalScaler;
+	public static fun values ()[Lio/github/yuroyami/libmpv/TemporalScaler;
+}
+
+public final class io/github/yuroyami/libmpv/ToneMapping : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Bt2390 Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Bt2446a Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Clip Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Gamma Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Hable Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Linear Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Mobius Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Reinhard Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field Spline Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field St2094_10 Lio/github/yuroyami/libmpv/ToneMapping;
+	public static final field St2094_40 Lio/github/yuroyami/libmpv/ToneMapping;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/ToneMapping;
+	public static fun values ()[Lio/github/yuroyami/libmpv/ToneMapping;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/TrackSelection {
+}
+
+public final class io/github/yuroyami/libmpv/TrackSelection$Auto : io/github/yuroyami/libmpv/TrackSelection {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/TrackSelection$Auto;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/TrackSelection$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/TrackSelection$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/TrackSelection;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/TrackSelection;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/TrackSelection$Id : io/github/yuroyami/libmpv/TrackSelection {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/yuroyami/libmpv/TrackSelection$Id;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/TrackSelection$Id;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/TrackSelection$Id;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getId ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/TrackSelection$No : io/github/yuroyami/libmpv/TrackSelection {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/TrackSelection$No;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/TrackType : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Audio Lio/github/yuroyami/libmpv/TrackType;
+	public static final field Sub Lio/github/yuroyami/libmpv/TrackType;
+	public static final field Video Lio/github/yuroyami/libmpv/TrackType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/TrackType;
+	public static fun values ()[Lio/github/yuroyami/libmpv/TrackType;
+}
+
+public final class io/github/yuroyami/libmpv/TransferCharacteristic : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Auto Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Bt1886 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma1_8 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma2_0 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma2_2 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma2_4 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma2_6 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Gamma2_8 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Hlg Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Linear Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Pq Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Prophoto Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field SLog1 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field SLog2 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field Srgb Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field St428 Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static final field VLog Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/TransferCharacteristic;
+	public static fun values ()[Lio/github/yuroyami/libmpv/TransferCharacteristic;
+}
+
+public final class io/github/yuroyami/libmpv/VerticalAlign : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Bottom Lio/github/yuroyami/libmpv/VerticalAlign;
+	public static final field Center Lio/github/yuroyami/libmpv/VerticalAlign;
+	public static final field Top Lio/github/yuroyami/libmpv/VerticalAlign;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/VerticalAlign;
+	public static fun values ()[Lio/github/yuroyami/libmpv/VerticalAlign;
+}
+
+public final class io/github/yuroyami/libmpv/VideoFrameInfo {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/Boolean;
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun component4 ()Ljava/lang/Boolean;
+	public final fun copy (Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;)Lio/github/yuroyami/libmpv/VideoFrameInfo;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/VideoFrameInfo;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/Boolean;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/VideoFrameInfo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInterlaced ()Ljava/lang/Boolean;
+	public final fun getPictureType ()Ljava/lang/String;
+	public final fun getRepeat ()Ljava/lang/Boolean;
+	public final fun getTff ()Ljava/lang/Boolean;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoFrameInfo$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/VideoFrameInfo$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/VideoFrameInfo;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/VideoFrameInfo;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/VideoOutput {
+	public static final field Companion Lio/github/yuroyami/libmpv/VideoOutput$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lio/github/yuroyami/libmpv/VideoOutput;
+	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
+	public fun equals (Ljava/lang/Object;)Z
+	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
+	public static final fun equals-impl0 (Ljava/lang/String;Ljava/lang/String;)Z
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public static fun hashCode-impl (Ljava/lang/String;)I
+	public fun toString ()Ljava/lang/String;
+	public static fun toString-impl (Ljava/lang/String;)Ljava/lang/String;
+	public final synthetic fun unbox-impl ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoOutput$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/VideoOutput$Codec;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun decode-k2LhDP8 (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/String;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+	public fun encode-6sKAUKU (Ljava/lang/String;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/VideoOutput$Companion {
+	public final fun getGpu-7ZJDUrw ()Ljava/lang/String;
+	public final fun getGpuNext-7ZJDUrw ()Ljava/lang/String;
+	public final fun getLibmpv-7ZJDUrw ()Ljava/lang/String;
+	public final fun getMediacodecEmbed-7ZJDUrw ()Ljava/lang/String;
+	public final fun getNull-7ZJDUrw ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoParams {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component10 ()Ljava/lang/String;
+	public final fun component11 ()Ljava/lang/String;
+	public final fun component12 ()Ljava/lang/String;
+	public final fun component13 ()Ljava/lang/String;
+	public final fun component14 ()Ljava/lang/Double;
+	public final fun component15 ()Ljava/lang/String;
+	public final fun component16 ()Ljava/lang/String;
+	public final fun component17 ()Ljava/lang/Integer;
+	public final fun component18 ()Ljava/lang/String;
+	public final fun component19 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component20 ()Ljava/lang/Integer;
+	public final fun component21 ()Ljava/lang/Integer;
+	public final fun component22 ()Ljava/lang/Integer;
+	public final fun component23 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun component6 ()Ljava/lang/Integer;
+	public final fun component7 ()Ljava/lang/Integer;
+	public final fun component8 ()Ljava/lang/Double;
+	public final fun component9 ()Ljava/lang/Double;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Lio/github/yuroyami/libmpv/VideoParams;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/VideoParams;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/VideoParams;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAlpha ()Ljava/lang/String;
+	public final fun getAspect ()Ljava/lang/Double;
+	public final fun getAverageBpp ()Ljava/lang/Integer;
+	public final fun getChromaLocation ()Ljava/lang/String;
+	public final fun getColorlevels ()Ljava/lang/String;
+	public final fun getColormatrix ()Ljava/lang/String;
+	public final fun getCropHeight ()Ljava/lang/Integer;
+	public final fun getCropLeft ()Ljava/lang/Integer;
+	public final fun getCropTop ()Ljava/lang/Integer;
+	public final fun getCropWidth ()Ljava/lang/Integer;
+	public final fun getDisplayHeight ()Ljava/lang/Integer;
+	public final fun getDisplayWidth ()Ljava/lang/Integer;
+	public final fun getGamma ()Ljava/lang/String;
+	public final fun getHeight ()Ljava/lang/Integer;
+	public final fun getHwPixelformat ()Ljava/lang/String;
+	public final fun getLight ()Ljava/lang/String;
+	public final fun getPar ()Ljava/lang/Double;
+	public final fun getPixelformat ()Ljava/lang/String;
+	public final fun getPrimaries ()Ljava/lang/String;
+	public final fun getRotate ()Ljava/lang/Integer;
+	public final fun getSigPeak ()Ljava/lang/Double;
+	public final fun getStereoIn ()Ljava/lang/String;
+	public final fun getWidth ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoParams$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/VideoParams$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/VideoParams;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/VideoParams;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/VideoRotation {
+}
+
+public final class io/github/yuroyami/libmpv/VideoRotation$Codec : io/github/yuroyami/libmpv/MpvCodec {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/VideoRotation$Codec;
+	public fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Lio/github/yuroyami/libmpv/VideoRotation;
+	public synthetic fun decode (Lio/github/yuroyami/libmpv/MpvNode;)Ljava/lang/Object;
+	public fun encode (Lio/github/yuroyami/libmpv/VideoRotation;)Lio/github/yuroyami/libmpv/MpvNode;
+	public synthetic fun encode (Ljava/lang/Object;)Lio/github/yuroyami/libmpv/MpvNode;
+}
+
+public final class io/github/yuroyami/libmpv/VideoRotation$Degrees : io/github/yuroyami/libmpv/VideoRotation {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun copy (I)Lio/github/yuroyami/libmpv/VideoRotation$Degrees;
+	public static synthetic fun copy$default (Lio/github/yuroyami/libmpv/VideoRotation$Degrees;IILjava/lang/Object;)Lio/github/yuroyami/libmpv/VideoRotation$Degrees;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoRotation$No : io/github/yuroyami/libmpv/VideoRotation {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/VideoRotation$No;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/VideoSyncMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Audio Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field Desync Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayAdrop Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayDesync Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayResample Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayResampleDesync Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayResampleVdrop Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayTempo Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static final field DisplayVdrop Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/VideoSyncMode;
+}
+
+public final class io/github/yuroyami/libmpv/VideoUnscaledMode : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field DownscaleBig Lio/github/yuroyami/libmpv/VideoUnscaledMode;
+	public static final field No Lio/github/yuroyami/libmpv/VideoUnscaledMode;
+	public static final field Yes Lio/github/yuroyami/libmpv/VideoUnscaledMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/VideoUnscaledMode;
+	public static fun values ()[Lio/github/yuroyami/libmpv/VideoUnscaledMode;
+}
+
+public final class io/github/yuroyami/libmpv/VsfilterColorCompat : java/lang/Enum, io/github/yuroyami/libmpv/MpvChoice {
+	public static final field Basic Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+	public static final field Force601 Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+	public static final field Full Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+	public static final field No Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getMpvName ()Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+	public static fun values ()[Lio/github/yuroyami/libmpv/VsfilterColorCompat;
+}
+
+public final class io/github/yuroyami/libmpv/stream/ContentResolverStreamProvider : io/github/yuroyami/libmpv/stream/MpvStreamProvider {
+	public fun <init> (Landroid/content/Context;)V
+	public fun open (Ljava/lang/String;)Lio/github/yuroyami/libmpv/stream/MpvStream;
+}
+

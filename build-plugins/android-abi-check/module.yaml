@@ -3,7 +3,7 @@ product: jvm/amper-plugin
 description: Checks the public API of an Android-only library against a committed ABI dump. abi-check needs a JVM platform, which these modules lack.
 
 pluginInfo:
-  settingsClass: io.github.yuroyami.libmpvkt.buildplugins.androidabi.AndroidAbiCheckSettings
+  settingsClass: io.github.yuroyami.libmpv.buildplugins.androidabi.AndroidAbiCheckSettings
 
 dependencies:
   - $libs.kotlin.abi.tools.api

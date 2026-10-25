@@ -3,7 +3,7 @@ product: jvm/amper-plugin
 description: Checks that the committed BuildInfo.kt matches buildscripts/include/depinfo.sh and the publishing version, and rewrites it.
 
 pluginInfo:
-  settingsClass: io.github.yuroyami.libmpvkt.buildplugins.buildinfo.BuildInfoSettings
+  settingsClass: io.github.yuroyami.libmpv.buildplugins.buildinfo.BuildInfoSettings
 
 dependencies:
   - //build-plugins/build-support

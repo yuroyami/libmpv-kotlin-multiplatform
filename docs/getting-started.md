@@ -6,10 +6,10 @@ The artifacts are on Maven Central. With Gradle, in the app's `build.gradle.kts`
 
 ```kotlin
 dependencies {
-    implementation("io.github.yuroyami:libmpvkt:0.4.0")
+    implementation("io.github.yuroyami:libmpv-kmp:0.4.0")
     // Only what the app draws with:
-    implementation("io.github.yuroyami:libmpvkt-view:0.4.0")      // MpvView, MpvOptions
-    implementation("io.github.yuroyami:libmpvkt-compose:0.4.0")   // MpvSurface, MpvPlayer
+    implementation("io.github.yuroyami:libmpv-kmp-view:0.4.0")      // MpvView, MpvOptions
+    implementation("io.github.yuroyami:libmpv-kmp-compose:0.4.0")   // MpvSurface, MpvPlayer
 }
 ```
 
@@ -17,13 +17,13 @@ With the Kotlin toolchain, in the app's `module.yaml`:
 
 ```yaml
 dependencies:
-  - io.github.yuroyami:libmpvkt:0.4.0
-  - io.github.yuroyami:libmpvkt-view:0.4.0
+  - io.github.yuroyami:libmpv-kmp:0.4.0
+  - io.github.yuroyami:libmpv-kmp-view:0.4.0
 ```
 
 Versions 0.3.0 and older are not on Maven Central. They stay in the old repository at `https://yuroyami.github.io/maven`.
 
-Minimum SDK 21, and 26 for `libmpvkt-canvas`. The app needs compile SDK 35 or newer, and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. Android only. In a Gradle Kotlin Multiplatform project, declare the dependency in `androidMain.dependencies`. In a toolchain module, use `dependencies@android:`.
+Minimum SDK 21, and 26 for `libmpv-kmp-canvas`. The app needs compile SDK 35 or newer, and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. Android only. In a Gradle Kotlin Multiplatform project, declare the dependency in `androidMain.dependencies`. In a toolchain module, use `dependencies@android:`.
 
 An app that plays network streams declares `<uses-permission android:name="android.permission.INTERNET" />`; the library declares no permission of its own. Rotation recreates an activity, and a recreated activity closes its core, so playback starts over. Declare `android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"` on the player activity, as the sample does, or keep the core somewhere that outlives the activity.
 
@@ -39,7 +39,7 @@ An app that plays network streams declares `<uses-permission android:name="andro
 6. Before the surface is destroyed: `mpv.detachSurface()`.
 7. `mpv.close()`. It waits for calls still running on other threads, then for mpv to stop, which a stuck stream can make slow, so call it off the main thread.
 
-The deprecated `MPVLib` follows the same order with its own calls; `sample/src/main/kotlin/io/github/yuroyami/libmpvkt/sample/MainActivity.kt` is that list as code.
+The deprecated `MPVLib` follows the same order with its own calls; `sample/src/main/kotlin/io/github/yuroyami/libmpv/sample/MainActivity.kt` is that list as code.
 
 ## Options a phone player sets
 

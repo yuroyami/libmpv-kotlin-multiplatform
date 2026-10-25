@@ -1,0 +1,207 @@
+package io.github.yuroyami.libmpv.view
+
+import android.graphics.SurfaceTexture
+import android.os.Build
+import android.util.Log
+import android.view.Surface
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import io.github.yuroyami.libmpv.EndFileReason
+import io.github.yuroyami.libmpv.InternalLibmpvKmpApi
+import io.github.yuroyami.libmpv.KeepOpenMode
+import io.github.yuroyami.libmpv.Mpv
+import io.github.yuroyami.libmpv.MpvCommands
+import io.github.yuroyami.libmpv.MpvEvent
+import io.github.yuroyami.libmpv.MpvProperties
+import io.github.yuroyami.libmpv.VideoOutput
+import io.github.yuroyami.libmpv.getOrNull
+import io.github.yuroyami.libmpv.getOrThrow
+import java.io.File
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNotSame
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onSubscription
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
+import org.junit.Rule
+import org.junit.rules.Timeout
+import org.junit.runner.RunWith
+
+/**
+ * The view without a window: it still owns the core, plays to the end, takes a second core, and
+ * survives being destroyed twice. Drawing is what the sample proves; this is the lifecycle.
+ */
+@RunWith(AndroidJUnit4::class)
+class MpvViewTest {
+
+    // A test that hangs must fail with a stack trace, not stall the CI job until its time limit.
+    @get:Rule
+    val timeout: Timeout = Timeout.builder()
+        .withTimeout(120, TimeUnit.SECONDS)
+        .withLookingForStuckThread(true)
+        .build()
+
+    /**
+     * From API 29 on, an emulator's software GPU never finishes creating mpv's context while a file
+     * plays, so the test that needs one wedges. Phones and the API 21 and 28 emulators run it.
+     */
+    private val emulatorGpuWedges: Boolean =
+        (Build.HARDWARE == "goldfish" || Build.HARDWARE == "ranchu" || Build.FINGERPRINT.contains("generic")) &&
+            Build.VERSION.SDK_INT >= 29
+
+    private val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+
+    private fun headless() = MpvOptions(
+        ao = "null",
+        keepOpen = KeepOpenMode.No,
+        extra = mapOf("vo" to "null"),
+    )
+
+    private fun onMain(block: () -> Unit) =
+        InstrumentationRegistry.getInstrumentation().runOnMainSync(block)
+
+    @Test
+    fun itPlaysAFileAndTakesASecondCore(): Unit = runBlocking {
+        val wav = File(context.cacheDir, "view.wav").apply { writeBytes(silentWav(1)) }
+        lateinit var view: MpvView
+        onMain {
+            view = MpvView(context)
+            view.initialize(headless())
+        }
+        val first = assertNotNull(view.mpv)
+        // Listening before the file starts, as events has no replay; and a failed load is an EndFile too, so the reason counts.
+        val ended = async(start = CoroutineStart.UNDISPATCHED) { first.events.first { it is MpvEvent.EndFile } as MpvEvent.EndFile }
+        onMain { view.playFile(wav.absolutePath) }
+        assertEquals(EndFileReason.Eof, withTimeout(20_000) { ended.await() }.reason)
+
+        onMain { view.initialize(headless()) }
+        val second = assertNotNull(view.mpv)
+        assertNotSame(first, second)
+
+        onMain { view.destroy() }
+        onMain { view.destroy() }
+    }
+
+    /** The start runs off the main thread without touching the view, and the view takes the core on it. */
+    @Test
+    fun aCorePreparedOffTheMainThreadPlaysOnceAttached(): Unit = runBlocking {
+        val wav = File(context.cacheDir, "prepared.wav").apply { writeBytes(silentWav(1)) }
+        lateinit var view: MpvView
+        onMain { view = MpvView(context) }
+        val prepared = withContext(Dispatchers.Default) { view.prepare(headless()) }
+        assertNull(view.mpv, "prepare must leave the view alone")
+        onMain { view.attach(prepared) }
+        assertSame(prepared.core, view.mpv)
+        val ended = async(start = CoroutineStart.UNDISPATCHED) { prepared.core.events.first { it is MpvEvent.EndFile } as MpvEvent.EndFile }
+        onMain { view.playFile(wav.absolutePath) }
+        assertEquals(EndFileReason.Eof, withTimeout(20_000) { ended.await() }.reason)
+        onMain { view.destroy() }
+    }
+
+    /** A file started before any surface keeps its video, and gets a picture once a surface comes. */
+    @OptIn(InternalLibmpvKmpApi::class)
+    @Test
+    fun aFileStartedBeforeItsSurfaceKeepsItsVideo(): Unit = runBlocking {
+        if (emulatorGpuWedges) {
+            Log.i("libmpv-kmp", "skipped aFileStartedBeforeItsSurfaceKeepsItsVideo: this emulator's GPU wedges in mpv")
+            return@runBlocking
+        }
+        val video = TestVideo.writeTo(context.cacheDir)
+        val options = MpvOptions(ao = "null")
+        val mpv = Mpv.create(context)
+        options.applyTo(mpv)
+        mpv.initialize().getOrThrow()
+        val texture = SurfaceTexture(0).apply { setDefaultBufferSize(320, 240) }
+        val surface = Surface(texture)
+        try {
+            val attached = CompletableDeferred<Unit>()
+            val loaded = async { mpv.events.onSubscription { attached.complete(Unit) }.first { it == MpvEvent.FileLoaded } }
+            attached.await()
+            mpv.command(MpvCommands.loadFile(video.absolutePath)).getOrThrow()
+            withTimeout(20_000) { loaded.await() }
+            assertNotNull(mpv[MpvProperties.CurrentTrackVideo].getOrNull(), "mpv dropped the video track before the surface came")
+
+            SurfaceHandshake.attach(mpv, surface, options.vo)
+            SurfaceHandshake.resize(mpv, surface, 320, 240)
+            withTimeout(20_000) { while (mpv.getString("current-vo") != "gpu") delay(50) }
+            assertNotNull(mpv[MpvProperties.CurrentTrackVideo].getOrNull(), "the video track is gone after the surface came")
+        } finally {
+            SurfaceHandshake.detach(mpv, surface)
+            mpv.close()
+            surface.release()
+            texture.release()
+        }
+    }
+
+    /** Two surfaces on one core: the old one's late destroy leaves the new one alone, and a closed core ignores the handshake. */
+    @OptIn(InternalLibmpvKmpApi::class)
+    @Test
+    fun aDestroyedSurfaceLeavesTheNewOneAlone() {
+        val mpv = Mpv.create(context)
+        MpvOptions(ao = "null").applyTo(mpv)
+        mpv.initialize().getOrThrow()
+        val textures = List(2) { SurfaceTexture(0).apply { setDefaultBufferSize(64, 64) } }
+        val (leaving, arriving) = textures.map { Surface(it) }
+        try {
+            SurfaceHandshake.attach(mpv, leaving, VideoOutput.Gpu)
+            SurfaceHandshake.attach(mpv, arriving, VideoOutput.Gpu)
+            SurfaceHandshake.detach(mpv, leaving)
+            assertSame(arriving, mpv.attachedSurface)
+            assertEquals("gpu", mpv.getString("vo"))
+
+            mpv.close()
+            SurfaceHandshake.resize(mpv, arriving, 32, 32)
+            SurfaceHandshake.detach(mpv, arriving)
+        } finally {
+            mpv.close()
+            leaving.release()
+            arriving.release()
+            textures.forEach { it.release() }
+        }
+    }
+
+    /** A failed initialize leaves the view with no core rather than a closed one, and the old core still closes. */
+    @Test
+    fun aFailedInitializeLeavesNoCore(): Unit = runBlocking {
+        lateinit var view: MpvView
+        onMain {
+            view = MpvView(context)
+            view.initialize(headless())
+        }
+        val first = assertNotNull(view.mpv)
+        val broken = Mpv.create(context).also { it.close() }
+        var failure: Throwable? = null
+        onMain { failure = runCatching { view.initialize(headless(), broken) }.exceptionOrNull() }
+        assertTrue(failure is IllegalStateException, "initialize with a closed core ended with $failure")
+        assertNull(view.mpv, "the view kept a core after a failed initialize")
+        withTimeout(10_000) { while (!first.isClosed) delay(20) }
+        onMain { view.destroy() }
+    }
+
+    /** A valid 8 kHz mono 16-bit PCM WAV of silence. */
+    private fun silentWav(seconds: Int): ByteArray {
+        val sampleRate = 8000
+        val dataSize = sampleRate * 2 * seconds
+        val buf = ByteBuffer.allocate(44 + dataSize).order(ByteOrder.LITTLE_ENDIAN)
+        buf.put("RIFF".toByteArray()).putInt(36 + dataSize).put("WAVE".toByteArray())
+        buf.put("fmt ".toByteArray()).putInt(16).putShort(1).putShort(1)
+            .putInt(sampleRate).putInt(sampleRate * 2).putShort(2).putShort(16)
+        buf.put("data".toByteArray()).putInt(dataSize)
+        return buf.array()
+    }
+}

@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildtools
+package io.github.yuroyami.libmpv.buildtools
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,9 +34,9 @@ class BuildInfoSourceTest {
     @Test
     fun theRenderedObjectCarriesEveryPin() {
         val source = renderBuildInfo(depinfo, "0.1.0", 21)
-        assertTrue("package io.github.yuroyami.libmpvkt" in source)
+        assertTrue("package io.github.yuroyami.libmpv" in source)
         assertTrue("public object BuildInfo" in source)
-        assertTrue("public const val LIBMPVKT: String = \"0.1.0\"" in source)
+        assertTrue("public const val LIBMPV_KMP: String = \"0.1.0\"" in source)
         assertTrue("public const val MPV: String = \"0.41.0\"" in source)
         assertTrue("public const val NDK: String = \"29.0.14206865\"" in source)
         assertTrue("public const val MIN_SDK: Int = 21" in source)
@@ -55,15 +55,15 @@ class BuildInfoSourceTest {
     fun theRenderedFileMatchesTheGradleOutput() {
         val expected = """
             |// Written by `./kotlin do updateBuildInfo` from buildscripts/include/depinfo.sh. Do not edit.
-            |package io.github.yuroyami.libmpvkt
+            |package io.github.yuroyami.libmpv
             |
             |/**
-            | * What this build of libmpvKt contains. Readable before [MPVLib.create]. Once the core is
+            | * What this build of libmpv-kotlin-multiplatform contains. Readable before [MPVLib.create]. Once the core is
             | * initialised, mpv reports the same through its `mpv-version` and `ffmpeg-version` properties.
             | */
             |public object BuildInfo {
-            |    /** The libmpvKt artifact version. */
-            |    public const val LIBMPVKT: String = "0.3.0"
+            |    /** The libmpv-kotlin-multiplatform artifact version. */
+            |    public const val LIBMPV_KMP: String = "0.3.0"
             |    /** The mpv release, without the leading v. */
             |    public const val MPV: String = "0.41.0"
             |    /** The FFmpeg release, without the leading n. */

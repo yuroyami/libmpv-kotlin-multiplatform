@@ -1,4 +1,4 @@
-// The Android device tests of the libmpvKt libraries. The Kotlin Toolchain has no instrumented test
+// The Android device tests of the libmpv-kotlin-multiplatform libraries. The Kotlin Toolchain has no instrumented test
 // support, so this Gradle build runs them against the staged artifacts of this checkout.
 // Run it through scripts/run-device-tests.sh, which stages the artifacts first.
 pluginManagement {
@@ -18,7 +18,7 @@ dependencyResolutionManagement {
         }
     }
     repositories {
-        // The libmpvKt artifacts come only from the staged copy of this checkout.
+        // The libmpv-kotlin-multiplatform artifacts come only from the staged copy of this checkout.
         exclusiveContent {
             forRepository {
                 maven {
@@ -27,7 +27,7 @@ dependencyResolutionManagement {
                         .orElse(rootDir.resolve("../../build/verification-maven").absolutePath).get())
                 }
             }
-            filter { includeModuleByRegex("io\\.github\\.yuroyami", "libmpvkt.*") }
+            filter { includeModuleByRegex("io\\.github\\.yuroyami", "libmpv-kmp.*") }
         }
         google()
         mavenCentral()

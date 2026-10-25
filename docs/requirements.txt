@@ -1,4 +1,4 @@
-# Tooling for the libmpvKt documentation site (https://yuroyami.github.io/libmpvKt/).
+# Tooling for the libmpv-kotlin-multiplatform documentation site (https://yuroyami.github.io/libmpv-kotlin-multiplatform/).
 # Install with:  pip install -r docs/requirements.txt
 # Serve locally with:  mkdocs serve
 mkdocs-material==9.7.6

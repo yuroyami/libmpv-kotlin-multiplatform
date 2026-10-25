@@ -16,15 +16,15 @@ assignees: ""
 
 ## Environment
 
-- libmpvKt version:
-- Modules in use (libmpvkt, libmpvkt-view, libmpvkt-compose, libmpvkt-canvas):
+- libmpv-kotlin-multiplatform version:
+- Modules in use (libmpv-kmp, libmpv-kmp-view, libmpv-kmp-compose, libmpv-kmp-canvas):
 - Device and Android version:
 - ABI (arm64-v8a, armeabi-v7a, x86, x86_64):
 - Consumer build: debug or shrunk release
 
 ## Log
 
-<!-- mpv's own lines: collect mpv.logs after mpv.requestLogMessages(MpvLogLevel.Verbose). Add logcat's lines tagged `libmpvKt`, and the crash if there was one. -->
+<!-- mpv's own lines: collect mpv.logs after mpv.requestLogMessages(MpvLogLevel.Verbose). Add logcat's lines tagged `libmpv-kmp`, and the crash if there was one. -->
 
 ```text
 

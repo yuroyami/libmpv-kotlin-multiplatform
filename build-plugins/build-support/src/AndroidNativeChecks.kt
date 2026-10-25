@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildtools
+package io.github.yuroyami.libmpv.buildtools
 
 import java.io.File
 
@@ -17,12 +17,12 @@ object AndroidNativeChecks {
     const val MIN_ALIGN: Long = 16384
 
     /** The library the JNI sources compile to. The probe symbol must be in it. */
-    const val JNI_LIB: String = "libmpvkt_jni.so"
+    const val JNI_LIB: String = "libmpv_kmp_jni.so"
 
     /** The C++ library. The libc++ marker must be in it. */
     const val LIBCXX: String = "libc++_shared.so"
 
-    /** The ABIs in [env], a comma-separated list such as `LIBMPVKT_ABIS`. All of [ABIS] when it is unset or blank. */
+    /** The ABIs in [env], a comma-separated list such as `LIBMPV_KMP_ABIS`. All of [ABIS] when it is unset or blank. */
     fun requiredAbis(env: String?): List<String> =
         env?.split(',')?.map(String::trim)?.filter(String::isNotEmpty)?.takeIf { it.isNotEmpty() } ?: ABIS
 
@@ -78,7 +78,7 @@ object AndroidNativeChecks {
     fun failureMessage(problems: List<String>): String =
         "Native libraries are not ready to ship:\n" + problems.joinToString("\n") { "  - $it" } +
             "\nBuild them with buildscripts/buildall.sh --arch <arch>, or fetch a release's with " +
-            ".github/scripts/fetch-natives.sh <tag>. A laptop with one architecture sets LIBMPVKT_ABIS=<abi>."
+            ".github/scripts/fetch-natives.sh <tag>. A laptop with one architecture sets LIBMPV_KMP_ABIS=<abi>."
 
     /**
      * Copies `<abi>/<file>` from [root] to `lib/<abi>/<file>` in [out] for every ABI that has all [files].

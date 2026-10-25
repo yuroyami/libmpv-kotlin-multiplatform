@@ -1,0 +1,30 @@
+# mpv in Compose. The Compose libraries are a floor, not a pin: Gradle raises them to the version the app uses.
+product:
+  type: kmp/lib
+  platforms: [ android ]
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+  - //android.module-template.yaml
+  - //library.module-template.yaml
+  - //compose.module-template.yaml
+
+dependencies:
+  - //libmpv-kmp-view: exported
+  - $libs.compose.runtime
+  - $libs.compose.ui
+  - $libs.compose.foundation
+
+test-dependencies:
+  - $libs.kotlinx.coroutines.test
+
+settings:
+  android:
+    namespace: io.github.yuroyami.libmpv.compose
+  publishing:
+    pom:
+      name: libmpv-kmp-compose
+      description: "libmpv-kotlin-multiplatform in Compose: MpvSurface, mpv's output with no View in between, and MpvPlayer, the View in a composition."
+
+plugins:
+  android-abi-check: enabled

@@ -1,6 +1,6 @@
-package io.github.yuroyami.libmpvkt.buildplugins.buildinfo
+package io.github.yuroyami.libmpv.buildplugins.buildinfo
 
-import io.github.yuroyami.libmpvkt.buildtools.renderBuildInfo
+import io.github.yuroyami.libmpv.buildtools.renderBuildInfo
 import org.jetbrains.amper.plugins.ExecutionAvoidance
 import org.jetbrains.amper.plugins.Input
 import org.jetbrains.amper.plugins.Output

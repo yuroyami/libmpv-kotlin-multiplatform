@@ -1,0 +1,37 @@
+# mpv drawn as a plain Compose image through the render API. libmpv_kmp_render.so rides
+# libmpv-kmp-canvas-android-natives and links libmpv.so at load time, so use the same version as libmpv-kmp.
+product:
+  type: kmp/lib
+  platforms: [ android ]
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+  - //android.module-template.yaml
+  - //library.module-template.yaml
+  - //compose.module-template.yaml
+
+dependencies:
+  - //libmpv-kmp-view: exported
+  - $libs.compose.runtime
+  - $libs.compose.ui
+  - $libs.compose.foundation
+
+# The Android libraries ship in a plain jar, which AGP unpacks into the APK's lib/ folder.
+dependencies@android:
+  - //libmpv-kmp-canvas-android-natives
+
+test-dependencies:
+  - $libs.kotlinx.coroutines.test
+
+settings:
+  android:
+    namespace: io.github.yuroyami.libmpv.canvas
+    # AHardwareBuffer and libnativewindow start at API 26.
+    minSdk: 26
+  publishing:
+    pom:
+      name: libmpv-kmp-canvas
+      description: "libmpv-kotlin-multiplatform's experimental Compose canvas: mpv drawn through its render API into bitmaps Compose can transform, blur or capture. Use the same version as libmpv-kmp."
+
+plugins:
+  android-abi-check: enabled

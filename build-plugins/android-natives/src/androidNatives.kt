@@ -1,13 +1,13 @@
-package io.github.yuroyami.libmpvkt.buildplugins.androidnatives
+package io.github.yuroyami.libmpv.buildplugins.androidnatives
 
-import io.github.yuroyami.libmpvkt.buildtools.AndroidNativeChecks
+import io.github.yuroyami.libmpv.buildtools.AndroidNativeChecks
 import org.jetbrains.amper.plugins.ExecutionAvoidance
 import org.jetbrains.amper.plugins.Input
 import org.jetbrains.amper.plugins.Output
 import org.jetbrains.amper.plugins.TaskAction
 import java.nio.file.Path
 
-private fun log(message: String) = println("[libmpvKt] $message")
+private fun log(message: String) = println("[libmpv-kotlin-multiplatform] $message")
 
 /** Copies `<abi>/<file>` into `lib/<abi>/<file>` for every ABI that has all [files]. Warns once per incomplete ABI. */
 @TaskAction
@@ -21,7 +21,7 @@ fun packageAndroidNatives(
     warnings.forEach { log("WARNING: $it") }
 }
 
-/** Fails unless every ABI in LIBMPVKT_ABIS passes [AndroidNativeChecks.findProblems]. */
+/** Fails unless every ABI in LIBMPV_KMP_ABIS passes [AndroidNativeChecks.findProblems]. */
 @TaskAction(ExecutionAvoidance.Disabled)
 fun checkAndroidNatives(
     @Input(inferTaskDependency = false) nativeLibsDir: Path,
@@ -30,7 +30,7 @@ fun checkAndroidNatives(
     probeSymbol: String?,
     libcxxMarker: String?,
 ) {
-    val abis = AndroidNativeChecks.requiredAbis(System.getenv("LIBMPVKT_ABIS"))
+    val abis = AndroidNativeChecks.requiredAbis(System.getenv("LIBMPV_KMP_ABIS"))
     val problems = AndroidNativeChecks.findProblems(nativeLibsDir.toFile(), abis, files, minApi, probeSymbol, libcxxMarker)
     check(problems.isEmpty()) { AndroidNativeChecks.failureMessage(problems) }
     log("${files.size} native files per ABI complete in $nativeLibsDir for ${abis.joinToString()}")

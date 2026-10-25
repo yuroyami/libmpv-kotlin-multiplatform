@@ -1,4 +1,4 @@
-# Settings that every published libmpvKt library shares, on top of libmpvkt.module-template.yaml.
+# Settings that every published libmpv-kotlin-multiplatform library shares, on top of libmpv-kmp.module-template.yaml.
 # Each library sets its own POM name and description.
 
 # `./kotlin publish mavenLocal -m <module>` puts a build into ~/.m2 for tests in other projects.
@@ -15,7 +15,7 @@ settings:
     group: io.github.yuroyami
     version: 0.3.0
     pom:
-      url: https://github.com/yuroyami/libmpvKt
+      url: https://github.com/yuroyami/libmpv-kotlin-multiplatform
       licenses:
         # The Kotlin wrapper, the JNI sources and the build scripts.
         - name: Apache License 2.0
@@ -30,9 +30,9 @@ settings:
           name: yuroyami
           url: https://github.com/yuroyami
       scm:
-        url: https://github.com/yuroyami/libmpvKt
-        connection: scm:git:https://github.com/yuroyami/libmpvKt.git
-        developerConnection: scm:git:ssh://git@github.com/yuroyami/libmpvKt.git
+        url: https://github.com/yuroyami/libmpv-kotlin-multiplatform
+        connection: scm:git:https://github.com/yuroyami/libmpv-kotlin-multiplatform.git
+        developerConnection: scm:git:ssh://git@github.com/yuroyami/libmpv-kotlin-multiplatform.git
     signArtifacts: true
     publishSources: true
     # manual uploads and validates the bundle, then waits for Publish on the Central Portal.

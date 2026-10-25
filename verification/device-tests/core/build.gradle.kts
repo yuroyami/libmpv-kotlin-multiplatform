@@ -1,19 +1,19 @@
-// The device tests of libmpvkt: its shared test folder and android-device-test compile into one test
+// The device tests of libmpv-kmp: its shared test folder and android-device-test compile into one test
 // APK, against the staged artifacts.
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.android.kmp.library)
 }
 
-val libmpvktVersion = providers.gradleProperty("libmpvktVersion").get()
-val module = rootProject.layout.projectDirectory.dir("../../libmpvkt")
+val libmpvKmpVersion = providers.gradleProperty("libmpvKmpVersion").get()
+val module = rootProject.layout.projectDirectory.dir("../../libmpv-kmp")
 
-// The tests use internal declarations of libmpvkt (DescriptorStream, the catalog's mismatch). The
+// The tests use internal declarations of libmpv-kmp (DescriptorStream, the catalog's mismatch). The
 // compiler sees them through the jar inside the staged Android archive, passed as a friend path.
 val friendDir = layout.buildDirectory.dir("friend")
 val friendClasses = tasks.register<Copy>("friendClasses") {
     val repository = providers.gradleProperty("verificationRepository").get()
-    fileTree(repository) { include("io/github/yuroyami/libmpvkt-android/$libmpvktVersion/*.aar") }
+    fileTree(repository) { include("io/github/yuroyami/libmpv-kmp-android/$libmpvKmpVersion/*.aar") }
         .forEach { from(zipTree(it)) { include("libs/*.jar"); eachFile { path = "classes.jar" } } }
     into(friendDir)
 }
@@ -27,9 +27,9 @@ kotlin {
     // As in the library builds: expect classes in the shared test folders.
     compilerOptions { freeCompilerArgs.add("-Xexpect-actual-classes") }
     android {
-        namespace = "io.github.yuroyami.libmpvkt.devicetests"
+        namespace = "io.github.yuroyami.libmpv.devicetests"
         // The package of the test APK, the same as in the Gradle build before the move.
-        testNamespace = "io.github.yuroyami.libmpvkt.test"
+        testNamespace = "io.github.yuroyami.libmpv.test"
         compileSdk = 37
         minSdk = 21
         withDeviceTestBuilder {
@@ -43,7 +43,7 @@ kotlin {
             // test/ holds the host tests that start no core. A missing folder adds nothing.
             kotlin.srcDir(module.dir("test"))
             dependencies {
-                implementation("io.github.yuroyami:libmpvkt:$libmpvktVersion")
+                implementation("io.github.yuroyami:libmpv-kmp:$libmpvKmpVersion")
                 implementation(kotlin("test"))
                 implementation(libs.kotlinx.coroutines.test)
             }

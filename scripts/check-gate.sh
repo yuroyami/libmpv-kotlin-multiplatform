@@ -55,7 +55,7 @@ run scan_dashes
 if [ "$TIER" = tier2 ]; then
     run buildscripts/download-deps.sh
     run buildscripts/buildall.sh --arch arm64
-    run env LIBMPVKT_ABIS=arm64-v8a ./kotlin "do" checkAndroidNatives
+    run env LIBMPV_KMP_ABIS=arm64-v8a ./kotlin "do" checkAndroidNatives
     run ./kotlin build -m sample --variant release
     run scripts/run-device-tests.sh
 fi

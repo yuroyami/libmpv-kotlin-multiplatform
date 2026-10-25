@@ -1,0 +1,26 @@
+# MpvView, the typed MpvOptions and the one surface handshake. No Compose here.
+product:
+  type: kmp/lib
+  platforms: [ android ]
+
+apply:
+  - //libmpv-kmp.module-template.yaml
+  - //android.module-template.yaml
+  - //library.module-template.yaml
+
+dependencies:
+  - //libmpv-kmp: exported
+
+test-dependencies:
+  - $libs.kotlinx.coroutines.test
+
+settings:
+  android:
+    namespace: io.github.yuroyami.libmpv.view
+  publishing:
+    pom:
+      name: libmpv-kmp-view
+      description: "libmpv-kotlin-multiplatform's Android View: MpvView, which shows mpv's output on a SurfaceView or a TextureView, and MpvOptions."
+
+plugins:
+  android-abi-check: enabled

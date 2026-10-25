@@ -1,4 +1,4 @@
-# Publishes every libmpvKt library module to Maven Central (the Central Portal) with the Kotlin
+# Publishes every libmpv-kotlin-multiplatform library module to Maven Central (the Central Portal) with the Kotlin
 # toolchain: `./kotlin publish mavenCentral`. Started by hand.
 #
 # The libraries are NOT built here. They are downloaded from the GitHub release named by the
@@ -46,8 +46,8 @@ env:
   KOTLIN_CLI_NO_WELCOME_BANNER: "1"
   # Every module that publishes. The natives jars publish beside the modules that depend on them.
   PUBLISHED_MODULES: >-
-    libmpvkt-native libmpvkt-android-natives libmpvkt libmpvkt-view libmpvkt-compose
-    libmpvkt-canvas libmpvkt-canvas-android-natives
+    libmpv-kmp-native libmpv-kmp-android-natives libmpv-kmp libmpv-kmp-view libmpv-kmp-compose
+    libmpv-kmp-canvas libmpv-kmp-canvas-android-natives
 
 jobs:
   check-version:

@@ -1,4 +1,4 @@
-# Code that libmpvKt's local build plugins share: the BuildInfo source and the checks of the
+# Code that libmpv-kotlin-multiplatform's local build plugins share: the BuildInfo source and the checks of the
 # Android native libraries. It is a plain library, so its tests run with `./kotlin test -m build-support`.
 product: jvm/lib
 

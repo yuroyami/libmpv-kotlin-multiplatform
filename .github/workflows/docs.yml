@@ -1,5 +1,5 @@
 # Builds the MkDocs site and the Dokka API reference. A push validates them; only a hand-started
-# run deploys to GitHub Pages (https://yuroyami.github.io/libmpvKt/), so an unpublished main
+# run deploys to GitHub Pages (https://yuroyami.github.io/libmpv-kotlin-multiplatform/), so an unpublished main
 # never replaces the public docs. Pages must be set to "GitHub Actions" in the repository settings.
 name: Docs
 

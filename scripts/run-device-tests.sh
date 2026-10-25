@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Runs the Android device tests of the libmpvKt libraries on one connected device or emulator.
+# Runs the Android device tests of the libmpv-kotlin-multiplatform libraries on one connected device or emulator.
 #
 # The Kotlin Toolchain has no instrumented tests. verification/device-tests is a Gradle build that
 # compiles test/ and android-device-test/kotlin/ of each library against the staged artifacts of
@@ -14,7 +14,7 @@
 #   scripts/run-device-tests.sh --no-stage TASK...       # reuse the staged artifacts
 #
 # Gradle arguments pass through, for example
-# -Pandroid.testInstrumentationRunnerArguments.class=io.github.yuroyami.libmpvkt.MpvTest.
+# -Pandroid.testInstrumentationRunnerArguments.class=io.github.yuroyami.libmpv.MpvTest.
 
 set -euo pipefail
 
@@ -43,10 +43,10 @@ fi
 
 if [ "$stage" = true ]; then
     "$ROOT/scripts/stage-verification-maven.sh" \
-        libmpvkt-native libmpvkt-android-natives libmpvkt libmpvkt-view libmpvkt-compose \
-        libmpvkt-canvas libmpvkt-canvas-android-natives
+        libmpv-kmp-native libmpv-kmp-android-natives libmpv-kmp libmpv-kmp-view libmpv-kmp-compose \
+        libmpv-kmp-canvas libmpv-kmp-canvas-android-natives
 fi
 [ -d "$ROOT/build/verification-maven" ] || { echo "Nothing staged. Run without --no-stage first." >&2; exit 2; }
 
 "$ROOT/verification/gradlew" -p "$ROOT/verification/device-tests" --no-daemon --console=plain \
-    "-PlibmpvktVersion=$version" "-PverificationRepository=$ROOT/build/verification-maven" "$@"
+    "-PlibmpvKmpVersion=$version" "-PverificationRepository=$ROOT/build/verification-maven" "$@"

@@ -1,12 +1,12 @@
 tasks:
   package:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.androidnatives.packageAndroidNatives
+    action: !io.github.yuroyami.libmpv.buildplugins.androidnatives.packageAndroidNatives
       nativeLibsDir: ${project.rootDir}/${pluginSettings.nativeLibsDir}
       files: ${pluginSettings.files}
       resourcesDir: ${taskOutputDir}/resources
 
   check:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.androidnatives.checkAndroidNatives
+    action: !io.github.yuroyami.libmpv.buildplugins.androidnatives.checkAndroidNatives
       nativeLibsDir: ${project.rootDir}/${pluginSettings.nativeLibsDir}
       files: ${pluginSettings.files}
       minApi: ${pluginSettings.minApi}
@@ -19,6 +19,6 @@ generated:
     - directory: ${tasks.package.action.resourcesDir}
 
 commands:
-  # Checks the ABIs in LIBMPVKT_ABIS (comma-separated), or all four when it is unset.
+  # Checks the ABIs in LIBMPV_KMP_ABIS (comma-separated), or all four when it is unset.
   - name: checkAndroidNatives
     performedBy: check

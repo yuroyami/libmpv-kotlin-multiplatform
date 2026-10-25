@@ -1,7 +1,7 @@
-# libmpvKt, for whoever works in this tree
+# libmpv-kotlin-multiplatform, for whoever works in this tree
 
-libmpv for Android as one Maven artifact. `libmpvkt-native/` holds the binding, `libmpvkt-android-natives/` packs its
-native libraries, `libmpvkt/` holds the typed API, `buildscripts/` compiles the natives, and `build-plugins/` holds the
+libmpv for Android as one Maven artifact. `libmpv-kmp-native/` holds the binding, `libmpv-kmp-android-natives/` packs its
+native libraries, `libmpv-kmp/` holds the typed API, `buildscripts/` compiles the natives, and `build-plugins/` holds the
 checks. The build is the Kotlin toolchain (`./kotlin`); only `verification/` is Gradle. `CONTRIBUTING.md` has the ground
 rules and the gate.
 This file has only what reading the code would not teach you.
@@ -18,8 +18,8 @@ This file has only what reading the code would not teach you.
 
 Each line is something that bit someone. Delete a line when it stops being true.
 
-- The Kotlin package and the JNI library name are hardcoded in C: `mpvkt.cpp`'s `FN` macro builds
-  the `Java_io_github_yuroyami_libmpvkt_jni_MpvNative_` symbol prefix, and `stream_cb.cpp` looks up
+- The Kotlin package and the JNI library name are hardcoded in C: `mpv_kmp.cpp`'s `FN` macro builds
+  the `Java_io_github_yuroyami_libmpv_jni_MpvNative_` symbol prefix, and `stream_cb.cpp` looks up
   `MpvStreamProvider` and `MpvStream` by name. Renaming the Kotlin package alone loads a library
   that crashes at the first call; `checkAndroidNatives` looks for one exported symbol to catch it.
 - `MpvNative` loads the native libraries in its static initialiser, so a JVM host test cannot touch
@@ -41,10 +41,10 @@ Each line is something that bit someone. Delete a line when it stops being true.
   gnu-sed); `path.sh` exports them.
 - FFmpeg's configure fails on a path with `#` in it. The checkout must not live under
   `StudioProjects/#Kite`.
-- `LIBMPVKT_ABIS=arm64-v8a` is for laptops with one architecture. The publish path never
+- `LIBMPV_KMP_ABIS=arm64-v8a` is for laptops with one architecture. The publish path never
   sets it, so a publish with a missing ABI fails, on purpose.
 - `verifyExoOnlyApk` and the exoOnly exclusion list live in Synkplay, not here, but they name
-  the ten files of `libmpvkt-android-natives`. Adding or renaming a library here means updating
+  the ten files of `libmpv-kmp-android-natives`. Adding or renaming a library here means updating
   that list there.
 - The `mpv-version` property answers `mpv v0.41.0`; `BuildInfo.MPV` is `0.41.0`. The device
   test compares by containment for that reason.
@@ -62,11 +62,11 @@ Each line is something that bit someone. Delete a line when it stops being true.
   the stuck thread instead of eating the CI job's hour (#71).
 - `MpvOptions` defaults `keep-open` to Yes, which holds the last frame and never ends the file. A
   test that waits for the end has to ask for No.
-- `libmpvkt_render.so` belongs to `libmpvkt-canvas` alone. `jni.sh` moves it there after
+- `libmpv_kmp_render.so` belongs to `libmpv-kmp-canvas` alone. `jni.sh` moves it there after
   ndk-build, and `fetch-natives.sh` does the same after unpacking a release, because the same
   file in two artifacts makes AGP refuse to merge an app that uses both. The canvas packs it into
-  `libmpvkt-canvas-android-natives`.
-- `libmpvkt_render.so` links `libmpv.so` at load time, so the canvas artifacts and the core
+  `libmpv-kmp-canvas-android-natives`.
+- `libmpv_kmp_render.so` links `libmpv.so` at load time, so the canvas artifacts and the core
   artifacts must be the same version.
 - Every render function runs on `MpvRenderer`'s own thread, and the C++ checks it: an EGL context
   belongs to one thread.
@@ -91,7 +91,7 @@ Each line is something that bit someone. Delete a line when it stops being true.
   `cscale`'s "same as scale" arrives as 0, not "" (#65).
 - Closing a `FileChannel` does not wake a read blocked on a pipe on the API 21 emulator, so
   `DescriptorStream` waits in `poll()` beside a wake-up pipe that `cancel()` writes to (#66).
-- The binding's package is `io.github.yuroyami.libmpvkt.jni`, not `.native`: `native` is a Java
+- The binding's package is `io.github.yuroyami.libmpv.jni`, not `.native`: `native` is a Java
   keyword, and AGP rejects the generated test package `...native.test` outright.
 - A property named after a type it uses (`DemuxerCacheState`, `AudioParams`, `GpuApi`) shadows that
   type inside `MpvProperties`, so those entries name their codec in full.

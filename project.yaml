@@ -1,4 +1,4 @@
-# The library modules and the local build plugins of libmpvKt.
+# The library modules and the local build plugins of libmpv-kotlin-multiplatform.
 modules:
   - build-plugins/abi-check
   - build-plugins/android-abi-check
@@ -6,13 +6,13 @@ modules:
   - build-plugins/build-info
   - build-plugins/build-support
   - build-plugins/dokka
-  - libmpvkt
-  - libmpvkt-android-natives
-  - libmpvkt-canvas
-  - libmpvkt-canvas-android-natives
-  - libmpvkt-compose
-  - libmpvkt-native
-  - libmpvkt-view
+  - libmpv-kmp
+  - libmpv-kmp-android-natives
+  - libmpv-kmp-canvas
+  - libmpv-kmp-canvas-android-natives
+  - libmpv-kmp-compose
+  - libmpv-kmp-native
+  - libmpv-kmp-view
   - sample
 
 plugins:

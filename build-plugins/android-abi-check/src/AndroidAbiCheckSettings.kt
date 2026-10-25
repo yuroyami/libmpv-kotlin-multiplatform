@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildplugins.androidabi
+package io.github.yuroyami.libmpv.buildplugins.androidabi
 
 import org.jetbrains.amper.plugins.Configurable
 

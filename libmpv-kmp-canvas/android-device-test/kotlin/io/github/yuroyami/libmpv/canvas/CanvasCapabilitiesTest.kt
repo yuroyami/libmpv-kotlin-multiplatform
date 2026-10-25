@@ -1,0 +1,124 @@
+package io.github.yuroyami.libmpv.canvas
+
+import android.os.Build
+import android.util.Log
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import io.github.yuroyami.libmpv.HwdecMode
+import io.github.yuroyami.libmpv.Mpv
+import io.github.yuroyami.libmpv.MpvCommands
+import io.github.yuroyami.libmpv.MpvProperties
+import io.github.yuroyami.libmpv.MpvResult
+import io.github.yuroyami.libmpv.getOrNull
+import io.github.yuroyami.libmpv.getOrThrow
+import io.github.yuroyami.libmpv.view.MpvOptions
+import java.io.File
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertTrue
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.rules.Timeout
+import org.junit.runner.RunWith
+
+/**
+ * What the canvas renderer actually does on this runtime, written to logcat as one line per run so
+ * the numbers can be read out of a CI log and put in the docs.
+ *
+ * These are questions, not gates: a run that answers "no" records the no and still passes. The
+ * speed gate that decides whether the canvas stops being experimental is a phone measurement, and
+ * it is not this.
+ */
+@RunWith(AndroidJUnit4::class)
+class CanvasCapabilitiesTest {
+
+    // A test that hangs must fail with a stack trace, not stall the CI job until its time limit.
+    @get:Rule
+    val timeout: Timeout = Timeout.builder()
+        .withTimeout(120, TimeUnit.SECONDS)
+        .withLookingForStuckThread(true)
+        .build()
+
+
+    private val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+
+    private fun fixture(): File = TestVideo.writeTo(context.cacheDir)
+
+    /** One run: play the fixture for [seconds] and report what mpv chose and how many frames arrived. */
+    private fun measure(label: String, hwdec: HwdecMode, vo: String?, seconds: Int = 4) = runBlocking {
+        val mpv = Mpv.create(context)
+        val options = MpvOptions.forCanvas().copy(ao = "null", hwdec = hwdec)
+        options.applyTo(mpv)
+        val started = mpv.initialize()
+        if (started is MpvResult.Fail) {
+            report(label, ok = false, note = "initialize failed: ${started.error}")
+            mpv.close()
+            return@runBlocking 0L
+        }
+        var frames = 0L
+        try {
+            val renderer = MpvRenderer(mpv)
+            // The renderer switches vo to libmpv, so the vo this run asks about goes in after it.
+            if (vo != null) mpv.setString("vo", vo)
+            renderer.requestSize(320, 240)
+            mpv.command(MpvCommands.loadFile(fixture().absolutePath)).getOrThrow()
+            val until = System.currentTimeMillis() + seconds * 1000L
+            while (System.currentTimeMillis() < until) Thread.sleep(100)
+            val stats = renderer.stats.value
+            frames = stats.framesRendered
+            report(
+                label,
+                ok = frames > 0,
+                note = "vo=${mpv[MpvProperties.CurrentVo].getOrNull()} " +
+                    "hwdec=${mpv[MpvProperties.HwdecCurrent].getOrNull()} " +
+                    "readback=${stats.readback} frames=$frames skipped=${stats.framesSkipped} " +
+                    "fps=${"%.1f".format(frames.toDouble() / seconds)} " +
+                    "dropped=${mpv[MpvProperties.FrameDropCount].getOrNull()}",
+            )
+            renderer.close()
+        } catch (t: Throwable) {
+            report(label, ok = false, note = "threw ${t::class.simpleName}: ${t.message}")
+        } finally {
+            mpv.close()
+        }
+        frames
+    }
+
+    private fun report(label: String, ok: Boolean, note: String) {
+        Log.i(TAG, "CANVAS-MEASUREMENT api=${Build.VERSION.SDK_INT} run=$label ok=$ok $note")
+    }
+
+    @Test
+    fun theRendererProducesFramesWithSoftwareDecoding() {
+        val frames = measure("software", HwdecMode.No, vo = null)
+        assertTrue(frames > 0, "the canvas renderer produced no frame at all")
+    }
+
+    @Test
+    fun hardwareDecodingThroughTheRenderApiIsRecorded() {
+        // An emulator has no hardware decoder, and its software stand-in returns no frame here. A
+        // skipped run counts as a failure in the Gradle report, so this records the no and returns.
+        if (isEmulator) {
+            report("hwdec-auto", ok = false, note = "not run: no hardware decoder on an emulator")
+            return
+        }
+        // Expected to reach MediaCodec through mpv's image-reader interop. A no is a recorded no.
+        measure("hwdec-auto", HwdecMode.Auto, vo = null)
+        measure("hwdec-mediacodec-copy", HwdecMode.MediacodecCopy, vo = null)
+    }
+
+    @Test
+    fun whetherGpuNextWorksThroughTheRenderApiIsRecorded() {
+        // vo=libmpv is the render API; this asks whether libplacebo's newer renderer drives it.
+        measure("gpu-next", HwdecMode.No, vo = "gpu-next")
+    }
+
+    private companion object {
+        const val TAG = "libmpv-kmp"
+
+        /** goldfish and ranchu are the Android emulator's virtual boards. */
+        val isEmulator: Boolean =
+            Build.HARDWARE == "goldfish" || Build.HARDWARE == "ranchu" || Build.FINGERPRINT.contains("generic")
+    }
+}

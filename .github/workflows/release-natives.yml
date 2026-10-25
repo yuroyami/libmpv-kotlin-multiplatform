@@ -79,7 +79,7 @@ jobs:
           curl -fL --retry 3 -o "dist/ffmpeg-n${v_ffmpeg}-source.tar.gz" "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n${v_ffmpeg}.tar.gz"
           ( cd dist && shasum -a 256 mpv-v${v_mpv}-source.tar.gz ffmpeg-n${v_ffmpeg}-source.tar.gz > sources.sha256 )
           {
-            echo "libmpvKt ${TAG}: the sources the native libraries were built from."
+            echo "libmpv-kotlin-multiplatform ${TAG}: the sources the native libraries were built from."
             echo
             echo "mpv          v${v_mpv}          https://github.com/mpv-player/mpv/tree/v${v_mpv}"
             echo "FFmpeg       n${v_ffmpeg}       https://github.com/FFmpeg/FFmpeg/tree/n${v_ffmpeg}"
@@ -110,8 +110,8 @@ jobs:
           # Tag the commit that was built, not whatever the default branch holds by upload time.
           target_commitish: ${{ github.sha }}
           overwrite_files: false
-          name: libmpvKt ${{ github.event.inputs.tag }}
-          body: "Native libraries for libmpvKt ${{ github.event.inputs.tag }}. The natives jars on Maven Central are assembled from exactly the libmpvkt-natives zips. Each libmpvkt-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. SOURCES.txt and the two tarballs are the source offer for the GPL binaries."
+          name: libmpv-kotlin-multiplatform ${{ github.event.inputs.tag }}
+          body: "Native libraries for libmpv-kotlin-multiplatform ${{ github.event.inputs.tag }}. The natives jars on Maven Central are assembled from exactly the libmpv-kmp-natives zips. Each libmpv-kmp-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. SOURCES.txt and the two tarballs are the source offer for the GPL binaries."
           fail_on_unmatched_files: true
           files: |
             dist/*.zip

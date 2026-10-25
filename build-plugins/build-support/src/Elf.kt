@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildtools
+package io.github.yuroyami.libmpv.buildtools
 
 import java.io.File
 import java.io.RandomAccessFile

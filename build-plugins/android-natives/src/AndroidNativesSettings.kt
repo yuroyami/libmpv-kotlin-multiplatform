@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildplugins.androidnatives
+package io.github.yuroyami.libmpv.buildplugins.androidnatives
 
 import org.jetbrains.amper.plugins.Configurable
 
@@ -13,7 +13,7 @@ interface AndroidNativesSettings {
     /** The minSdk of the AAR that loads the libraries. A library linked for a higher API fails the check. */
     val minApi: Int
 
-    /** A symbol that libmpvkt_jni.so must contain, or null for no such check. */
+    /** A symbol that libmpv_kmp_jni.so must contain, or null for no such check. */
     val probeSymbol: String?
 
     /** A text that libc++_shared.so must contain, or null for no such check. */

@@ -1,11 +1,11 @@
-site_name: libmpvKt
-site_url: https://yuroyami.github.io/libmpvKt/
+site_name: libmpv-kotlin-multiplatform
+site_url: https://yuroyami.github.io/libmpv-kotlin-multiplatform/
 site_description: libmpv for Android as one Maven artifact.
 site_author: yuroyami
 copyright: Apache-2.0 wrapper, GPL binaries
 
-repo_name: yuroyami/libmpvKt
-repo_url: https://github.com/yuroyami/libmpvKt
+repo_name: yuroyami/libmpv-kotlin-multiplatform
+repo_url: https://github.com/yuroyami/libmpv-kotlin-multiplatform
 edit_uri: edit/main/docs/
 
 docs_dir: docs
@@ -72,4 +72,4 @@ nav:
   - Building the natives: building-natives.md
   - Releasing: releasing.md
   - Licensing: licensing.md
-  - API reference: https://yuroyami.github.io/libmpvKt/api/
+  - API reference: https://yuroyami.github.io/libmpv-kotlin-multiplatform/api/

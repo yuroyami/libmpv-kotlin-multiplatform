@@ -1,0 +1,123 @@
+public final class io/github/yuroyami/libmpv/view/CloseInBackgroundKt {
+	public static final fun closeInBackground (Lio/github/yuroyami/libmpv/Mpv;)V
+}
+
+public final class io/github/yuroyami/libmpv/view/MpvOptions {
+	public static final field Companion Lio/github/yuroyami/libmpv/view/MpvOptions$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (Ljava/io/File;Ljava/io/File;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/yuroyami/libmpv/VideoSyncMode;Ljava/lang/Double;ZLjava/io/File;Ljava/util/List;Ljava/util/List;JZLio/github/yuroyami/libmpv/SubFontProvider;ZLio/github/yuroyami/libmpv/KeepOpenMode;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/io/File;Ljava/io/File;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/yuroyami/libmpv/VideoSyncMode;Ljava/lang/Double;ZLjava/io/File;Ljava/util/List;Ljava/util/List;JZLio/github/yuroyami/libmpv/SubFontProvider;ZLio/github/yuroyami/libmpv/KeepOpenMode;Ljava/util/Map;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun applyTo (Lio/github/yuroyami/libmpv/Mpv;)V
+	public final fun applyTo (Lio/github/yuroyami/libmpv/view/MpvOptions$OptionSink;)V
+	public final fun component1 ()Ljava/io/File;
+	public final fun component10 ()Ljava/lang/Double;
+	public final fun component11 ()Z
+	public final fun component12 ()Ljava/io/File;
+	public final fun component13 ()Ljava/util/List;
+	public final fun component14 ()Ljava/util/List;
+	public final fun component15 ()J
+	public final fun component16 ()Z
+	public final fun component17 ()Lio/github/yuroyami/libmpv/SubFontProvider;
+	public final fun component18 ()Z
+	public final fun component19 ()Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public final fun component2 ()Ljava/io/File;
+	public final fun component20 ()Ljava/util/Map;
+	public final fun component3 ()Lio/github/yuroyami/libmpv/view/SurfaceType;
+	public final fun component4-7ZJDUrw ()Ljava/lang/String;
+	public final fun component5-VaVPFo8 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/String;
+	public final fun component9 ()Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public final fun copy-6lnNi1k (Ljava/io/File;Ljava/io/File;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/yuroyami/libmpv/VideoSyncMode;Ljava/lang/Double;ZLjava/io/File;Ljava/util/List;Ljava/util/List;JZLio/github/yuroyami/libmpv/SubFontProvider;ZLio/github/yuroyami/libmpv/KeepOpenMode;Ljava/util/Map;)Lio/github/yuroyami/libmpv/view/MpvOptions;
+	public static synthetic fun copy-6lnNi1k$default (Lio/github/yuroyami/libmpv/view/MpvOptions;Ljava/io/File;Ljava/io/File;Lio/github/yuroyami/libmpv/view/SurfaceType;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lio/github/yuroyami/libmpv/VideoSyncMode;Ljava/lang/Double;ZLjava/io/File;Ljava/util/List;Ljava/util/List;JZLio/github/yuroyami/libmpv/SubFontProvider;ZLio/github/yuroyami/libmpv/KeepOpenMode;Ljava/util/Map;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/view/MpvOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAo ()Ljava/lang/String;
+	public final fun getAudioLanguages ()Ljava/util/List;
+	public final fun getCacheDir ()Ljava/io/File;
+	public final fun getConfigDir ()Ljava/io/File;
+	public final fun getDeband ()Z
+	public final fun getDemuxerMaxBytes ()J
+	public final fun getDisplayFps ()Ljava/lang/Double;
+	public final fun getExtra ()Ljava/util/Map;
+	public final fun getHwdec-VaVPFo8 ()Ljava/lang/String;
+	public final fun getHwdecCodecs ()Ljava/lang/String;
+	public final fun getInputDefaultBindings ()Z
+	public final fun getInterpolation ()Z
+	public final fun getKeepOpen ()Lio/github/yuroyami/libmpv/KeepOpenMode;
+	public final fun getProfile ()Ljava/lang/String;
+	public final fun getSubFontProvider ()Lio/github/yuroyami/libmpv/SubFontProvider;
+	public final fun getSubtitleLanguages ()Ljava/util/List;
+	public final fun getSurfaceType ()Lio/github/yuroyami/libmpv/view/SurfaceType;
+	public final fun getTlsCaFile ()Ljava/io/File;
+	public final fun getVideoSync ()Lio/github/yuroyami/libmpv/VideoSyncMode;
+	public final fun getVo-7ZJDUrw ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/yuroyami/libmpv/view/MpvOptions$Companion {
+	public final fun forCanvas ()Lio/github/yuroyami/libmpv/view/MpvOptions;
+}
+
+public abstract interface class io/github/yuroyami/libmpv/view/MpvOptions$OptionSink {
+	public abstract fun option (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class io/github/yuroyami/libmpv/view/MpvView : android/widget/FrameLayout {
+	public fun <init> (Landroid/content/Context;)V
+	public fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;)V
+	public synthetic fun <init> (Landroid/content/Context;Landroid/util/AttributeSet;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun attach (Lio/github/yuroyami/libmpv/view/PreparedCore;)V
+	public final fun destroy ()V
+	public final fun getAudioTrack ()Lio/github/yuroyami/libmpv/TrackSelection;
+	public final fun getChapters ()Ljava/util/List;
+	public final fun getDuration ()Ljava/lang/Double;
+	public final fun getHwdecActive ()Ljava/lang/String;
+	public final fun getMpv ()Lio/github/yuroyami/libmpv/Mpv;
+	public final fun getMuted ()Z
+	public final fun getPaused ()Z
+	public final fun getPlayback ()Lkotlinx/coroutines/flow/StateFlow;
+	public final fun getSpeed ()D
+	public final fun getSubtitleTrack ()Lio/github/yuroyami/libmpv/TrackSelection;
+	public final fun getTimePos ()Ljava/lang/Double;
+	public final fun getTracks ()Ljava/util/List;
+	public final fun getVolume ()D
+	public final fun initialize (Lio/github/yuroyami/libmpv/view/MpvOptions;Lio/github/yuroyami/libmpv/Mpv;)V
+	public static synthetic fun initialize$default (Lio/github/yuroyami/libmpv/view/MpvView;Lio/github/yuroyami/libmpv/view/MpvOptions;Lio/github/yuroyami/libmpv/Mpv;ILjava/lang/Object;)V
+	public final fun playFile (Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadFileMode;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun playFile$default (Lio/github/yuroyami/libmpv/view/MpvView;Ljava/lang/String;Lio/github/yuroyami/libmpv/LoadFileMode;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun prepare (Lio/github/yuroyami/libmpv/view/MpvOptions;Lio/github/yuroyami/libmpv/Mpv;)Lio/github/yuroyami/libmpv/view/PreparedCore;
+	public static synthetic fun prepare$default (Lio/github/yuroyami/libmpv/view/MpvView;Lio/github/yuroyami/libmpv/view/MpvOptions;Lio/github/yuroyami/libmpv/Mpv;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/view/PreparedCore;
+	public final fun screenshot ()Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun seek (DLio/github/yuroyami/libmpv/SeekMode;Lio/github/yuroyami/libmpv/SeekPrecision;)Lio/github/yuroyami/libmpv/MpvResult;
+	public static synthetic fun seek$default (Lio/github/yuroyami/libmpv/view/MpvView;DLio/github/yuroyami/libmpv/SeekMode;Lio/github/yuroyami/libmpv/SeekPrecision;ILjava/lang/Object;)Lio/github/yuroyami/libmpv/MpvResult;
+	public final fun setAudioTrack (Lio/github/yuroyami/libmpv/TrackSelection;)V
+	public final fun setMuted (Z)V
+	public final fun setPaused (Z)V
+	public final fun setSpeed (D)V
+	public final fun setSubtitleTrack (Lio/github/yuroyami/libmpv/TrackSelection;)V
+	public final fun setTimePos (Ljava/lang/Double;)V
+	public final fun setVolume (D)V
+}
+
+public final class io/github/yuroyami/libmpv/view/PreparedCore : java/lang/AutoCloseable {
+	public fun close ()V
+	public final fun getCore ()Lio/github/yuroyami/libmpv/Mpv;
+}
+
+public final class io/github/yuroyami/libmpv/view/SurfaceHandshake {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/view/SurfaceHandshake;
+	public final fun attach-l8Hgg5g (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;Ljava/lang/String;)V
+	public final fun detach (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;)V
+	public final fun resize (Lio/github/yuroyami/libmpv/Mpv;Landroid/view/Surface;II)V
+}
+
+public final class io/github/yuroyami/libmpv/view/SurfaceType : java/lang/Enum {
+	public static final field Surface Lio/github/yuroyami/libmpv/view/SurfaceType;
+	public static final field Texture Lio/github/yuroyami/libmpv/view/SurfaceType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/yuroyami/libmpv/view/SurfaceType;
+	public static fun values ()[Lio/github/yuroyami/libmpv/view/SurfaceType;
+}
+

@@ -1,6 +1,6 @@
 tasks:
   check:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.buildinfo.checkBuildInfo
+    action: !io.github.yuroyami.libmpv.buildplugins.buildinfo.checkBuildInfo
       moduleName: ${module.name}
       version: ${module.settings.publishing.version}
       minSdk: ${pluginSettings.minSdk}
@@ -8,7 +8,7 @@ tasks:
       sourceFile: ${module.rootDir}/${pluginSettings.file}
 
   update:
-    action: !io.github.yuroyami.libmpvkt.buildplugins.buildinfo.updateBuildInfo
+    action: !io.github.yuroyami.libmpv.buildplugins.buildinfo.updateBuildInfo
       moduleName: ${module.name}
       version: ${module.settings.publishing.version}
       minSdk: ${pluginSettings.minSdk}

@@ -61,7 +61,7 @@ jobs:
           path: dist
           merge-multiple: true
       - name: Put the libraries in place through the same path a release uses
-        run: LIBMPVKT_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local
+        run: LIBMPV_KMP_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local
 
       # Every check on the four ABIs: the files, the 16 KB alignment, the JNI symbol, the libc++.
       - name: Check the native libraries
@@ -71,7 +71,7 @@ jobs:
           ./kotlin do checkAndroidNatives
 
       - name: Build the natives jars
-        run: ./kotlin build -m libmpvkt-android-natives -m libmpvkt-canvas-android-natives
+        run: ./kotlin build -m libmpv-kmp-android-natives -m libmpv-kmp-canvas-android-natives
 
       # The core jar holds ten libraries per ABI, and the canvas jar holds one.
       - name: Check what the natives jars hold
@@ -90,8 +90,8 @@ jobs:
             echo "$jar: $count libraries and $rules"
             cp "$jar" build/ci-artifacts/
           }
-          check_jar libmpvkt-android-natives 40 libmpvkt-native.pro
-          check_jar libmpvkt-canvas-android-natives 4 libmpvkt-canvas.pro
+          check_jar libmpv-kmp-android-natives 40 libmpv-kmp-native.pro
+          check_jar libmpv-kmp-canvas-android-natives 4 libmpv-kmp-canvas.pro
 
       # The release build runs R8 with the keep rules that the natives jars publish.
       - name: Build the sample, debug and release
@@ -106,7 +106,7 @@ jobs:
           [ -n "$apks" ] || { echo "::error::the build made no sample APK"; exit 1; }
           for apk in $apks; do
             for abi in arm64-v8a armeabi-v7a x86 x86_64; do
-              unzip -l "$apk" "lib/$abi/libmpvkt_jni.so" > /dev/null || { echo "::error::$apk has no lib/$abi/libmpvkt_jni.so"; exit 1; }
+              unzip -l "$apk" "lib/$abi/libmpv_kmp_jni.so" > /dev/null || { echo "::error::$apk has no lib/$abi/libmpv_kmp_jni.so"; exit 1; }
             done
             echo "$apk carries the four ABIs"
             cp "$apk" build/ci-artifacts/
@@ -114,7 +114,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: libmpvkt-packaging
+          name: libmpv-kmp-packaging
           path: build/ci-artifacts/
           if-no-files-found: error
           retention-days: 7
@@ -155,7 +155,7 @@ jobs:
         with:
           name: natives-x86_64
           path: dist
-      - run: LIBMPVKT_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local x86_64
+      - run: LIBMPV_KMP_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local x86_64
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -171,8 +171,8 @@ jobs:
           disable-animations: true
           script: |
             adb logcat -c
-            LIBMPVKT_ABIS=x86_64 scripts/run-device-tests.sh ${{ matrix.tasks }} || echo "TESTS_FAILED" > tests-failed
-            adb logcat -d -s libmpvKt:I mpv:W > canvas-measurements.txt
+            LIBMPV_KMP_ABIS=x86_64 scripts/run-device-tests.sh ${{ matrix.tasks }} || echo "TESTS_FAILED" > tests-failed
+            adb logcat -d -s libmpv-kmp:I mpv:W > canvas-measurements.txt
             adb logcat -d -b crash > crash.txt
             grep -c CANVAS-MEASUREMENT canvas-measurements.txt || true
             test ! -f tests-failed

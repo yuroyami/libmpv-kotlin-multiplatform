@@ -1,4 +1,4 @@
-package io.github.yuroyami.libmpvkt.buildtools
+package io.github.yuroyami.libmpv.buildtools
 
 import java.io.File
 import java.nio.ByteBuffer
@@ -10,14 +10,14 @@ import kotlin.test.assertTrue
 
 class AndroidNativeChecksTest {
 
-    /** The settings of libmpvkt-android-natives. */
+    /** The settings of libmpv-kmp-android-natives. */
     private object Core {
         val files: List<String> = listOf(
             "libavcodec.so", "libavdevice.so", "libavfilter.so", "libavformat.so", "libavutil.so",
             "libswresample.so", "libswscale.so", "libmpv.so", AndroidNativeChecks.JNI_LIB, AndroidNativeChecks.LIBCXX,
         )
         const val MIN_API: Int = 21
-        const val PROBE: String = "Java_io_github_yuroyami_libmpvkt_jni_MpvNative_create"
+        const val PROBE: String = "Java_io_github_yuroyami_libmpv_jni_MpvNative_create"
         const val MARKER: String = "from_chars_floating"
     }
 
@@ -86,7 +86,7 @@ class AndroidNativeChecksTest {
         }
     }
 
-    private fun root(): File = createTempDirectory("libmpvkt-check").toFile()
+    private fun root(): File = createTempDirectory("libmpv-kmp-check").toFile()
 
     /** The check reads a library's header, program headers and notes, not the megabytes behind them. */
     @Test
@@ -171,16 +171,16 @@ class AndroidNativeChecksTest {
         assertEquals(listOf("x86_64/libavutil.so is not an ELF file"), findProblems(root, listOf("x86_64")))
     }
 
-    /** libmpvkt-canvas-android-natives: one library at API 26, with no probe symbol and no libc++ marker. */
+    /** libmpv-kmp-canvas-android-natives: one library at API 26, with no probe symbol and no libc++ marker. */
     @Test
     fun theRenderLibraryIsCheckedAgainstItsOwnMinSdk() {
         val root = root()
         val dir = File(root, "x86_64").apply { mkdirs() }
-        File(dir, "libmpvkt_render.so").writeBytes(fakeElf(true, listOf(16384), apiLevel = 26))
-        val render = listOf("libmpvkt_render.so")
+        File(dir, "libmpv_kmp_render.so").writeBytes(fakeElf(true, listOf(16384), apiLevel = 26))
+        val render = listOf("libmpv_kmp_render.so")
         assertEquals(emptyList(), AndroidNativeChecks.findProblems(root, listOf("x86_64"), render, 26, null, null))
         assertEquals(
-            listOf("x86_64/libmpvkt_render.so is linked for API 26, above the AAR's minSdk 21"),
+            listOf("x86_64/libmpv_kmp_render.so is linked for API 26, above the AAR's minSdk 21"),
             AndroidNativeChecks.findProblems(root, listOf("x86_64"), render, 21, null, null),
         )
     }

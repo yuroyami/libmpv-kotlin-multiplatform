@@ -1,4 +1,4 @@
-# The versions of the device-test build in this folder. Kotlin matches libmpvkt.module-template.yaml
+# The versions of the device-test build in this folder. Kotlin matches libmpv-kmp.module-template.yaml
 # in the repository root. The androidx test versions are the ones the Gradle build used before the
 # move, because they still run on API 21.
 [versions]

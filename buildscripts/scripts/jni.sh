@@ -1,6 +1,6 @@
 #!/bin/bash -e
-# Compiles libmpvkt_jni.so and copies every prebuilt library, plus the NDK's libc++_shared.so,
-# into libmpvkt-native/native-libs/<abi>/, for the one architecture buildall.sh was given.
+# Compiles libmpv_kmp_jni.so and copies every prebuilt library, plus the NDK's libc++_shared.so,
+# into libmpv-kmp-native/native-libs/<abi>/, for the one architecture buildall.sh was given.
 set -eo pipefail
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -19,8 +19,8 @@ case "$(basename "${prefix_dir:-}")" in
 esac
 
 if [ "$1" == "clean" ]; then
-	rm -rf "$ROOT/build/ndk-obj" "$ROOT/build/ndk-render-libs" "$ROOT/libmpvkt-native/native-libs/$abi" \
-		"$ROOT/libmpvkt-canvas/native-libs/$abi"
+	rm -rf "$ROOT/build/ndk-obj" "$ROOT/build/ndk-render-libs" "$ROOT/libmpv-kmp-native/native-libs/$abi" \
+		"$ROOT/libmpv-kmp-canvas/native-libs/$abi"
 	exit 0
 fi
 [ "$1" == "build" ] || exit 255
@@ -31,27 +31,27 @@ if [ ! -f "$prefix_dir/lib/libmpv.so" ]; then
 fi
 
 # First run: the core libraries, at the AAR's minSdk (APP_PLATFORM in Application.mk).
-ndk-build -C "$ROOT/libmpvkt-native/native" \
-	NDK_LIBS_OUT="$ROOT/libmpvkt-native/native-libs" NDK_OUT="$ROOT/build/ndk-obj/core" \
+ndk-build -C "$ROOT/libmpv-kmp-native/native" \
+	NDK_LIBS_OUT="$ROOT/libmpv-kmp-native/native-libs" NDK_OUT="$ROOT/build/ndk-obj/core" \
 	-j${cores:-4}
 
-# Second run: libmpvkt_render.so, at API 26 for AHardwareBuffer. It gets its own output
+# Second run: libmpv_kmp_render.so, at API 26 for AHardwareBuffer. It gets its own output
 # directory, because ndk-build empties every ABI directory of NDK_LIBS_OUT it installs into.
 render_out="$ROOT/build/ndk-render-libs"
 rm -rf "$render_out"
-ndk-build -C "$ROOT/libmpvkt-native/native" LIBMPVKT_RENDER=1 APP_PLATFORM=android-26 \
+ndk-build -C "$ROOT/libmpv-kmp-native/native" LIBMPV_KMP_RENDER=1 APP_PLATFORM=android-26 \
 	NDK_LIBS_OUT="$render_out" NDK_OUT="$ROOT/build/ndk-obj/render" \
 	-j${cores:-4}
 
-# libmpvkt_render.so belongs to libmpvkt-canvas, which publishes it. Leaving it beside the core
+# libmpv_kmp_render.so belongs to libmpv-kmp-canvas, which publishes it. Leaving it beside the core
 # libraries puts the same file in two AARs, and AGP refuses to merge them.
-mkdir -p "$ROOT/libmpvkt-canvas/native-libs/$abi"
-cp "$render_out/$abi/libmpvkt_render.so" "$ROOT/libmpvkt-canvas/native-libs/$abi/"
+mkdir -p "$ROOT/libmpv-kmp-canvas/native-libs/$abi"
+cp "$render_out/$abi/libmpv_kmp_render.so" "$ROOT/libmpv-kmp-canvas/native-libs/$abi/"
 
 # The NDK's libc++_shared.so carries its full debug info, about 7.5 MB per ABI, and ndk-build keeps
 # ours. The symbol tables stay, so a crash still names its functions; the NDK keeps unstripped
 # copies with the same build ID for full symbolication.
-for lib in "$ROOT/libmpvkt-native/native-libs/$abi/libc++_shared.so" "$ROOT/libmpvkt-native/native-libs/$abi/libmpvkt_jni.so" \
-	"$ROOT/libmpvkt-canvas/native-libs/$abi/libmpvkt_render.so"; do
+for lib in "$ROOT/libmpv-kmp-native/native-libs/$abi/libc++_shared.so" "$ROOT/libmpv-kmp-native/native-libs/$abi/libmpv_kmp_jni.so" \
+	"$ROOT/libmpv-kmp-canvas/native-libs/$abi/libmpv_kmp_render.so"; do
 	llvm-strip --strip-debug "$lib"
 done

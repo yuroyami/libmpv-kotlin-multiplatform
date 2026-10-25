@@ -15,8 +15,8 @@ captures/
 # Native build inputs and outputs. The scripts fill these; a release run downloads them.
 buildscripts/deps/
 buildscripts/prefix/
-libmpvkt-native/native-libs/
-libmpvkt-canvas/native-libs/
+libmpv-kmp-native/native-libs/
+libmpv-kmp-canvas/native-libs/
 dist/
 
 # Build logs from the native scripts.

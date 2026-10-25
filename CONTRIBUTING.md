@@ -1,6 +1,6 @@
-# Contributing to libmpvKt
+# Contributing to libmpv-kotlin-multiplatform
 
-libmpvKt packages a prebuilt libmpv for Android. The Kotlin side is small; most of the work is in the build scripts and in keeping what ships true to what the docs say.
+libmpv-kotlin-multiplatform packages a prebuilt libmpv for Android. The Kotlin side is small; most of the work is in the build scripts and in keeping what ships true to what the docs say.
 
 Open work lives in GitHub Issues. There is no private planning file.
 
@@ -10,7 +10,7 @@ Open work lives in GitHub Issues. There is no private planning file.
 - **A claim carries the strength of its evidence.** A green host test says nothing about a device. The device tests and the sample on a real phone are the proof that the libraries load and play.
 - **No em dashes and no en dashes in any file.** The gate scans for them.
 - **No new dependency without asking first**: not a library, not a toolchain plugin, not a GitHub Action, not a change of an upstream pin.
-- **Explicit API mode is on.** Every public declaration has KDoc. Each module commits a dump of its Android API in `api/android/`. A public API change updates the dump in the same commit: run `./kotlin build -p android`, then `./kotlin do updateAndroidAbi`. Review a change to `libmpvkt/api/android/libmpvkt.api` with care: `MPVLib` keeps the 0.1.0 signatures.
+- **Explicit API mode is on.** Every public declaration has KDoc. Each module commits a dump of its Android API in `api/android/`. A public API change updates the dump in the same commit: run `./kotlin build -p android`, then `./kotlin do updateAndroidAbi`. Review a change to `libmpv-kmp/api/android/libmpv-kmp.api` with care: `MPVLib` keeps the 0.1.0 signatures.
 - **The pins are the truth.** `buildscripts/include/depinfo.sh` is the only place a version is written. README tables, `BuildInfo` and CHANGELOG follow it. After a pin change, `./kotlin do updateBuildInfo` rewrites `BuildInfo`.
 - **When the tree contradicts an issue or a document, stop and say so.** Do not improvise the document back into truth.
 
@@ -35,7 +35,7 @@ The commands you need most:
 ./kotlin show modules                         # every module and its platforms
 ```
 
-`LIBMPVKT_ABIS=arm64-v8a` before `./kotlin do checkAndroidNatives` limits the check to the ABIs in the list. Use it on a machine that built one ABI. A release never sets it, so a release with a missing ABI fails.
+`LIBMPV_KMP_ABIS=arm64-v8a` before `./kotlin do checkAndroidNatives` limits the check to the ABIs in the list. Use it on a machine that built one ABI. A release never sets it, so a release with a missing ABI fails.
 
 ## The gate before every commit
 
@@ -43,11 +43,11 @@ Two tiers, selected by the paths that changed, never by confidence.
 
 **Tier 1, every change, a few minutes:** `scripts/check-gate.sh tier1`. The host tests, the build, the API dump and `BuildInfo` checks, the build-logic tests and the dash scan.
 
-**Tier 2, about an hour:** `scripts/check-gate.sh tier2`. Run it for any change under `buildscripts/`, `libmpvkt-native/native/`, the canvas C++ sources or `build-plugins/`, and for a change to `project.yaml`, a `module.yaml`, a `*.module-template.yaml` or `libs.versions.toml`. Tier 2 runs tier 1, then builds the arm64 natives, checks them, builds the release sample, and runs every module's device tests.
+**Tier 2, about an hour:** `scripts/check-gate.sh tier2`. Run it for any change under `buildscripts/`, `libmpv-kmp-native/native/`, the canvas C++ sources or `build-plugins/`, and for a change to `project.yaml`, a `module.yaml`, a `*.module-template.yaml` or `libs.versions.toml`. Tier 2 runs tier 1, then builds the arm64 natives, checks them, builds the release sample, and runs every module's device tests.
 
 The device tests run on every attached device. The script refuses to start with more than one device attached, unless `ANDROID_SERIAL` names the device to use.
 
-To run the device tests alone, run `scripts/run-device-tests.sh`. It stages the libraries of this checkout, then runs the tests on the device. On an x86_64 emulator, add `LIBMPVKT_ABIS=x86_64` in front.
+To run the device tests alone, run `scripts/run-device-tests.sh`. It stages the libraries of this checkout, then runs the tests on the device. On an x86_64 emulator, add `LIBMPV_KMP_ABIS=x86_64` in front.
 
 `./kotlin ... | tail` reports the exit code of `tail`, not of the build. Write the output to a file and read it.
 

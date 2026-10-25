@@ -5,10 +5,10 @@
 # It publishes the named modules to Maven Local with one `./kotlin publish mavenLocal`. Then it copies
 # only this version of those modules into build/verification-maven, and removes that version from
 # Maven Local again, so a local build of a release version never stays there. The device-test build
-# resolves libmpvKt from build/verification-maven only.
+# resolves libmpv-kotlin-multiplatform from build/verification-maven only.
 #
-#   scripts/stage-verification-maven.sh libmpvkt-native libmpvkt-android-natives
-#   scripts/stage-verification-maven.sh --with-dependencies libmpvkt-canvas
+#   scripts/stage-verification-maven.sh libmpv-kmp-native libmpv-kmp-android-natives
+#   scripts/stage-verification-maven.sh --with-dependencies libmpv-kmp-canvas
 #
 # --with-dependencies adds every module that the named modules depend on, read from their
 # module.yaml files.
@@ -20,7 +20,7 @@ closure=false
 if [ "${1:-}" = "--with-dependencies" ]; then closure=true; shift; fi
 [ $# -gt 0 ] || { echo "usage: $0 [--with-dependencies] MODULE..." >&2; exit 2; }
 if [ "$closure" = true ]; then
-    # Every `- //libmpvkt<name>` line of a module.yaml, followed until no new module appears.
+    # Every `- //libmpv-kmp<name>` line of a module.yaml, followed until no new module appears.
     # shellcheck disable=SC2046 # one module name per word
     set -- $(python3 - "$ROOT" "$@" <<'PY'
 import pathlib, re, sys
@@ -32,7 +32,7 @@ while todo:
         continue
     seen.add(module)
     text = (root / module / "module.yaml").read_text()
-    todo += re.findall(r"^\s*-\s*//(libmpvkt[a-z0-9-]*)", text, re.M)
+    todo += re.findall(r"^\s*-\s*//(libmpv-kmp[a-z0-9-]*)", text, re.M)
 print(" ".join(sorted(seen)))
 PY
 )
@@ -44,7 +44,7 @@ repository="$ROOT/build/verification-maven"
 all_modules="$(awk '/^modules:/ { inside = 1; next } /^[^[:space:]-]/ { inside = 0 } inside && /^  - / { print $2 }' "$ROOT/project.yaml")"
 
 # The artifact folders of this version that belong to a named module. A folder belongs to the module
-# with the longest matching name: libmpvkt-canvas-android to libmpvkt-canvas, not to libmpvkt.
+# with the longest matching name: libmpv-kmp-canvas-android to libmpv-kmp-canvas, not to libmpv-kmp.
 owned_folders() {
     local path folder owner candidate
     for path in "$group"/*/; do

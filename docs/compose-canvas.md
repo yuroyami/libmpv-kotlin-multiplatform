@@ -11,10 +11,10 @@ MpvCanvas(renderer, Modifier.fillMaxSize().graphicsLayer { rotationZ = angle })
 ```
 
 ```kotlin
-implementation("io.github.yuroyami:libmpvkt-canvas:0.2.0")
+implementation("io.github.yuroyami:libmpv-kmp-canvas:0.4.0")
 ```
 
-The canvas needs API 26, because the render library draws into hardware buffers. Its version must match `libmpvkt`'s: `libmpvkt_render.so` links against the `libmpv.so` in the core AAR.
+The canvas needs API 26, because the render library draws into hardware buffers. Its version must match `libmpv-kmp`'s: `libmpv_kmp_render.so` links against the `libmpv.so` in the core AAR.
 
 `MpvOptions.forCanvas()` is the whole difference in configuration: it leaves out the window context options, which do not apply when there is no window. Like every core, it starts with `vo=null`. `MpvRenderer` switches `vo` to `libmpv` once its render context exists, so a file started before the renderer keeps its video.
 

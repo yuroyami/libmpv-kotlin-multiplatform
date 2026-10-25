@@ -18,19 +18,19 @@ cd buildscripts
 ./buildall.sh --arch arm64          # dependencies, mpv, then the JNI library, for one ABI
 ```
 
-Architectures: `arm64`, `armv7l`, `x86`, `x86_64`. Each takes between ten minutes and an hour the first time, depending on the machine; a CI runner is at the slow end. The output lands in `libmpvkt-native/native-libs/<abi>/`, ten files per ABI. Then:
+Architectures: `arm64`, `armv7l`, `x86`, `x86_64`. Each takes between ten minutes and an hour the first time, depending on the machine; a CI runner is at the slow end. The output lands in `libmpv-kmp-native/native-libs/<abi>/`, ten files per ABI. Then:
 
 ```bash
-LIBMPVKT_ABIS=arm64-v8a ./kotlin do checkAndroidNatives
-./kotlin build -m libmpvkt-android-natives -m libmpvkt-canvas-android-natives
+LIBMPV_KMP_ABIS=arm64-v8a ./kotlin do checkAndroidNatives
+./kotlin build -m libmpv-kmp-android-natives -m libmpv-kmp-canvas-android-natives
 ```
 
-`LIBMPVKT_ABIS` is a comma-separated list of the ABIs to check. Without it, the check wants all four ABIs. The natives jars hold every ABI that has all of its files, and the build prints a warning for each ABI that is not complete.
+`LIBMPV_KMP_ABIS` is a comma-separated list of the ABIs to check. Without it, the check wants all four ABIs. The natives jars hold every ABI that has all of its files, and the build prints a warning for each ABI that is not complete.
 
 To try the result in an app, publish it to the local Maven repository:
 
 ```bash
-./kotlin publish mavenLocal -m libmpvkt-native -m libmpvkt-android-natives
+./kotlin publish mavenLocal -m libmpv-kmp-native -m libmpv-kmp-android-natives
 ```
 
 Useful flags: `--clean` rebuilds a target's build directory, `-n` skips dependencies, `--deps-only` builds everything below mpv and stops, and a target name (`mpv`, `ffmpeg`, `libass`...) builds that one thing.
@@ -41,15 +41,15 @@ Useful flags: `--clean` rebuilds a target's build directory, `-n` skips dependen
 
 ## What the scripts do
 
-- `download-deps.sh` clones or downloads each source at its tag and records the commit in `.libmpvkt-commit`, which ends up in the release's `BUILD-INFO.txt`. A checkout counts as done only once that file exists, so an interrupted clone is fetched again.
+- `download-deps.sh` clones or downloads each source at its tag and records the commit in `.libmpv-kmp-commit`, which ends up in the release's `BUILD-INFO.txt`. A checkout counts as done only once that file exists, so an interrupted clone is fetched again.
 - `buildall.sh` sets up one prefix per architecture under `buildscripts/prefix/`, writes a meson cross file, and builds each target's dependencies first. Everything below mpv is a static library; mpv and FFmpeg are shared.
-- `scripts/jni.sh` runs `ndk-build` over `libmpvkt-native/native/jni/Android.mk`, which compiles `libmpvkt_jni.so` and copies the prebuilt shared libraries plus `libc++_shared.so` into `libmpvkt-native/native-libs/<abi>/`.
+- `scripts/jni.sh` runs `ndk-build` over `libmpv-kmp-native/native/jni/Android.mk`, which compiles `libmpv_kmp_jni.so` and copies the prebuilt shared libraries plus `libc++_shared.so` into `libmpv-kmp-native/native-libs/<abi>/`.
 - Every shared library is linked with `-Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384`, and `checkAndroidNatives` reads the ELF headers back to prove it.
 
 ## What CI does
 
 `ci.yml` runs one job per ABI on Ubuntu. The prefix (everything below mpv) is cached under a key made of the pins, so a push that touches only Kotlin rebuilds mpv and the JNI library in a few minutes and nothing else. A pin change rebuilds the chain, about half an hour per ABI, in parallel.
 
-`release-natives.yml` builds the same four ABIs on demand and attaches `libmpvkt-natives-<abi>.zip`, its `.sha256`, and the mpv and FFmpeg source tarballs to the GitHub release for the tag. `publish.yml` downloads those zips, verifies them, and assembles the natives jars from them. So the jars on Maven Central are made of the files anyone can inspect on the release page.
+`release-natives.yml` builds the same four ABIs on demand and attaches `libmpv-kmp-natives-<abi>.zip`, its `.sha256`, and the mpv and FFmpeg source tarballs to the GitHub release for the tag. `publish.yml` downloads those zips, verifies them, and assembles the natives jars from them. So the jars on Maven Central are made of the files anyone can inspect on the release page.
 
-`.github/scripts/fetch-natives.sh <tag>` puts a release's libraries into `libmpvkt-native/native-libs/` on any machine, which is the quickest way to work on the Kotlin side without building anything. That works from `v0.2.0` on. The 0.1.0 JNI library exports the old `MPVLib` symbols, so `checkAndroidNatives` refuses it for the current tree.
+`.github/scripts/fetch-natives.sh <tag>` puts a release's libraries into `libmpv-kmp-native/native-libs/` on any machine, which is the quickest way to work on the Kotlin side without building anything. That works from `v0.4.0` on. Older releases ship `libmpvkt-natives-<abi>.zip` with JNI symbols for the old package, so `checkAndroidNatives` refuses them for the current tree.
