@@ -17,6 +17,13 @@ public final class io/github/yuroyami/libmpv/BuildInfo {
 	public final fun getABIS ()Ljava/util/List;
 }
 
+public final class io/github/yuroyami/libmpv/jni/MpvAndroidNative {
+	public static final field INSTANCE Lio/github/yuroyami/libmpv/jni/MpvAndroidNative;
+	public final fun initAndroid (Landroid/content/Context;)V
+	public final fun releaseSurfaceHandle (J)V
+	public final fun surfaceHandle (Landroid/view/Surface;)J
+}
+
 public final class io/github/yuroyami/libmpv/jni/MpvNative {
 	public static final field INSTANCE Lio/github/yuroyami/libmpv/jni/MpvNative;
 	public final fun abortAsyncCommand (JJ)V
@@ -41,11 +48,9 @@ public final class io/github/yuroyami/libmpv/jni/MpvNative {
 	public final fun getPropertyString (JLjava/lang/String;)Ljava/lang/String;
 	public final fun hookAdd (JJLjava/lang/String;I)I
 	public final fun hookContinue (JJ)I
-	public final fun initAndroid (Landroid/content/Context;)V
 	public final fun initialize (J)I
 	public final fun loadConfigFile (JLjava/lang/String;)I
 	public final fun observeProperty (JJLjava/lang/String;I)I
-	public final fun releaseSurfaceHandle (J)V
 	public final fun requestEvent (JIZ)I
 	public final fun requestLogMessages (JLjava/lang/String;)I
 	public final fun setOptionNode (JLjava/lang/String;[B)I
@@ -54,7 +59,6 @@ public final class io/github/yuroyami/libmpv/jni/MpvNative {
 	public final fun setPropertyNode (JLjava/lang/String;[B)I
 	public final fun setPropertyString (JLjava/lang/String;Ljava/lang/String;)I
 	public final fun streamCbAddRo (JLjava/lang/String;Lio/github/yuroyami/libmpv/stream/MpvStreamProvider;)I
-	public final fun surfaceHandle (Landroid/view/Surface;)J
 	public final fun terminateDestroy (J)V
 	public final fun timeUs (J)J
 	public final fun unobserveProperty (JJ)I

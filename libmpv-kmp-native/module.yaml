@@ -2,7 +2,9 @@
 # libraries ride libmpv-kmp-android-natives, a plain jar that AGP unpacks into the APK.
 product:
   type: kmp/lib
-  platforms: [ android ]
+  platforms: [ android, jvm ]
+
+# src/ is the JNI binding that the JVM and Android share. An alias of every platform would merge into src/.
 
 apply:
   - //libmpv-kmp.module-template.yaml
@@ -14,6 +16,8 @@ dependencies@android:
   - //libmpv-kmp-android-natives
 
 settings:
+  kotlin:
+    freeCompilerArgs: [ -Xexpect-actual-classes ]
   android:
     namespace: io.github.yuroyami.libmpv.jni
   publishing:
@@ -22,7 +26,8 @@ settings:
       description: "The native half of libmpv-kotlin-multiplatform: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64 with 16 KB page alignment, and MpvNative, the raw binding. The native libraries are GPL."
 
 plugins:
+  abi-check: enabled
   android-abi-check: enabled
   build-info:
     enabled: true
-    file: src@android/io/github/yuroyami/libmpv/BuildInfo.kt
+    file: src/io/github/yuroyami/libmpv/BuildInfo.kt

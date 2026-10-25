@@ -37,52 +37,6 @@ fun dumpJvmAbi(
     dumpFile.createParentDirectories().writeText(dump)
 }
 
-/**
- * Writes the ABI dump of the module's Android classes, in the same format as the JVM dump.
- * No plugin reference gives the Android classes, so this reads them from the build folder:
- * run `./kotlin build -p android` first.
- */
-@TaskAction(ExecutionAvoidance.Disabled)
-fun dumpAndroidAbi(
-    moduleName: String,
-    dumpDir: String,
-    // A String, not an @Input Path: the build folder holds this task's own output.
-    buildDir: String,
-    @Output dumpFile: Path,
-) {
-    if (dumpDir.isBlank()) {
-        dumpFile.createParentDirectories().writeText("")
-        return
-    }
-    val classes = listOf("debug", "release")
-        .map { Path(buildDir, "artifacts", "CompiledJvmArtifact", "${moduleName}android$it", "kotlin-output") }
-        .firstOrNull { it.exists() }
-        ?: error("No Android classes of $moduleName. Run `./kotlin build -p android -m $moduleName` first.")
-    val classFiles = classes.walk()
-        .filter { it.isRegularFile() && it.extension == "class" }
-        .map { it.toFile() }
-        .sortedBy { it.path }
-        .toList()
-    val dump = StringBuilder()
-    AbiTools.getInstance(AbiTools::class.java.classLoader).printJvmDump(dump, classFiles, AbiFilters.EMPTY)
-    dumpFile.createParentDirectories().writeText(dump)
-}
-
-/** Fails when the built Android dump differs from the committed one. Line endings are ignored. */
-@TaskAction(ExecutionAvoidance.Disabled)
-fun checkAndroidAbi(
-    moduleName: String,
-    dumpDir: String,
-    @Input builtDump: Path,
-    @Input(inferTaskDependency = false) committedDump: Path,
-) {
-    if (dumpDir.isBlank()) {
-        println("$moduleName has no androidDumpDir, so there is no Android ABI check.")
-        return
-    }
-    compareDumps(moduleName, builtDump, committedDump, "updateAndroidAbi")
-}
-
 /** Fails when the built JVM dump differs from the committed one. Line endings are ignored. */
 @TaskAction
 fun checkJvmAbi(

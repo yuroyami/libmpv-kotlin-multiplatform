@@ -76,6 +76,7 @@ LOCAL_CPPFLAGS  += -std=c++20 -fvisibility-inlines-hidden
 LOCAL_LDFLAGS   += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 LOCAL_SRC_FILES := \
 	mpv_kmp.cpp \
+	mpv_kmp_android.cpp \
 	node_codec.cpp \
 	stream_cb.cpp \
 	utf8.cpp

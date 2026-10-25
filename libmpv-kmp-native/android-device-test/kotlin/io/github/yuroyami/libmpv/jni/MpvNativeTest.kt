@@ -19,7 +19,7 @@ class MpvNativeTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     private fun start(): Long {
-        MpvNative.initAndroid(context)
+        MpvAndroidNative.initAndroid(context)
         val h = MpvNative.create()
         assertNotEquals(0L, h)
         assertEquals(0, MpvNative.setOptionString(h, "vo", "null"))

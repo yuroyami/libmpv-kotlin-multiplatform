@@ -104,6 +104,10 @@ Each line is something that bit someone. Delete a line when it stops being true.
   clients `createClient` made before it ends the core (#29).
 - Releases go to Maven Central, which never replaces or deletes a version. `publishingMode: manual`
   stops each upload on the Central Portal until the owner presses Publish there.
+- A source alias that names every platform of a module merges into `src/`, and its folder then cannot see
+  `src/`. That is why `libmpv-kmp-native` has no `jvmAndAndroid` alias while its platforms are only Android and the JVM.
+- The copied `abi-check` plugin does the JVM and klib dumps only. `android-abi-check` does the Android dump, because
+  `abi-check` needs JVM classes and cannot run on an Android-only module.
 - `do` is a shell keyword, so shellcheck (inside actionlint) flags `./kotlin do ...` in a workflow.
   Put `# shellcheck disable=SC1010` on the line before it.
 - `scripts/run-device-tests.sh` runs on every attached device, a phone included. Pin one with

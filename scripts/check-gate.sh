@@ -49,6 +49,7 @@ fi
 run ./kotlin test -p android
 run ./kotlin build -p android
 run ./kotlin check androidAbi buildInfo
+run ./kotlin check abi -m libmpv-kmp-native
 run ./kotlin test -m build-support
 run scan_dashes
 

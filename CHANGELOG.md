@@ -23,6 +23,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The AARs keep their classes in `libs/<artifact>-jvm.jar` and have no `aar-metadata.properties`. Gradle therefore no longer checks that the app's compile SDK is 35 or newer. The floor still applies, so check it yourself.
 - The project builds with the Kotlin toolchain (the `./kotlin` script) instead of Gradle, on Kotlin 2.4.21. The device tests run in a separate Gradle build under `verification/`.
 - Each module commits a dump of its Android API under `api/android/`, and a check fails when the public API changes without a new dump.
+- `MpvNative.initAndroid`, `MpvNative.surfaceHandle` and `MpvNative.releaseSurfaceHandle` move to the new object `MpvAndroidNative` in the same package. `MpvNative` keeps every other function, and `libmpv-kmp-native` now also builds for the desktop JVM.
+- `MpvNative.create` sets the C numeric locale before every `mpv_create`, not only once at `initAndroid`. mpv returns no core under any other numeric locale, and an app can change the locale at any time.
 
 ## [0.3.0] - 2026-09-26
 

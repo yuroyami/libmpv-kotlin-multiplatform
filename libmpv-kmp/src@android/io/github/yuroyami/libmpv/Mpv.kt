@@ -3,6 +3,7 @@ package io.github.yuroyami.libmpv
 import android.content.Context
 import android.util.Log
 import android.view.Surface
+import io.github.yuroyami.libmpv.jni.MpvAndroidNative
 import io.github.yuroyami.libmpv.jni.MpvNative
 import io.github.yuroyami.libmpv.jni.MpvNativeApi
 import io.github.yuroyami.libmpv.stream.MpvStreamProvider
@@ -362,7 +363,7 @@ public class Mpv private constructor(
             MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(0)))
         }
         releaseSurface()
-        surfaceHandle = MpvNative.surfaceHandle(surface)
+        surfaceHandle = MpvAndroidNative.surfaceHandle(surface)
         attachedSurface = surface
         val r = MpvNative.setOptionNode(handle, "wid", NodeCodec.encode(MpvNode.Int64(surfaceHandle)))
         if (r < 0) {
@@ -386,7 +387,7 @@ public class Mpv private constructor(
     private fun releaseSurface() {
         attachedSurface = null
         if (surfaceHandle != 0L) {
-            MpvNative.releaseSurfaceHandle(surfaceHandle)
+            MpvAndroidNative.releaseSurfaceHandle(surfaceHandle)
             surfaceHandle = 0
         }
     }
@@ -486,7 +487,7 @@ public class Mpv private constructor(
         /** A new core. Nothing runs until [initialize]. */
         public fun create(context: Context): Mpv {
             if (!androidReady) {
-                MpvNative.initAndroid(context.applicationContext)
+                MpvAndroidNative.initAndroid(context.applicationContext)
                 androidReady = true
             }
             val h = MpvNative.create()

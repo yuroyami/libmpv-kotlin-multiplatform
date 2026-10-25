@@ -17,10 +17,4 @@ interface AbiCheckSettings {
 
     /** Directory of the committed klib ABI dump, relative to the module directory. The file is `<module>.klib.api`. */
     val klibDumpDir: String get() = "api"
-
-    /**
-     * Directory of the committed Android ABI dump, relative to the module directory, or empty for no
-     * Android check. The file is `<module>.api`. The check reads the classes that `./kotlin build -p android` wrote.
-     */
-    val androidDumpDir: String get() = ""
 }

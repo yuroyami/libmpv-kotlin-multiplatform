@@ -3,13 +3,8 @@
 
 #include <clocale>
 #include <cstring>
-#include <mutex>
 #include <string>
 #include <vector>
-
-extern "C" {
-#include <libavcodec/jni.h>
-}
 
 #include "node_codec.h"
 #include "stream_cb.h"
@@ -69,29 +64,18 @@ static bool decode_arg(JNIEnv *env, jbyteArray bytes, mpv_node *out, NodeArena &
     return decode_node((const uint8_t *) b.p, (size_t) b.n, pos, out, arena);
 }
 
-static JavaVM *g_vm;
-
 extern "C" JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *) {
-    g_vm = vm;
     JNIEnv *env;
     if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) return JNI_ERR;
     if (!stream_cb_init(vm, env)) return JNI_ERR;
     return JNI_VERSION_1_6;
 }
 
-FN(void, initAndroid)(JNIEnv *env, jobject, jobject appctx) {
-    static std::once_flag once;
-    std::call_once(once, [&] {
-        setlocale(LC_NUMERIC, "C");
-        av_jni_set_java_vm(g_vm, nullptr);
-        jobject global = env->NewGlobalRef(appctx);
-        if (global) av_jni_set_android_app_ctx(global, nullptr);
-    });
-}
-
 FN(jlong, clientApiVersion)(JNIEnv *, jobject) { return (jlong) mpv_client_api_version(); }
 
 FN(jlong, create)(JNIEnv *, jobject) {
+    // mpv_create returns no handle under any other numeric locale, and the app can change it at any time.
+    setlocale(LC_NUMERIC, "C");
     mpv_handle *h = mpv_create();
     if (h) stream_cb_owner_created(h);
     return reinterpret_cast<jlong>(h);
@@ -293,6 +277,3 @@ FN(jint, streamCbAddRo)(JNIEnv *env, jobject, jlong h, jstring protocol, jobject
     JStr p(env, protocol);
     return stream_cb_register(env, H(h), p.s, provider);
 }
-
-FN(jlong, surfaceHandle)(JNIEnv *env, jobject, jobject surface) { return reinterpret_cast<jlong>(env->NewGlobalRef(surface)); }
-FN(void, releaseSurfaceHandle)(JNIEnv *env, jobject, jlong handle) { if (handle) env->DeleteGlobalRef(reinterpret_cast<jobject>(handle)); }
