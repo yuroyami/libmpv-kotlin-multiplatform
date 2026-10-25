@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-Nothing yet.
+- Releases move to Maven Central, under the same group and artifact names. Add `mavenCentral()` and drop the `https://yuroyami.github.io/maven` repository. Versions 0.3.0 and older stay in that repository.
+- Two new artifacts come in by themselves: `libmpvkt-android-natives` holds the ten native libraries of `libmpvkt-native`, and `libmpvkt-canvas-android-natives` holds `libmpvkt_render.so`. They are plain jars with the libraries under `lib/<abi>/` and the keep rules under `META-INF/proguard/`. The file names of the libraries do not change, so an exclusion list that names them still holds.
+- The AARs keep their classes in `libs/<artifact>-jvm.jar` and have no `aar-metadata.properties`. Gradle therefore no longer checks that the app's compile SDK is 35 or newer. The floor still applies, so check it yourself.
+- The project builds with the Kotlin toolchain (the `./kotlin` script) instead of Gradle, on Kotlin 2.4.21. The device tests run in a separate Gradle build under `verification/`.
+- Each module commits a dump of its Android API under `api/android/`, and a check fails when the public API changes without a new dump.
 
 ## [0.3.0] - 2026-09-26
 

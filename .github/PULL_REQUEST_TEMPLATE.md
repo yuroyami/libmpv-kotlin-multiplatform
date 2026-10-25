@@ -5,7 +5,7 @@
 ## How it was tested
 
 - [ ] `scripts/check-gate.sh tier1` passes
-- [ ] `scripts/check-gate.sh tier2` passes, when buildscripts/, libmpvkt-native/native/, libmpvkt-canvas/src/androidMain/cpp/, buildSrc/ or a build file changed
+- [ ] `scripts/check-gate.sh tier2` passes, when buildscripts/, libmpvkt-native/native/, libmpvkt-canvas/native/, build-plugins/, verification/ or a module.yaml or template file changed
 - Device or emulator it ran on:
 
 ## Checklist

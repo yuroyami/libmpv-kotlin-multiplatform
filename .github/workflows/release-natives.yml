@@ -1,6 +1,6 @@
 # Builds the four ABIs and attaches them, with their checksums and the GPL source offer, to the
-# GitHub release for the tag. Started by hand. publish.yml then assembles the AAR from exactly
-# these files, so what is in the Maven repository is what anyone can inspect on the release page.
+# GitHub release for the tag. Started by hand. publish.yml then assembles the natives jars from
+# exactly these files, so what is on Maven Central is what anyone can inspect on the release page.
 name: Release natives
 
 on:
@@ -20,7 +20,7 @@ concurrency:
 jobs:
   # Fails in seconds, before four native builds start, on a tag that would publish the wrong thing.
   check-tag:
-    name: the tag is v<VERSION>, and free or already on this commit
+    name: the tag is v<version>, and free or already on this commit
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -30,9 +30,9 @@ jobs:
           TAG: ${{ github.event.inputs.tag }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="$(grep '^VERSION=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
+          version="$(sed -n 's/^    version:[[:space:]]*//p' library.module-template.yaml | tr -d '[:space:]')"
           if [ "$TAG" != "v$version" ]; then
-            echo "::error::the tag must be v$version, from VERSION in gradle.properties, not $TAG" >&2
+            echo "::error::the tag must be v$version, from the version in library.module-template.yaml, not $TAG" >&2
             exit 1
           fi
           existing="$(git ls-remote origin "refs/tags/$TAG^{}" | cut -f1)"
@@ -111,7 +111,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           overwrite_files: false
           name: libmpvKt ${{ github.event.inputs.tag }}
-          body: "Native libraries for libmpvKt ${{ github.event.inputs.tag }}. The AARs at https://yuroyami.github.io/maven/ are assembled from exactly the libmpvkt-natives zips. Each libmpvkt-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. SOURCES.txt and the two tarballs are the source offer for the GPL binaries."
+          body: "Native libraries for libmpvKt ${{ github.event.inputs.tag }}. The natives jars on Maven Central are assembled from exactly the libmpvkt-natives zips. Each libmpvkt-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. SOURCES.txt and the two tarballs are the source offer for the GPL binaries."
           fail_on_unmatched_files: true
           files: |
             dist/*.zip

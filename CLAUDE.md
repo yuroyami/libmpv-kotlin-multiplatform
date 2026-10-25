@@ -1,7 +1,9 @@
 # libmpvKt, for whoever works in this tree
 
-libmpv for Android as one Maven artifact. `libmpvkt-native/` holds the natives and the binding, `libmpvkt/` the typed API,
-`buildscripts/` compiles the natives, `buildSrc/` holds the checks. `CONTRIBUTING.md` has the ground rules and the gate.
+libmpv for Android as one Maven artifact. `libmpvkt-native/` holds the binding, `libmpvkt-android-natives/` packs its
+native libraries, `libmpvkt/` holds the typed API, `buildscripts/` compiles the natives, and `build-plugins/` holds the
+checks. The build is the Kotlin toolchain (`./kotlin`); only `verification/` is Gradle. `CONTRIBUTING.md` has the ground
+rules and the gate.
 This file has only what reading the code would not teach you.
 
 ## How work happens here
@@ -19,7 +21,7 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - The Kotlin package and the JNI library name are hardcoded in C: `mpvkt.cpp`'s `FN` macro builds
   the `Java_io_github_yuroyami_libmpvkt_jni_MpvNative_` symbol prefix, and `stream_cb.cpp` looks up
   `MpvStreamProvider` and `MpvStream` by name. Renaming the Kotlin package alone loads a library
-  that crashes at the first call; `checkNativeLibs` looks for one exported symbol to catch it.
+  that crashes at the first call; `checkAndroidNatives` looks for one exported symbol to catch it.
 - `MpvNative` loads the native libraries in its static initialiser, so a JVM host test cannot touch
   it, nor `Mpv` and `MPVLib` above it. Anything that reaches a core is a device test; logic kept
   apart from the handle (`CallGate`, `PendingReplies`, `rgbaPixels`) is tested on the host.
@@ -27,15 +29,11 @@ Each line is something that bit someone. Delete a line when it stops being true.
   still a crash, not an exception, which is why every call goes through `Mpv`'s call gate and
   `close()` waits for the calls already inside native code.
 - libmpv needs the NDK r29 `libc++_shared.so`. An older one lacks `__from_chars_floating_point`
-  and crashes at load; `checkNativeLibs` greps for the symbol. Two AARs both shipping libc++
-  make AGP refuse the merge, which is the right outcome.
+  and crashes at load; `checkAndroidNatives` greps for the symbol. Two dependencies both shipping
+  libc++ make AGP refuse the merge, which is the right outcome.
 - Kotlin block comments nest, so a `/*` inside one (`native-libs/<abi>/*.so` written in a build
   file comment) opens a second comment and swallows the rest of the file. The error lands far
   from the cause, on the first `*/` in a string.
-- Kotlin's `abiValidation` dumps nothing for a module whose only target is Android, so
-  `checkKotlinAbi` passes trivially today. The block stays because it starts working the moment
-  a jvm or native target appears; do not read a green `checkKotlinAbi` as proof the API is
-  unchanged. Review `MPVLib.kt` by eye.
 - Meson's prefix wants a flat layout: `buildall.sh` symlinks `usr` and `local` to `.` inside each
   prefix. Delete `buildscripts/prefix/<arch>` whole rather than parts of it.
 - `lua.sh` and `mbedtls.sh` always clean and rebuild; that is upstream's makefile, not a bug.
@@ -43,17 +41,13 @@ Each line is something that bit someone. Delete a line when it stops being true.
   gnu-sed); `path.sh` exports them.
 - FFmpeg's configure fails on a path with `#` in it. The checkout must not live under
   `StudioProjects/#Kite`.
-- `-Plibmpvkt.abis=arm64-v8a` is for laptops with one architecture. The publish path never
-  passes it, so a publish with a missing ABI fails, on purpose.
+- `LIBMPVKT_ABIS=arm64-v8a` is for laptops with one architecture. The publish path never
+  sets it, so a publish with a missing ABI fails, on purpose.
 - `verifyExoOnlyApk` and the exoOnly exclusion list live in Synkplay, not here, but they name
-  this AAR's ten files. Adding or renaming a library here means updating that list there.
+  the ten files of `libmpvkt-android-natives`. Adding or renaming a library here means updating
+  that list there.
 - The `mpv-version` property answers `mpv v0.41.0`; `BuildInfo.MPV` is `0.41.0`. The device
   test compares by containment for that reason.
-- The Maven repository is the `main` branch of `yuroyami/maven`, served by GitHub Pages under a
-  1 GB site cap. One release is about 59 MB (measured on 0.1.0), so it holds about sixteen
-  versions: prune the oldest version directories when it nears the cap, never rewrite a published
-  one. The native zips stay on every release page for ever, and `fetch-natives.sh` plus
-  `publishToMavenLocal` rebuilds any version on any machine.
 - `vo=gpu-next` does not work through the render API: mpv ends with no video output and no
   frames. The canvas has the `gpu` renderer only, measured on an Android 15 phone and on Android
   15 and 9 emulators.
@@ -70,9 +64,10 @@ Each line is something that bit someone. Delete a line when it stops being true.
   test that waits for the end has to ask for No.
 - `libmpvkt_render.so` belongs to `libmpvkt-canvas` alone. `jni.sh` moves it there after
   ndk-build, and `fetch-natives.sh` does the same after unpacking a release, because the same
-  file in two AARs makes AGP refuse to merge an app that uses both.
-- `libmpvkt_render.so` links `libmpv.so` at load time, so the canvas AAR and the core AAR must be
-  the same version.
+  file in two artifacts makes AGP refuse to merge an app that uses both. The canvas packs it into
+  `libmpvkt-canvas-android-natives`.
+- `libmpvkt_render.so` links `libmpv.so` at load time, so the canvas artifacts and the core
+  artifacts must be the same version.
 - Every render function runs on `MpvRenderer`'s own thread, and the C++ checks it: an EGL context
   belongs to one thread.
 - `AHardwareBuffer_toHardwareBuffer` is in `libandroid`, not `libnativewindow`, so the render
@@ -84,8 +79,8 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - The surface handshake lives once, in `SurfaceHandshake`. A second copy of `wid`, `force-window`,
   `vo` and `android-surface-size` drifts from the first and shows as a black picture, not an error.
 - The sample's screens each run in their own process, because each holds a core.
-- The sample is minSdk 23 while the library is 21: `activity-compose` pulls `androidx.navigationevent`,
-  which asks for 23.
+- The sample is minSdk 26 while the library is 21: its canvas screen needs `AHardwareBuffer`, and
+  `activity-compose` alone would already ask for 23.
 - `Mpv.events` has no replay: subscribe before the command that produces the event, or it is gone.
 - The catalog test is the truth about names. When it fails, fix the table in the catalog, never the
   test: it reads mpv's own `property-list` and `command-list`.
@@ -104,8 +99,12 @@ Each line is something that bit someone. Delete a line when it stops being true.
   `vo=null` first, while its render thread still serves mpv (#42).
 - `mpv_terminate_destroy` waits for every client handle of the core, so `Mpv.close()` closes the
   clients `createClient` made before it ends the core (#29).
-- `connectedAndroidTest` runs on every attached device, a phone included. Pin one with
-  `ANDROID_SERIAL`; the tier 2 gate refuses to start otherwise.
+- Releases go to Maven Central, which never replaces or deletes a version. `publishingMode: manual`
+  stops each upload on the Central Portal until the owner presses Publish there.
+- `do` is a shell keyword, so shellcheck (inside actionlint) flags `./kotlin do ...` in a workflow.
+  Put `# shellcheck disable=SC1010` on the line before it.
+- `scripts/run-device-tests.sh` runs on every attached device, a phone included. Pin one with
+  `ANDROID_SERIAL`; the script and the tier 2 gate refuse to start otherwise.
 - Everything above `MPVLib` is Phase 2 (`PLAN-2-typed-api.md`, `PLAN-3-surfaces.md`,
   `PLAN-4-canvas.md`). Do not grow `MPVLib` into a player API; it is the compatibility surface
   and the typed `Mpv` class is where new capability goes.

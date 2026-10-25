@@ -1,6 +1,8 @@
 .idea/
+# The device-test build under verification/ is Gradle and keeps its own Gradle state.
 .gradle/
 .kotlin/
+# The Kotlin toolchain writes its output to build/ at the root.
 build/
 **/build/
 local.properties
@@ -25,3 +27,4 @@ PLAN.md
 PLAN-2-typed-api.md
 PLAN-3-surfaces.md
 PLAN-4-canvas.md
+PLAN-5-multiplatform.md

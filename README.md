@@ -1,8 +1,8 @@
 # libmpvKt
 
-Prebuilt [mpv](https://mpv.io) for Android. One Gradle dependency gives you libmpv, FFmpeg, libass, dav1d and the rest, compiled for all four Android ABIs, with a Kotlin API where every property, command and event has a type.
+Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFmpeg, libass, dav1d and the rest, compiled for all four Android ABIs, with a Kotlin API where every property, command and event has a type.
 
-[![Maven](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fyuroyami.github.io%2Fmaven%2Fio%2Fgithub%2Fyuroyami%2Flibmpvkt%2Fmaven-metadata.xml&label=Maven)](https://github.com/yuroyami/maven/tree/main/io/github/yuroyami/libmpvkt)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/libmpvkt?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.yuroyami/libmpvkt)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/libmpvKt/ci.yml?label=CI)](https://github.com/yuroyami/libmpvKt/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache%202.0%20wrapper%2C%20GPL%20binaries-blue)](NOTICE)
 
@@ -15,31 +15,30 @@ Prebuilt [mpv](https://mpv.io) for Android. One Gradle dependency gives you libm
 - A Kotlin API with a type for every property, command and event. Errors come back as values, and events arrive as flows.
 - Three ways to show the video: an Android View that also works in XML layouts, Compose surfaces, and an experimental Compose canvas.
 
-The native libraries are built in public CI from pinned upstream versions. Each GitHub release carries the exact zips that the Maven artifacts are made from.
+The native libraries are built in public CI from pinned upstream versions. Each GitHub release carries the exact zips that the Maven Central artifacts are made from.
 
 ## Install
 
-Add the repository once, in `settings.gradle.kts`. The artifacts are not on Maven Central: they live in a Maven repository on GitHub Pages, and the `content` filter stops Gradle from asking it for anything else.
+The artifacts are on Maven Central. Add the artifact that matches how you show video. Each one pulls in `libmpvkt` and the native libraries by itself.
 
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://yuroyami.github.io/maven") {
-            content { includeModuleByRegex("io\\.github\\.yuroyami", "libmpvkt.*") }
-        }
-    }
-}
-```
-
-Then add the artifact that matches how you show video. Each one pulls in `libmpvkt` and the native libraries by itself.
+With Gradle, in the app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.github.yuroyami:libmpvkt-compose:0.3.0")
+    implementation("io.github.yuroyami:libmpvkt-compose:0.4.0")
 }
 ```
+
+With the Kotlin toolchain, in the app's `module.yaml`:
+
+```yaml
+dependencies:
+  - io.github.yuroyami:libmpvkt-compose:0.4.0
+```
+
+In a Kotlin Multiplatform module, use `dependencies@android:` instead of `dependencies:`.
+
+Versions 0.3.0 and older are not on Maven Central. They stay in the old repository at `https://yuroyami.github.io/maven`.
 
 | Artifact | What it gives you | Min SDK |
 |---|---|---|
@@ -48,7 +47,7 @@ dependencies {
 | `libmpvkt-canvas` | `MpvCanvas`, the experimental Compose canvas | 26 |
 | `libmpvkt` | `Mpv` on its own, for apps that handle the surface themselves | 21 |
 
-Your app needs compile SDK 35 or newer and Kotlin targeting JVM 11 or newer. In a Kotlin Multiplatform project, the line goes in `androidMain.dependencies`. You need no ProGuard rules: the AARs bring their own.
+Your app needs compile SDK 35 or newer and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. In a Gradle Kotlin Multiplatform project, the line goes in `androidMain.dependencies`. You need no ProGuard rules: the artifacts bring their own.
 
 ## Show a video
 
@@ -154,7 +153,7 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 ## Limits
 
 - The native libraries are GPL, so an app that ships them falls under GPL-3.0-or-later as a whole. [Licensing](docs/licensing.md) explains what that means.
-- The AAR is about 59 MB. Each ABI adds 31 to 41 MB to an APK before compression, so ship an app bundle: each phone then downloads only its own ABI.
+- The native libraries are about 59 MB. Each ABI adds 31 to 41 MB to an APK before compression, so ship an app bundle: each phone then downloads only its own ABI.
 - `libc++_shared.so` comes inside. If another dependency ships one too, the build stops with a merge error. That error protects you, because libmpv crashes at load with an older libc++. If you must choose one, `packaging { jniLibs { pickFirsts += "**/libc++_shared.so" } }` does it, and the copy that wins must come from NDK r29 or newer.
 - Rotation restarts playback, unless the activity declares `android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"` or the core lives somewhere that outlives the activity.
 - The deprecated `MPVLib` allows one core per process. `Mpv` has no such limit.
@@ -179,7 +178,7 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 
 FFmpeg has its decoders, demuxers and MediaCodec hardware decoding. It has no encoders or muxers, except the few that mpv's screenshots and cache dumps use.
 
-The libraries in the AARs are stripped. From 0.3.0, every release page also has a `libmpvkt-symbols-<abi>.zip` with the unstripped copies, which carry the same build ids. Give them to your crash reporter, or read a crash with `ndk-stack -sym <unzipped>/<abi>`. The NDK keeps the unstripped `libc++_shared.so` itself.
+The libraries in the published artifacts are stripped. From 0.3.0, every release page also has a `libmpvkt-symbols-<abi>.zip` with the unstripped copies, which carry the same build ids. Give them to your crash reporter, or read a crash with `ndk-stack -sym <unzipped>/<abi>`. The NDK keeps the unstripped `libc++_shared.so` itself.
 
 ## Building the natives yourself
 
@@ -187,4 +186,4 @@ You do not have to. Every release page has the native zips and the mpv and FFmpe
 
 ## License
 
-The Kotlin code, the JNI code and the build scripts are Apache-2.0. The native libraries keep their own licenses, and together they make the published AARs GPL-3.0-or-later. `MPVLib.kt` and the JNI code come from [mpv-android](https://github.com/mpv-android/mpv-android), which is MIT. [NOTICE](NOTICE) lists everything.
+The Kotlin code, the JNI code and the build scripts are Apache-2.0. The native libraries keep their own licenses, and together they make the published artifacts GPL-3.0-or-later. `MPVLib.kt` and the JNI code come from [mpv-android](https://github.com/mpv-android/mpv-android), which is MIT. [NOTICE](NOTICE) lists everything.

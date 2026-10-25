@@ -1,4 +1,9 @@
-# Every push and pull request: the gate, the natives, the AAR, and the device tests on an emulator.
+# Every push and pull request: the gate, the natives with their packaging and the sample, and the
+# device tests on an emulator.
+#
+# Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
+# SDK comes from the runner image (ANDROID_HOME). The device tests are a separate Gradle build
+# (verification/device-tests), so that job also sets up a JDK for it.
 name: CI
 
 on:
@@ -14,41 +19,42 @@ concurrency:
   # Pull request runs replace each other. A run on main finishes, so an uncached native build is not lost.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: "1"
+
 jobs:
   gate:
-    name: host tests, ABI dump, build logic, dash scan
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew testAndroidHostTest checkKotlinAbi --stacktrace
-      - run: ./gradlew -p buildSrc test --stacktrace
-      - name: No em dashes or en dashes in tracked files
-        run: |
-          if git grep -n -I -e "$(printf '\342\200\224')" -e "$(printf '\342\200\223')" -- . ; then
-            echo "::error::an em dash or an en dash is in a tracked file"; exit 1
-          fi
-
-  natives:
-    uses: ./.github/workflows/build-natives.yml
-
-  aar:
-    name: AAR and sample
-    needs: [gate, natives]
+    name: host tests, ABI dumps, build logic, dash scan
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/cache@v4
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-gate-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-gate-
+      # The same script as the local gate, so CI and a laptop run one list of commands.
+      - run: scripts/check-gate.sh tier1
+
+  natives:
+    uses: ./.github/workflows/build-natives.yml
+
+  packaging:
+    name: natives jars and sample
+    needs: [gate, natives]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-packaging-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-packaging-
+            kotlin-gate-
       - uses: actions/download-artifact@v4
         with:
           pattern: natives-*
@@ -56,14 +62,60 @@ jobs:
           merge-multiple: true
       - name: Put the libraries in place through the same path a release uses
         run: LIBMPVKT_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local
-      # assembleRelease runs R8 over every AAR with its published consumer rules.
-      - run: ./gradlew :libmpvkt-native:checkNativeLibs :libmpvkt-canvas:checkRenderLib bundleAndroidMainAar :sample:assembleDebug :sample:assembleRelease --stacktrace
-      # The publish path, unsigned, into build/static-maven: a broken POM or javadoc jar fails here, not on release day.
-      - run: ./gradlew publishAllPublicationsToStaticRepository --no-configuration-cache --stacktrace
+
+      # Every check on the four ABIs: the files, the 16 KB alignment, the JNI symbol, the libc++.
+      - name: Check the native libraries
+        run: |
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do checkAndroidNatives
+
+      - name: Build the natives jars
+        run: ./kotlin build -m libmpvkt-android-natives -m libmpvkt-canvas-android-natives
+
+      # The core jar holds ten libraries per ABI, and the canvas jar holds one.
+      - name: Check what the natives jars hold
+        run: |
+          set -euo pipefail
+          mkdir -p build/ci-artifacts
+          check_jar() {
+            local name="$1" libs="$2" rules="$3" jar
+            jar="$(find build -name "$name*.jar" ! -name '*-sources.jar' ! -name '*-javadoc.jar' | head -1)"
+            [ -n "$jar" ] || { echo "::error::the build made no $name jar"; exit 1; }
+            count="$(unzip -l "$jar" | grep -cE ' lib/[^/]+/[^/]+\.so$' || true)"
+            if [ "$count" -ne "$libs" ]; then
+              echo "::error::$jar holds $count libraries, not $libs"; exit 1
+            fi
+            unzip -l "$jar" "META-INF/proguard/$rules" > /dev/null || { echo "::error::$jar has no META-INF/proguard/$rules"; exit 1; }
+            echo "$jar: $count libraries and $rules"
+            cp "$jar" build/ci-artifacts/
+          }
+          check_jar libmpvkt-android-natives 40 libmpvkt-native.pro
+          check_jar libmpvkt-canvas-android-natives 4 libmpvkt-canvas.pro
+
+      # The release build runs R8 with the keep rules that the natives jars publish.
+      - name: Build the sample, debug and release
+        run: |
+          ./kotlin build -m sample
+          ./kotlin build -m sample --variant release
+
+      - name: Check that the sample carries the libraries
+        run: |
+          set -euo pipefail
+          apks="$(find build -path '*sample*' -name '*.apk')"
+          [ -n "$apks" ] || { echo "::error::the build made no sample APK"; exit 1; }
+          for apk in $apks; do
+            for abi in arm64-v8a armeabi-v7a x86 x86_64; do
+              unzip -l "$apk" "lib/$abi/libmpvkt_jni.so" > /dev/null || { echo "::error::$apk has no lib/$abi/libmpvkt_jni.so"; exit 1; }
+            done
+            echo "$apk carries the four ABIs"
+            cp "$apk" build/ci-artifacts/
+          done
+
       - uses: actions/upload-artifact@v4
         with:
-          name: libmpvkt-aars
-          path: "**/build/outputs/aar/*.aar"
+          name: libmpvkt-packaging
+          path: build/ci-artifacts/
           if-no-files-found: error
           retention-days: 7
 
@@ -77,21 +129,28 @@ jobs:
       matrix:
         # 35 exercises the canvas renderer's zero-copy path (Bitmap.wrapHardwareBuffer, API 29+).
         # 28 is the only way to exercise its readback path, which no current phone can reach.
-        # 21 is the core AARs' minSdk. The canvas module starts at 26, so it sits that one out.
+        # 21 is the core modules' minSdk. The canvas module starts at 26, so it sits that one out.
+        # An empty task list runs every device test project.
         include:
           - api: 35
-            tasks: connectedAndroidTest
+            tasks: ""
           - api: 28
-            tasks: connectedAndroidTest
+            tasks: ""
           - api: 21
-            tasks: ":libmpvkt-native:connectedAndroidTest :libmpvkt:connectedAndroidTest :libmpvkt-view:connectedAndroidTest"
+            tasks: ":native:connectedAndroidDeviceTest :core:connectedAndroidDeviceTest :view:connectedAndroidDeviceTest"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-emulator-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-emulator-
+            kotlin-packaging-
       - uses: actions/download-artifact@v4
         with:
           name: natives-x86_64
@@ -102,6 +161,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      # The script stages the libraries of this checkout, then runs the device tests on the emulator.
       - name: Run the device tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -111,7 +171,7 @@ jobs:
           disable-animations: true
           script: |
             adb logcat -c
-            ./gradlew ${{ matrix.tasks }} -Plibmpvkt.abis=x86_64 --stacktrace || echo "TESTS_FAILED" > tests-failed
+            LIBMPVKT_ABIS=x86_64 scripts/run-device-tests.sh ${{ matrix.tasks }} || echo "TESTS_FAILED" > tests-failed
             adb logcat -d -s libmpvKt:I mpv:W > canvas-measurements.txt
             adb logcat -d -b crash > crash.txt
             grep -c CANVAS-MEASUREMENT canvas-measurements.txt || true
@@ -121,7 +181,8 @@ jobs:
         with:
           name: device-test-report-api-${{ matrix.api }}
           path: |
-            **/build/reports/androidTests
+            verification/device-tests/*/build/reports/androidTests
+            verification/device-tests/*/build/outputs/androidTest-results
             canvas-measurements.txt
             crash.txt
           if-no-files-found: warn

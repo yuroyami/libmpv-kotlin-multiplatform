@@ -6,29 +6,50 @@ Open work lives in GitHub Issues. There is no private planning file.
 
 ## Ground rules
 
-- **Red first.** A new check or test is seen failing before it is seen passing. `CheckNativeLibsTask` was proved by removing a library and watching the AAR refuse to build; keep that habit.
+- **Red first.** A new check or test is seen failing before it is seen passing. The native library check was proved by removing a library and watching the build refuse it; keep that habit.
 - **A claim carries the strength of its evidence.** A green host test says nothing about a device. The device tests and the sample on a real phone are the proof that the libraries load and play.
 - **No em dashes and no en dashes in any file.** The gate scans for them.
-- **No new dependency without asking first**: not a library, not a plugin, not a GitHub Action, not a change of an upstream pin.
-- **Explicit API mode is on.** Every public declaration has KDoc. Kotlin's ABI dump is empty for a module whose only target is Android (see `CLAUDE.md`), so a public API change is reviewed by eye, `MPVLib.kt` first of all: it keeps the 0.1.0 signatures.
-- **The pins are the truth.** `buildscripts/include/depinfo.sh` is the only place a version is written. README tables, `BuildInfo` and CHANGELOG follow it.
+- **No new dependency without asking first**: not a library, not a toolchain plugin, not a GitHub Action, not a change of an upstream pin.
+- **Explicit API mode is on.** Every public declaration has KDoc. Each module commits a dump of its Android API in `api/android/`. A public API change updates the dump in the same commit: run `./kotlin build -p android`, then `./kotlin do updateAndroidAbi`. Review a change to `libmpvkt/api/android/libmpvkt.api` with care: `MPVLib` keeps the 0.1.0 signatures.
+- **The pins are the truth.** `buildscripts/include/depinfo.sh` is the only place a version is written. README tables, `BuildInfo` and CHANGELOG follow it. After a pin change, `./kotlin do updateBuildInfo` rewrites `BuildInfo`.
 - **When the tree contradicts an issue or a document, stop and say so.** Do not improvise the document back into truth.
 
 ## Getting a build
 
-- JDK 21 and an Android SDK (`ANDROID_HOME` or `sdk.dir` in `local.properties`).
+The repository builds with the Kotlin toolchain. The `./kotlin` script (`kotlin.bat` on Windows) downloads the toolchain and its JDK on the first run.
+
+- An Android SDK, in `ANDROID_HOME` or in `sdk.dir` in `local.properties`.
+- JDK 21 for the device tests only. They run in a separate Gradle build under `verification/`.
 - For the natives: NDK 29.0.14206865 in `ANDROID_NDK_HOME`, plus the tools in `docs/building-natives.md`.
-- To work on the Kotlin side without compiling anything native: from 0.2.0 on, `.github/scripts/fetch-natives.sh v0.2.0` downloads a release's libraries into place. Until that release, use the natives from a CI run of the Build natives workflow, or a local build: the 0.1.0 JNI library exports the old `MPVLib` symbols, and `checkNativeLibs` refuses it.
+- To work on the Kotlin side without compiling anything native, download a release's libraries into place: `.github/scripts/fetch-natives.sh v0.3.0`.
+
+The commands you need most:
+
+```bash
+./kotlin build -p android                     # every module
+./kotlin test -p android                      # the host tests
+./kotlin test -m build-support                # the tests of the build logic
+./kotlin check androidAbi buildInfo           # the API dumps and BuildInfo
+./kotlin do checkAndroidNatives               # the native libraries in place
+./kotlin build -m sample --variant release    # the sample app, shrunk by R8
+./kotlin show modules                         # every module and its platforms
+```
+
+`LIBMPVKT_ABIS=arm64-v8a` before `./kotlin do checkAndroidNatives` limits the check to the ABIs in the list. Use it on a machine that built one ABI. A release never sets it, so a release with a missing ABI fails.
 
 ## The gate before every commit
 
 Two tiers, selected by the paths that changed, never by confidence.
 
-**Tier 1, every change, seconds:** `scripts/check-gate.sh tier1`. Host tests, the ABI dump check, the build-logic tests and the dash scan.
+**Tier 1, every change, a few minutes:** `scripts/check-gate.sh tier1`. The host tests, the build, the API dump and `BuildInfo` checks, the build-logic tests and the dash scan.
 
-**Tier 2, any change under `buildscripts/`, `libmpvkt-native/native/`, `libmpvkt-canvas/src/androidMain/cpp/`, `buildSrc/`, or to a build file, about an hour:** `scripts/check-gate.sh tier2`. Tier 1, then the arm64 natives, the packaging check, the sample, and every module's device tests. `connectedAndroidTest` runs on every attached device, so the script refuses to start with more than one attached unless `ANDROID_SERIAL` names the device to use.
+**Tier 2, about an hour:** `scripts/check-gate.sh tier2`. Run it for any change under `buildscripts/`, `libmpvkt-native/native/`, the canvas C++ sources or `build-plugins/`, and for a change to `project.yaml`, a `module.yaml`, a `*.module-template.yaml` or `libs.versions.toml`. Tier 2 runs tier 1, then builds the arm64 natives, checks them, builds the release sample, and runs every module's device tests.
 
-`./gradlew ... | tail` reports the exit code of `tail`; read the log for `BUILD FAILED`.
+The device tests run on every attached device. The script refuses to start with more than one device attached, unless `ANDROID_SERIAL` names the device to use.
+
+To run the device tests alone, run `scripts/run-device-tests.sh`. It stages the libraries of this checkout, then runs the tests on the device. On an x86_64 emulator, add `LIBMPVKT_ABIS=x86_64` in front.
+
+`./kotlin ... | tail` reports the exit code of `tail`, not of the build. Write the output to a file and read it.
 
 ## Pull requests
 

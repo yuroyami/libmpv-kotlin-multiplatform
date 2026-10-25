@@ -1,30 +1,39 @@
-# Publishes the AAR to the static Maven repository: a checkout of yuroyami/maven, which GitHub
-# Pages serves at https://yuroyami.github.io/maven/. Started by hand.
+# Publishes every libmpvKt library module to Maven Central (the Central Portal) with the Kotlin
+# toolchain: `./kotlin publish mavenCentral`. Started by hand.
 #
 # The libraries are NOT built here. They are downloaded from the GitHub release named by the
-# version, checksum verified, and checked by checkNativeLibs before the AAR is assembled. Run
-# "Release natives" for v<version> first.
+# version, checksum verified, and checked by checkAndroidNatives before the natives jars are
+# assembled. Run "Release natives" for v<version> first.
 #
-# A version directory that already exists in yuroyami/maven stops the run before anything is
-# written: a published version is never overwritten. Publish a new version instead.
+# By default the deployment waits on the Central Portal after validation (publishingMode manual in
+# library.module-template.yaml). Nothing in a deployment is public until a person presses Publish
+# on the portal, and that releases all of it together. Drop a failed or wrong deployment on the
+# portal instead of releasing it. The release input switches this run to auto.
 #
-# Secrets: MAVEN_REPO_TOKEN (a fine-grained personal access token with contents read and write
-# on yuroyami/maven), SIGNING_IN_MEMORY_KEY, SIGNING_IN_MEMORY_KEY_ID and
-# SIGNING_IN_MEMORY_KEY_PASSWORD (an ASCII-armored GPG key, its id, its passphrase; the same
-# three the Kite repositories use).
+# Maven Central never replaces a published version. A wrong version is followed by a corrected one.
 #
-# Publishing from the maintainer's machine works the same way:
-#   git clone https://github.com/yuroyami/maven ../maven
-#   ./gradlew publishAllPublicationsToStaticRepository -Plibmpvkt.mavenRepoDir=$PWD/../maven --no-configuration-cache
-#   cd ../maven && git add . && git commit -m "libmpvKt <version>" && git push
+# Secrets:
+#   MAVEN_CENTRAL_USERNAME, MAVEN_CENTRAL_PASSWORD    a Central Portal user token
+#   SIGNING_IN_MEMORY_KEY, SIGNING_IN_MEMORY_KEY_PASSWORD    an ASCII-armored GPG key and its passphrase
+# The toolchain reads the key id from the key itself.
+#
+# Publishing from the maintainer's machine works the same way, with the same four values in the
+# KOTLIN_TOOLCHAIN_* variables of the last step:
+#   .github/scripts/fetch-natives.sh v<version>
+#   ./kotlin do checkAndroidNatives
+#   ./kotlin publish mavenCentral -m <module> -m <module> ...
 name: Publish release
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to publish (must match VERSION in gradle.properties), e.g. 0.1.0"
+        description: "Version to publish (must match settings.publishing.version in library.module-template.yaml), e.g. 0.4.0"
         required: true
+      release:
+        description: "Also release the deployment on the Central Portal. Off leaves it validated for a person to publish."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -33,9 +42,16 @@ concurrency:
   group: publish-${{ github.event.inputs.version }}
   cancel-in-progress: false
 
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: "1"
+  # Every module that publishes. The natives jars publish beside the modules that depend on them.
+  PUBLISHED_MODULES: >-
+    libmpvkt-native libmpvkt-android-natives libmpvkt libmpvkt-view libmpvkt-compose
+    libmpvkt-canvas libmpvkt-canvas-android-natives
+
 jobs:
   check-version:
-    name: input matches gradle.properties and the changelog
+    name: input matches the publishing version and the changelog
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
@@ -51,9 +67,9 @@ jobs:
             echo "::error::the version must look like 1.2.3, not $VERSION" >&2
             exit 1
           fi
-          gradle_version="$(grep '^VERSION=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
-          if [ "${gradle_version}" != "${VERSION}" ]; then
-            echo "::error::gradle.properties has VERSION=${gradle_version} but the run asked for ${VERSION}" >&2
+          template_version="$(sed -n 's/^    version:[[:space:]]*//p' library.module-template.yaml | tr -d '[:space:]')"
+          if [ "${template_version}" != "${VERSION}" ]; then
+            echo "::error::library.module-template.yaml has version ${template_version} but the run asked for ${VERSION}" >&2
             exit 1
           fi
           # A dated heading: '## [x.y.z] - unreleased' is not a release yet.
@@ -64,95 +80,100 @@ jobs:
           echo "Publishing ${VERSION}"
 
   publish:
-    name: AAR to yuroyami/maven
+    name: every library module to Maven Central
     needs: check-version
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       # The same tagged commit whose natives the next steps download, so Kotlin and C++ match.
       - uses: actions/checkout@v4
         with:
           ref: v${{ github.event.inputs.version }}
 
-      # The repository the artifacts land in. The token is not kept in the checkout's git config:
-      # the Gradle build below runs third-party plugins, and only the push step needs to write.
-      - uses: actions/checkout@v4
-        with:
-          repository: yuroyami/maven
-          token: ${{ secrets.MAVEN_REPO_TOKEN }}
-          path: maven-repo
-          persist-credentials: false
-
-      - name: Refuse to overwrite a published version
+      # Central refuses a second upload of a version too, but only after the whole build.
+      - name: Refuse a version that Maven Central already has
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          # Every artifact one version publishes, each with its -android variant.
-          for artifact in libmpvkt-native libmpvkt-native-android libmpvkt libmpvkt-android libmpvkt-view libmpvkt-view-android libmpvkt-compose libmpvkt-compose-android libmpvkt-canvas libmpvkt-canvas-android; do
-            dir="maven-repo/io/github/yuroyami/$artifact/$VERSION"
-            if [ -e "$dir" ]; then
-              echo "::error::$dir exists; a published version is never overwritten. Publish a new version." >&2
+          for module in $PUBLISHED_MODULES; do
+            url="https://repo1.maven.org/maven2/io/github/yuroyami/$module/$VERSION/$module-$VERSION.pom"
+            if curl -sfI "$url" > /dev/null; then
+              echo "::error::$url exists; a published version is never replaced. Publish a new version." >&2
               exit 1
             fi
           done
 
-      - uses: actions/setup-java@v4
+      - uses: actions/cache@v4
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-publish-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-publish-
+            kotlin-packaging-
 
       - name: Fetch the release's native libraries
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: .github/scripts/fetch-natives.sh "v$VERSION"
 
-      # A missing secret reads as empty, and the build would then publish unsigned for good,
-      # because a published version is never replaced.
-      - name: Refuse to publish unsigned
+      - name: Check them
+        run: |
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do checkAndroidNatives
+
+      # A missing secret reads as empty, and the build would then publish unsigned or not at all.
+      - name: Refuse to publish without the secrets
         env:
+          CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           KEY: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
-          KEY_ID: ${{ secrets.SIGNING_IN_MEMORY_KEY_ID }}
           KEY_PASSWORD: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: |
-          for v in KEY KEY_ID KEY_PASSWORD; do
+          for v in CENTRAL_USERNAME CENTRAL_PASSWORD KEY KEY_PASSWORD; do
             if [ -z "${!v}" ]; then
-              echo "::error::the signing secret behind $v is empty" >&2
+              echo "::error::the secret behind $v is empty" >&2
               exit 1
             fi
           done
 
-      - name: Check them and publish into the checkout
-        env:
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_IN_MEMORY_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
-        run: |
-          ./gradlew :libmpvkt-native:checkNativeLibs publishAllPublicationsToStaticRepository \
-            -Plibmpvkt.mavenRepoDir="$PWD/maven-repo" --no-configuration-cache --stacktrace
-
-      - name: Show what will be pushed, and refuse unsigned files
+      # The same publication into the runner's ~/.m2 first, so an unsigned file stops the run
+      # before anything reaches the portal.
+      - name: Publish locally and refuse unsigned files
         env:
           VERSION: ${{ github.event.inputs.version }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: |
-          cd maven-repo
-          git status --short
-          du -sh io/github/yuroyami
-          unsigned="$(find io/github/yuroyami -path "*/$VERSION/*" \( -name '*.aar' -o -name '*.jar' -o -name '*.pom' -o -name '*.module' \) ! -exec test -e '{}.asc' \; -print)"
+          set -euo pipefail
+          flags=()
+          for module in $PUBLISHED_MODULES; do flags+=(-m "$module"); done
+          ./kotlin publish mavenLocal "${flags[@]}"
+          repo="$HOME/.m2/repository/io/github/yuroyami"
+          for module in $PUBLISHED_MODULES; do
+            [ -d "$repo/$module/$VERSION" ] || { echo "::error::$module $VERSION is missing from the local publication" >&2; exit 1; }
+          done
+          unsigned="$(find "$repo" -path "*/$VERSION/*" \( -name '*.aar' -o -name '*.jar' -o -name '*.pom' -o -name '*.module' \) ! -exec test -e '{}.asc' \; -print)"
           if [ -n "$unsigned" ]; then
             echo "::error::these files have no signature: $unsigned" >&2
             exit 1
           fi
+          find "$repo" -path "*/$VERSION/*" -type f | sort
 
-      # The only step that writes to yuroyami/maven, and the only one that sees its token.
-      - name: Push
+      - name: Publish to Maven Central
         env:
-          VERSION: ${{ github.event.inputs.version }}
-          TOKEN: ${{ secrets.MAVEN_REPO_TOKEN }}
+          RELEASE: ${{ github.event.inputs.release }}
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          KOTLIN_TOOLCHAIN_MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY: ${{ secrets.SIGNING_IN_MEMORY_KEY }}
+          KOTLIN_TOOLCHAIN_SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: |
-          cd maven-repo
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "libmpvKt $VERSION"
-          git push "https://x-access-token:${TOKEN}@github.com/yuroyami/maven.git" HEAD:main
+          set -euo pipefail
+          if [ "$RELEASE" = "true" ]; then
+            # Only in this runner's checkout: the committed default stays manual.
+            sed -i 's/publishingMode: manual/publishingMode: auto/' library.module-template.yaml ./*/module.yaml
+          fi
+          # One run for every module, so the portal receives one deployment.
+          flags=()
+          for module in $PUBLISHED_MODULES; do flags+=(-m "$module"); done
+          ./kotlin publish mavenCentral "${flags[@]}"

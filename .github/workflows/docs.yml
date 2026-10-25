@@ -10,9 +10,11 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - '**/*.kt'
-      - '**/build.gradle.kts'
-      - 'gradle/libs.versions.toml'
-      - 'gradle.properties'
+      - '**/module.yaml'
+      - '*.module-template.yaml'
+      - 'project.yaml'
+      - 'libs.versions.toml'
+      - 'build-plugins/**'
       - 'dokka-templates/**'
       - '.github/workflows/docs.yml'
   # A pull request builds the site too, so a broken page or a dependency bump fails before merge.
@@ -21,14 +23,16 @@ on:
       - 'docs/**'
       - 'mkdocs.yml'
       - '**/*.kt'
-      - '**/build.gradle.kts'
-      - 'gradle/libs.versions.toml'
-      - 'gradle.properties'
+      - '**/module.yaml'
+      - '*.module-template.yaml'
+      - 'project.yaml'
+      - 'libs.versions.toml'
+      - 'build-plugins/**'
       - 'dokka-templates/**'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
-# The build job runs pip and third-party Gradle plugins, so it gets read access only.
+# The build job runs pip and the toolchain's third-party plugins, so it gets read access only.
 permissions:
   contents: read
 
@@ -51,14 +55,23 @@ jobs:
           cache-dependency-path: docs/requirements.txt
       - run: pip install -r docs/requirements.txt
       - run: mkdocs build --strict --site-dir site
-      - uses: actions/setup-java@v4
+      - uses: actions/cache@v4
         with:
-          distribution: temurin
-          java-version: 21
-      - uses: gradle/actions/setup-gradle@v4
+          path: ~/.cache/JetBrains/Kotlin
+          key: kotlin-docs-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-docs-
+            kotlin-gate-
+      # `dokka` writes the pages of each published module, and `dokkaSite` merges them into build/dokka/html.
       - name: Generate the API reference into the site
+        env:
+          KOTLIN_CLI_NO_WELCOME_BANNER: "1"
         run: |
-          ./gradlew dokkaGenerate --no-configuration-cache --stacktrace
+          # `do` is a command of the kotlin script here, not the shell keyword.
+          # shellcheck disable=SC1010
+          ./kotlin do dokka
+          # shellcheck disable=SC1010
+          ./kotlin do dokkaSite
           mkdir -p site/api
           cp -r build/dokka/html/. site/api/
       - run: touch site/.nojekyll

@@ -1,33 +1,29 @@
 # Getting started
 
-## The repository and the dependency
+## The dependency
 
-The artifacts live in a static Maven repository on GitHub Pages, not on Maven Central. Declare it once, in `settings.gradle.kts`, with a filter so every other `io.github.yuroyami` artifact keeps coming from Central:
-
-```kotlin
-dependencyResolutionManagement {
-    repositories {
-        google()
-        mavenCentral()
-        maven("https://yuroyami.github.io/maven") {
-            content { includeModuleByRegex("io\\.github\\.yuroyami", "libmpvkt.*") }
-        }
-    }
-}
-```
-
-Then the dependency, in the app's `build.gradle.kts`:
+The artifacts are on Maven Central. With Gradle, in the app's `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.github.yuroyami:libmpvkt:0.3.0")
+    implementation("io.github.yuroyami:libmpvkt:0.4.0")
     // Only what the app draws with:
-    implementation("io.github.yuroyami:libmpvkt-view:0.3.0")      // MpvView, MpvOptions
-    implementation("io.github.yuroyami:libmpvkt-compose:0.3.0")   // MpvSurface, MpvPlayer
+    implementation("io.github.yuroyami:libmpvkt-view:0.4.0")      // MpvView, MpvOptions
+    implementation("io.github.yuroyami:libmpvkt-compose:0.4.0")   // MpvSurface, MpvPlayer
 }
 ```
 
-Minimum SDK 21, and 26 for `libmpvkt-canvas`. The app needs compile SDK 35 or newer, and Kotlin targeting JVM 11 or newer. Android only. In a Kotlin Multiplatform project, declare the dependency in `androidMain.dependencies`.
+With the Kotlin toolchain, in the app's `module.yaml`:
+
+```yaml
+dependencies:
+  - io.github.yuroyami:libmpvkt:0.4.0
+  - io.github.yuroyami:libmpvkt-view:0.4.0
+```
+
+Versions 0.3.0 and older are not on Maven Central. They stay in the old repository at `https://yuroyami.github.io/maven`.
+
+Minimum SDK 21, and 26 for `libmpvkt-canvas`. The app needs compile SDK 35 or newer, and Kotlin targeting JVM 11 or newer. Gradle does not check the compile SDK for you. Android only. In a Gradle Kotlin Multiplatform project, declare the dependency in `androidMain.dependencies`. In a toolchain module, use `dependencies@android:`.
 
 An app that plays network streams declares `<uses-permission android:name="android.permission.INTERNET" />`; the library declares no permission of its own. Rotation recreates an activity, and a recreated activity closes its core, so playback starts over. Declare `android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"` on the player activity, as the sample does, or keep the core somewhere that outlives the activity.
 

@@ -1,5 +1,6 @@
-# Weekly update proposals for the three ecosystems this repository pins. Merging one is still an
-# owner decision; an upstream pin in depinfo.sh is bumped by hand, never here.
+# Weekly update proposals for the three ecosystems this repository pins. Gradle builds only the
+# device tests under verification/. Merging one is still an owner decision; an upstream pin in
+# depinfo.sh is bumped by hand, never here.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -7,7 +8,7 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: gradle
-    directory: "/"
+    directory: "/verification"
     schedule:
       interval: weekly
   - package-ecosystem: pip
