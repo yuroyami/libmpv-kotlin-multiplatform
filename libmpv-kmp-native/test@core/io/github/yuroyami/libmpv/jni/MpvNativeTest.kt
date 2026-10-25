@@ -1,26 +1,18 @@
 package io.github.yuroyami.libmpv.jni
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
-import org.junit.runner.RunWith
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TimeSource
 
 /** The raw binding on a real core: every call family once, plus a node round trip through the C++ codec. */
 @OptIn(MpvNativeApi::class)
-@RunWith(AndroidJUnit4::class)
 class MpvNativeTest {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
-
     private fun start(): Long {
-        MpvAndroidNative.initAndroid(context)
-        val h = MpvNative.create()
+        val h = createTestHandle()
         assertNotEquals(0L, h)
         assertEquals(0, MpvNative.setOptionString(h, "vo", "null"))
         assertEquals(0, MpvNative.setOptionString(h, "ao", "null"))
@@ -29,42 +21,39 @@ class MpvNativeTest {
         return h
     }
 
+    private fun le32(v: Int) = ByteArray(4) { (v ushr (8 * it)).toByte() }
+    private fun le64(v: Long) = ByteArray(8) { (v ushr (8 * it)).toByte() }
+
     /** Tag 1 STRING with a u32 length. */
     private fun str(s: String): ByteArray {
-        val b = s.toByteArray()
-        return ByteBuffer.allocate(5 + b.size).order(ByteOrder.LITTLE_ENDIAN).put(1).putInt(b.size).put(b).array()
+        val b = s.encodeToByteArray()
+        return byteArrayOf(1) + le32(b.size) + b
     }
 
     /** Tag 7 ARRAY of the given encoded nodes. */
-    private fun arr(vararg nodes: ByteArray): ByteArray {
-        val body = nodes.fold(ByteArray(0)) { acc, n -> acc + n }
-        return ByteBuffer.allocate(5 + body.size).order(ByteOrder.LITTLE_ENDIAN).put(7).putInt(nodes.size).put(body).array()
-    }
+    private fun arr(vararg nodes: ByteArray): ByteArray = byteArrayOf(7) + le32(nodes.size) + nodes.fold(ByteArray(0)) { acc, n -> acc + n }
 
     /** Tag 4 INT64, little-endian. */
-    private fun int64(v: Long): ByteArray = ByteBuffer.allocate(9).order(ByteOrder.LITTLE_ENDIAN).put(4).putLong(v).array()
+    private fun int64(v: Long): ByteArray = byteArrayOf(4) + le64(v)
 
     /** Tag 5 DOUBLE, as its IEEE bits. */
-    private fun double(v: Double): ByteArray =
-        ByteBuffer.allocate(9).order(ByteOrder.LITTLE_ENDIAN).put(5).putLong(java.lang.Double.doubleToRawLongBits(v)).array()
+    private fun double(v: Double): ByteArray = byteArrayOf(5) + le64(v.toRawBits())
 
     /** Tag 9 BYTE_ARRAY with a u32 length. */
-    private fun bytes(b: ByteArray): ByteArray = ByteBuffer.allocate(5 + b.size).order(ByteOrder.LITTLE_ENDIAN).put(9).putInt(b.size).put(b).array()
+    private fun bytes(b: ByteArray): ByteArray = byteArrayOf(9) + le32(b.size) + b
 
     /** Tag 8 MAP: a u32 count, then each key as a u32 length and UTF-8 bytes, followed by its value node. */
-    private fun map(vararg entries: Pair<String, ByteArray>): ByteArray {
-        val body = entries.fold(ByteArray(0)) { acc, (key, value) ->
-            val k = key.toByteArray()
-            acc + ByteBuffer.allocate(4 + k.size).order(ByteOrder.LITTLE_ENDIAN).putInt(k.size).put(k).array() + value
+    private fun map(vararg entries: Pair<String, ByteArray>): ByteArray =
+        byteArrayOf(8) + le32(entries.size) + entries.fold(ByteArray(0)) { acc, (key, value) ->
+            val k = key.encodeToByteArray()
+            acc + le32(k.size) + k + value
         }
-        return ByteBuffer.allocate(5 + body.size).order(ByteOrder.LITTLE_ENDIAN).put(8).putInt(entries.size).put(body).array()
-    }
+
+    private fun readLe(bytes: ByteArray, at: Int, count: Int): Long =
+        (0 until count).fold(0L) { v, i -> v or ((bytes[at + i].toLong() and 0xff) shl (8 * i)) }
 
     /** The error and the payload start of a result envelope. */
-    private fun envelope(bytes: ByteArray): Pair<Int, ByteArray> {
-        val error = ByteBuffer.wrap(bytes, 0, 4).order(ByteOrder.LITTLE_ENDIAN).int
-        return error to bytes.copyOfRange(4, bytes.size)
-    }
+    private fun envelope(bytes: ByteArray): Pair<Int, ByteArray> = readLe(bytes, 0, 4).toInt() to bytes.copyOfRange(4, bytes.size)
 
     @Test
     fun versionsAndClientsAndNodes() {
@@ -124,7 +113,7 @@ class MpvNativeTest {
             assertEquals(0, MpvNative.setPropertyString(h, "user-data/libmpv-kmp-set", text))
             val (error, payload) = envelope(MpvNative.getPropertyNode(h, "user-data/libmpv-kmp-set"))
             assertEquals(0, error)
-            assertTrue(payload.contentEquals(str(text)), "mpv stored ${payload.joinToString(" ") { "%02X".format(it) }}")
+            assertTrue(payload.contentEquals(str(text)), "mpv stored ${payload.joinToString(" ") { (it.toInt() and 0xff).toString(16).padStart(2, '0') }}")
 
             assertEquals(0, MpvNative.command(h, arrayOf("set", "user-data/libmpv-kmp-command", text)))
             val (_, viaCommand) = envelope(MpvNative.getPropertyNode(h, "user-data/libmpv-kmp-command"))
@@ -150,12 +139,11 @@ class MpvNativeTest {
             assertEquals(0, MpvNative.setPropertyString(h, "pause", "yes"))
 
             val seen = mutableSetOf<String>()
-            val deadline = System.currentTimeMillis() + 10_000
-            while (System.currentTimeMillis() < deadline && !seen.containsAll(listOf("log", "observe", "reply"))) {
+            val deadline = TimeSource.Monotonic.markNow() + 10.seconds
+            while (deadline.hasNotPassedNow() && !seen.containsAll(listOf("log", "observe", "reply"))) {
                 val raw = MpvNative.waitEvent(h, 0.5)
-                val buf = ByteBuffer.wrap(raw).order(ByteOrder.LITTLE_ENDIAN)
-                val id = buf.int
-                val reply = buf.long
+                val id = readLe(raw, 0, 4).toInt()
+                val reply = readLe(raw, 4, 8)
                 when {
                     id == 2 -> seen += "log"
                     id == 22 && reply == 42L -> seen += "observe"

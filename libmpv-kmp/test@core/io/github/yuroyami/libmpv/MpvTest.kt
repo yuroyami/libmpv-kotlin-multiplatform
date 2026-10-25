@@ -1,38 +1,30 @@
 package io.github.yuroyami.libmpv
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 import kotlin.test.Test
 import kotlin.test.fail
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.measureTime
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class MpvTest {
-
-    private val context: Context = ApplicationProvider.getApplicationContext()
 
     /** A wait that says what it was waiting for when it runs out, and is patient on a slow emulator. */
     private suspend fun <T> awaiting(what: String, millis: Long = 20_000, block: suspend () -> T): T =
         withTimeoutOrNull(millis) { block() } ?: fail("timed out after ${millis}ms waiting for $what")
 
-    private fun start(): Mpv = Mpv.create(context).apply {
+    private fun start(): Mpv = createTestCore().apply {
         setOption("vo", "null").getOrThrow()
         setOption("ao", "null").getOrThrow()
         setOption("idle", "yes").getOrThrow()
@@ -58,12 +50,12 @@ class MpvTest {
     @Test
     fun observeAsyncHookAndShutdown(): Unit = runBlocking {
         val mpv = start()
-        val wav = File(context.cacheDir, "silence.wav").apply { writeBytes(SilentWav.bytes(1)) }
+        val wav = writeTestFile("silence.wav", SilentWav.bytes(1))
         try {
             var hookRan = false
             mpv.hook("on_load") { hookRan = true }.getOrThrow()
             val ended = awaiting("the file to end") {
-                mpv.command(MpvCommand.of("loadfile", wav.absolutePath)).getOrThrow()
+                mpv.command(MpvCommand.of("loadfile", wav)).getOrThrow()
                 mpv.events.filterIsInstance<MpvEvent.EndFile>().first()
             }
             assertEquals(EndFileReason.Eof, ended.reason)
@@ -90,14 +82,14 @@ class MpvTest {
     @Test
     fun asyncReadsInt64ObserversAndHookNamesCarryTheirData(): Unit = runBlocking {
         val mpv = start()
-        val wav = File(context.cacheDir, "hooked.wav").apply { writeBytes(SilentWav.bytes(1)) }
+        val wav = writeTestFile("hooked.wav", SilentWav.bytes(1))
         try {
             assertEquals(MpvResult.Ok(100.0), awaiting("the async volume read") { mpv.getAsync(MpvProperties.Volume) })
             val int64 = awaiting("the first INT64 value") { mpv.observeNode("playlist-count", format = 4).first() }
             assertEquals(MpvNode.Int64(0), int64)
             val hookName = CompletableDeferred<String>()
             mpv.hook("on_load") { hookName.complete(it.name) }.getOrThrow()
-            mpv.command(MpvCommand.of("loadfile", wav.absolutePath)).getOrThrow()
+            mpv.command(MpvCommand.of("loadfile", wav)).getOrThrow()
             assertEquals("on_load", awaiting("the on_load hook") { hookName.await() })
         } finally {
             mpv.close()
@@ -106,34 +98,34 @@ class MpvTest {
 
     /** close() waits for the calls inside native code; a reader on another thread then ends with IllegalStateException. */
     @Test
-    fun closeWhileAnotherThreadReads() {
+    fun closeWhileAnotherThreadReads(): Unit = runBlocking {
         val mpv = start()
-        val reading = CountDownLatch(1)
-        var ending: Throwable? = null
-        val reader = thread {
+        val reading = CompletableDeferred<Unit>()
+        val ending = CompletableDeferred<Throwable>()
+        launch(Dispatchers.Default) {
             try {
-                while (true) { mpv.getNode("time-pos"); mpv[MpvProperties.Volume]; reading.countDown() }
+                while (true) { mpv.getNode("time-pos"); mpv[MpvProperties.Volume]; reading.complete(Unit) }
             } catch (t: Throwable) {
-                ending = t
+                ending.complete(t)
             }
         }
-        assertTrue(reading.await(10, TimeUnit.SECONDS), "the reader never got going")
+        awaiting("the reader to get going", millis = 10_000) { reading.await() }
         mpv.close()
-        reader.join(10_000)
-        assertTrue(ending is IllegalStateException, "the reader ended with $ending")
+        val ended = awaiting("the reader to end", millis = 10_000) { ending.await() }
+        assertTrue(ended is IllegalStateException, "the reader ended with $ended")
     }
 
     /** A hook handler that throws is logged; mpv continues and the file loads. */
     @Test
     fun aThrowingHookDoesNotEndTheApp(): Unit = runBlocking {
         val mpv = start()
-        val wav = File(context.cacheDir, "throwing-hook.wav").apply { writeBytes(SilentWav.bytes(1)) }
+        val wav = writeTestFile("throwing-hook.wav", SilentWav.bytes(1))
         try {
             mpv.hook("on_load") { throw IllegalStateException("a broken hook") }.getOrThrow()
             val attached = CompletableDeferred<Unit>()
             val loaded = async { mpv.events.onSubscription { attached.complete(Unit) }.first { it == MpvEvent.FileLoaded } }
             attached.await()
-            mpv.command(MpvCommand.of("loadfile", wav.absolutePath)).getOrThrow()
+            mpv.command(MpvCommand.of("loadfile", wav)).getOrThrow()
             awaiting("the file to load past the failed hook") { loaded.await() }
         } finally {
             mpv.close()
@@ -161,13 +153,13 @@ class MpvTest {
     @Test
     fun logLinesStayOutOfEvents(): Unit = runBlocking {
         val mpv = start()
-        val wav = File(context.cacheDir, "logged.wav").apply { writeBytes(SilentWav.bytes(1)) }
+        val wav = writeTestFile("logged.wav", SilentWav.bytes(1))
         try {
             mpv.requestLogMessages(MpvLogLevel.Verbose).getOrThrow()
             val attached = CompletableDeferred<Unit>()
             val seen = async { mpv.events.onSubscription { attached.complete(Unit) }.takeWhile { it !is MpvEvent.EndFile }.toList() }
             attached.await()
-            mpv.command(MpvCommand.of("loadfile", wav.absolutePath)).getOrThrow()
+            mpv.command(MpvCommand.of("loadfile", wav)).getOrThrow()
             val events = awaiting("the end of the file") { seen.await() }
             assertTrue(events.none { it is MpvEvent.LogMessage }, "log lines reached events")
         } finally {
@@ -190,12 +182,35 @@ class MpvTest {
 
     /** mpv_terminate_destroy waits for every client of the core, so the owner closes its clients first. */
     @Test
-    fun closingACoreClosesItsClients() {
+    fun closingACoreClosesItsClients(): Unit = runBlocking {
         val mpv = start()
         val client = mpv.createClient("second")
-        val closer = thread { mpv.close() }
-        closer.join(10_000)
-        assertFalse(closer.isAlive, "close blocked on the open client")
+        val closer = launch(Dispatchers.Default) { mpv.close() }
+        assertTrue(withTimeoutOrNull(10_000) { closer.join() } != null, "close blocked on the open client")
         assertTrue(client.isClosed)
+    }
+
+    @Test
+    fun nonAsciiTextRoundTrips() {
+        val mpv = start()
+        try {
+            mpv.setString("title", "日本語の字幕 ✓").getOrThrow()
+            assertEquals("日本語の字幕 ✓", mpv.getString("title"))
+        } finally {
+            mpv.close()
+        }
+    }
+
+    /** An MPVLib observer may destroy the core from the event thread. close() must not wait for its own thread. */
+    @Test
+    fun closeFromAnEventListenerReturnsAtOnce(): Unit = runBlocking {
+        val mpv = start()
+        val closed = CompletableDeferred<Long>()
+        mpv.addEventListener { event ->
+            if (event is MpvEvent.ClientMessage) closed.complete(measureTime { mpv.close() }.inWholeMilliseconds)
+        }
+        mpv.command("script-message", "close-now").getOrThrow()
+        assertTrue(withTimeout(10_000) { closed.await() } < 1_000)
+        assertTrue(mpv.isClosed)
     }
 }

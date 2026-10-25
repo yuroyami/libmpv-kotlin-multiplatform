@@ -1,9 +1,5 @@
 package io.github.yuroyami.libmpv
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
@@ -12,32 +8,42 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import org.junit.runner.RunWith
 
-/** The catalog against the real mpv: every name exists, every choice value is one mpv accepts. */
-@RunWith(AndroidJUnit4::class)
+/**
+ * The catalog against the real mpv: every name exists, every choice value is one mpv accepts. The catalog
+ * describes the pinned mpv, so against another version (Homebrew's, in dev mode) the tests skip themselves.
+ */
 class MpvCatalogTest {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
-
-    private fun start(): Mpv = Mpv.create(context).apply {
+    private fun start(): Mpv = createTestCore().apply {
         setOption("vo", "null").getOrThrow(); setOption("ao", "null").getOrThrow(); setOption("idle", "yes").getOrThrow()
         initialize().getOrThrow()
     }
 
+    /** A started core when it is the pinned mpv, or null after it printed why the test skips. */
+    private fun startPinned(): Mpv? {
+        val mpv = start()
+        val found = mpv.getString("mpv-version").orEmpty()
+        if (BuildInfo.MPV in found) return mpv
+        mpv.close()
+        println("skipped: $found is not the pinned mpv ${BuildInfo.MPV}")
+        return null
+    }
+
     @Test
     fun everyPropertyExists() {
-        val mpv = start()
+        val mpv = startPinned() ?: return
         try {
             val known = mpv[MpvProperties.PropertyList].getOrThrow().toSet()
-            val missing = MpvProperties.all.map { it.name.substringBefore('/') }.filter { it !in known }
+            val expected = if (testRunsOnAndroid) emptySet() else CatalogAvailability.androidOnlyProperties
+            val missing = MpvProperties.all.map { it.name.substringBefore('/') }.filter { it !in known && it !in expected }
             assertTrue(missing.isEmpty(), "unknown to mpv ${mpv.getString("mpv-version")}: $missing")
         } finally { mpv.close() }
     }
 
     @Test
     fun everyCommandExists() {
-        val mpv = start()
+        val mpv = startPinned() ?: return
         try {
             val known = mpv[MpvProperties.CommandList].getOrThrow().map { it.name }.toSet()
             val missing = MpvCommands.all.map { it.first }.filter { it !in known }
@@ -47,7 +53,7 @@ class MpvCatalogTest {
 
     @Test
     fun everyChoiceValueIsAccepted() {
-        val mpv = start()
+        val mpv = startPinned() ?: return
         try {
             val problems = mutableListOf<String>()
             var checked = 0
@@ -73,13 +79,13 @@ class MpvCatalogTest {
     /** Every property reads back in the type the catalog gives it, with a file loaded. Unavailable is fine; a type mismatch is not. */
     @Test
     fun everyPropertyDecodesWhatMpvSends(): Unit = runBlocking {
-        val mpv = start()
-        val wav = File(context.cacheDir, "catalog.wav").apply { writeBytes(SilentWav.bytes(seconds = 2)) }
+        val mpv = startPinned() ?: return@runBlocking
+        val wav = writeTestFile("catalog.wav", SilentWav.bytes(seconds = 2))
         try {
             val attached = CompletableDeferred<Unit>()
             val loaded = async { mpv.events.onSubscription { attached.complete(Unit) }.first { it == MpvEvent.FileLoaded } }
             attached.await()
-            mpv.command(MpvCommands.loadFile(wav.absolutePath)).getOrThrow()
+            mpv.command(MpvCommands.loadFile(wav)).getOrThrow()
             withTimeout(20_000) { loaded.await() }
             val problems = MpvProperties.all.mapNotNull { property ->
                 val result = mpv[property]

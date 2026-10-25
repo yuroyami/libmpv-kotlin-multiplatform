@@ -8,6 +8,8 @@ product:
 aliases:
   # The JNI binding that the JVM and Android share.
   - jvmAndAndroid: [ jvm, android ]
+  # The tests that start a real core, on every platform this host can run them. Android runs them in verification/.
+  - core: [ jvm, macosArm64 ]
 
 apply:
   - //libmpv-kmp.module-template.yaml

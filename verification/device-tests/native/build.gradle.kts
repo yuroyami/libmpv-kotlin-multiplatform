@@ -27,6 +27,8 @@ kotlin {
         commonTest {
             // test/ holds the host tests that start no core. A missing folder adds nothing.
             kotlin.srcDir(module.dir("test"))
+            // test@core/ holds the tests that start a real core. The JVM and macOS run them too.
+            kotlin.srcDir(module.dir("test@core"))
             dependencies {
                 implementation("io.github.yuroyami:libmpv-kmp-native:$libmpvKmpVersion")
                 implementation(kotlin("test"))
