@@ -36,10 +36,12 @@ data class KonanCross(
             "mingw_x64" to ("x86_64-pc-windows-gnu" to "msys2-mingw-w64-x86_64-2"),
         )
 
+        /** Where Kotlin/Native keeps its distributions and dependencies. */
+        fun konanRoot(): File = System.getenv("KONAN_DATA_DIR")?.let(::File) ?: File(System.getProperty("user.home"), ".konan")
+
         fun resolve(konanTarget: String): KonanCross {
             val (triple, sysrootRelative) = SYSROOTS[konanTarget] ?: error("No cross toolchain is known for $konanTarget")
-            val konanRoot = System.getenv("KONAN_DATA_DIR")?.let(::File) ?: File(System.getProperty("user.home"), ".konan")
-            val dependencies = konanRoot.resolve("dependencies")
+            val dependencies = konanRoot().resolve("dependencies")
             val llvmBin = dependencies.listFiles().orEmpty()
                 .filter { it.isDirectory && it.name.startsWith("llvm-") && it.resolve("bin/clang++").canExecute() }
                 .maxByOrNull { it.name }?.resolve("bin")
