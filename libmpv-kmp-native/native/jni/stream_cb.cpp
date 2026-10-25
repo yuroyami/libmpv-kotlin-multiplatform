@@ -27,7 +27,12 @@ static void detach_on_exit(void *) { g_vm->DetachCurrentThread(); }
 static JNIEnv *env_for_this_thread() {
     JNIEnv *env = nullptr;
     if (g_vm->GetEnv((void **) &env, JNI_VERSION_1_6) == JNI_OK) return env;
+#ifdef __ANDROID__
     if (g_vm->AttachCurrentThread(&env, nullptr) != JNI_OK) return nullptr;
+#else
+    // The desktop JDK's jni.h takes void ** here, Android's takes JNIEnv **.
+    if (g_vm->AttachCurrentThread((void **) &env, nullptr) != JNI_OK) return nullptr;
+#endif
     pthread_setspecific(g_detach_key, env);
     return env;
 }

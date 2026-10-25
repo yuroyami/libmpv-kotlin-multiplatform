@@ -26,6 +26,8 @@ settings:
       description: "The native half of libmpv-kotlin-multiplatform: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64 with 16 KB page alignment, and MpvNative, the raw binding. The native libraries are GPL."
 
 plugins:
+  # The desktop JNI library in the JVM jar, linked from buildscripts/prefix/<platform>. See build-plugins/mpv-natives.
+  mpv-natives: enabled
   abi-check: enabled
   android-abi-check: enabled
   build-info:

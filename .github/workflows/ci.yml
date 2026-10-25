@@ -1,5 +1,5 @@
-# Every push and pull request: the gate, the natives with their packaging and the sample, and the
-# device tests on an emulator.
+# Every push and pull request: the gate, the JVM core tests on macOS, the natives with their packaging
+# and the sample, and the device tests on an emulator.
 #
 # Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
 # SDK comes from the runner image (ANDROID_HOME). The device tests are a separate Gradle build
@@ -37,6 +37,25 @@ jobs:
             kotlin-gate-
       # The same script as the local gate, so CI and a laptop run one list of commands.
       - run: scripts/check-gate.sh tier1
+
+  desktop:
+    name: JVM core tests on macOS, German locale
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/JetBrains/Kotlin
+          key: kotlin-desktop-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-desktop-
+      # No static mpv tree exists for macOS yet, so the JNI library links Homebrew's mpv (dev mode).
+      - run: brew install mpv
+      # mpv returns no core under a numeric locale other than C. The JVM takes the user's locale, so test a decimal comma.
+      - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
+        env:
+          LC_ALL: de_DE.UTF-8
 
   natives:
     uses: ./.github/workflows/build-natives.yml

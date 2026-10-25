@@ -108,6 +108,8 @@ Each line is something that bit someone. Delete a line when it stops being true.
   `src/`. That is why `libmpv-kmp-native` has no `jvmAndAndroid` alias while its platforms are only Android and the JVM.
 - The copied `abi-check` plugin does the JVM and klib dumps only. `android-abi-check` does the Android dump, because
   `abi-check` needs JVM classes and cannot run on an Android-only module.
+- Android's `jni.h` declares `AttachCurrentThread(JNIEnv **, ...)`, the desktop JDK's `(void **, ...)`. The
+  JNI sources that both compile keep that one call behind `#ifdef __ANDROID__`.
 - `do` is a shell keyword, so shellcheck (inside actionlint) flags `./kotlin do ...` in a workflow.
   Put `# shellcheck disable=SC1010` on the line before it.
 - `scripts/run-device-tests.sh` runs on every attached device, a phone included. Pin one with

@@ -6,6 +6,7 @@ modules:
   - build-plugins/build-info
   - build-plugins/build-support
   - build-plugins/dokka
+  - build-plugins/mpv-natives
   - libmpv-kmp
   - libmpv-kmp-android-natives
   - libmpv-kmp-canvas
@@ -21,3 +22,4 @@ plugins:
   - //build-plugins/android-natives
   - //build-plugins/build-info
   - //build-plugins/dokka
+  - //build-plugins/mpv-natives

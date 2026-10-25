@@ -1,0 +1,6 @@
+{
+  global:
+    JNI_OnLoad;
+    Java_io_github_yuroyami_libmpv_jni_MpvNative_*;
+  local: *;
+};
