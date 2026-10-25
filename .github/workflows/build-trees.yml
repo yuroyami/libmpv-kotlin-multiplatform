@@ -1,0 +1,114 @@
+# Builds the static LGPL mpv trees (buildall.sh --platform), one macOS job each, and uploads each as
+# the tree-<platform> artifact. A desktop platform also links its JNI library from the tree and
+# uploads it as jni-<platform>. Called by ci.yml on every push.
+#
+# Everything below mpv is cached under tree_id and the hash of the scripts, as build-natives.yml
+# caches the Android prefix. mpv itself is rebuilt on every run, a few minutes.
+name: Build trees
+
+on:
+  workflow_call:
+
+env:
+  KOTLIN_CLI_NO_WELCOME_BANNER: "1"
+
+jobs:
+  trees:
+    name: tree ${{ matrix.platform }}
+    runs-on: macos-15
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { platform: macos-arm64, jni: true }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the build tools
+        run: brew install automake autoconf libtool pkg-config coreutils gnu-sed meson ninja nasm
+
+      - name: Read the pins
+        id: pins
+        run: |
+          . buildscripts/include/depinfo.sh
+          {
+            echo "tree_id=$tree_id"
+            echo "prefix_id=$prefix_id"
+            echo "mpv=$v_mpv"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Restore the sources
+        id: sources
+        uses: actions/cache/restore@v4
+        with:
+          path: buildscripts/deps
+          key: sources-${{ steps.pins.outputs.prefix_id }}-mpv${{ steps.pins.outputs.mpv }}-${{ hashFiles('buildscripts/download-deps.sh') }}-macos
+
+      - name: Fetch the sources
+        run: buildscripts/download-deps.sh
+
+      - name: Save the sources (cache miss)
+        if: steps.sources.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: buildscripts/deps
+          key: ${{ steps.sources.outputs.cache-primary-key }}
+
+      - name: Restore the tree below mpv
+        id: tree
+        uses: actions/cache/restore@v4
+        with:
+          path: buildscripts/prefix/${{ matrix.platform }}
+          key: tree-${{ matrix.platform }}-${{ steps.pins.outputs.tree_id }}-${{ hashFiles('buildscripts/buildall.sh', 'buildscripts/include/*.sh', 'buildscripts/scripts/*.sh', '!buildscripts/scripts/mpv.sh', '!buildscripts/scripts/jni.sh') }}
+
+      - name: Build the dependencies (cache miss)
+        if: steps.tree.outputs.cache-hit != 'true'
+        run: buildscripts/buildall.sh --platform ${{ matrix.platform }} --deps-only
+
+      - name: Save the tree below mpv (cache miss)
+        if: steps.tree.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: buildscripts/prefix/${{ matrix.platform }}
+          key: ${{ steps.tree.outputs.cache-primary-key }}
+
+      - name: Build mpv
+        run: buildscripts/buildall.sh --platform ${{ matrix.platform }} -n mpv
+
+      # tar keeps the usr and local links inside the tree, which an artifact upload would follow.
+      - name: Pack the tree
+        run: tar -czf tree-${{ matrix.platform }}.tar.gz -C buildscripts/prefix ${{ matrix.platform }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tree-${{ matrix.platform }}
+          path: tree-${{ matrix.platform }}.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+      - uses: actions/cache@v4
+        if: matrix.jni
+        with:
+          path: ~/Library/Caches/JetBrains/Kotlin
+          key: kotlin-trees-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
+          restore-keys: |
+            kotlin-trees-
+            kotlin-desktop-
+
+      - name: Link the JNI library from the tree
+        if: matrix.jni
+        run: |
+          ./kotlin build -m libmpv-kmp-native -p jvm
+          library="$(find build -path "*libmpv-kmp-native/${{ matrix.platform }}/manifest.txt" | head -1)"
+          [ -n "$library" ] || { echo "::error::the build linked no ${{ matrix.platform }} library"; exit 1; }
+          if head -1 "$library" | grep -q '^# dev'; then echo "::error::${{ matrix.platform }} linked Homebrew's mpv, not the tree"; exit 1; fi
+          mkdir -p jni && cp "$(dirname "$library")"/* jni/
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.jni
+        with:
+          name: jni-${{ matrix.platform }}
+          path: jni/
+          if-no-files-found: error
+          retention-days: 7

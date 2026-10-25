@@ -36,3 +36,7 @@ dep_jni=(mpv)
 ## The cache identity of everything below mpv. CI keys its prefix cache on this string, so a
 ## bump of any dependency invalidates it, and a bump of mpv alone does not.
 prefix_id="ndk${v_ndk}-ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}"
+
+## The cache identity of everything below mpv in a static platform tree (buildall.sh --platform), as
+## prefix_id is for Android: the pins and every build tool pin, without the NDK.
+tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}"

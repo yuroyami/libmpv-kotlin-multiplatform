@@ -1,0 +1,91 @@
+#!/bin/bash
+# The static, LGPL trees of buildall.sh --platform: the desktop JVM and Apple targets. loadplatform sets
+# the same names that loadarch sets for Android, and setup_platform_prefix writes the Meson cross file.
+
+# A space-separated flag list as the items of a Meson array.
+meson_array () {
+	local out= flag
+	for flag in $1; do out="$out'$flag', "; done
+	echo "[${out%, }]"
+}
+
+loadplatform () {
+	unset CC CXX CPATH LIBRARY_PATH C_INCLUDE_PATH CPLUS_INCLUDE_PATH
+	unset CFLAGS CXXFLAGS CPPFLAGS LDFLAGS
+
+	export platform=$1
+	export prefix_dir="$PWD/prefix/$1"
+	export dir_suffix=-$1
+	export link_mode=static
+	export licence=lgpl
+
+	case "$1" in
+	macos-arm64)
+		export target_os=macos
+		export host_triple=aarch64-apple-darwin
+		# The floor of the desktop link and of Kotlin/Native's macosArm64. Without it clang takes the SDK's.
+		export MACOSX_DEPLOYMENT_TARGET=12.0
+		aim_flags="-arch arm64 -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+		export CC=clang CXX=clang++ AR=ar RANLIB=ranlib NM=nm STRIP=strip
+		meson_system=darwin meson_subsystem=macos meson_cpu_family=aarch64 meson_cpu=aarch64
+		cxx_aim_flags=$aim_flags
+		link_flags=$aim_flags
+		;;
+	*)
+		echo "Invalid or not yet supported platform: $1" >&2
+		exit 1
+		;;
+	esac
+
+	export aim_flags cxx_aim_flags link_flags
+	# autotools, make and FFmpeg read these. Meson reads the cross file instead.
+	export CFLAGS="-O2 $aim_flags"
+	export CXXFLAGS="-O2 $cxx_aim_flags"
+	export LDFLAGS="$link_flags"
+}
+
+setup_platform_prefix () {
+	if [ ! -d "$prefix_dir" ]; then
+		mkdir -p "$prefix_dir"
+		# enforce flat structure (/usr/local -> /)
+		ln -s . "$prefix_dir/usr"
+		ln -s . "$prefix_dir/local"
+	fi
+
+	cat >"$prefix_dir/crossfile.tmp" <<CROSSFILE
+[built-in options]
+buildtype = 'release'
+default_library = 'static'
+wrap_mode = 'nodownload'
+prefix = '/usr/local'
+c_args = $(meson_array "$aim_flags")
+cpp_args = $(meson_array "$cxx_aim_flags")
+objc_args = $(meson_array "$aim_flags")
+objcpp_args = $(meson_array "$cxx_aim_flags")
+c_link_args = $(meson_array "$link_flags")
+cpp_link_args = $(meson_array "$link_flags")
+objc_link_args = $(meson_array "$link_flags")
+objcpp_link_args = $(meson_array "$link_flags")
+[binaries]
+c = '$CC'
+cpp = '$CXX'
+objc = '$CC'
+objcpp = '$CXX'
+ar = '$AR'
+nm = '$NM'
+strip = '$STRIP'
+pkgconfig = 'pkg-config'
+pkg-config = 'pkg-config'
+[host_machine]
+system = '$meson_system'
+subsystem = '$meson_subsystem'
+cpu_family = '$meson_cpu_family'
+cpu = '$meson_cpu'
+endian = 'little'
+CROSSFILE
+	if cmp -s "$prefix_dir"/crossfile.{tmp,txt}; then
+		rm "$prefix_dir/crossfile.tmp"
+	else
+		mv "$prefix_dir"/crossfile.{tmp,txt}
+	fi
+}

@@ -18,17 +18,28 @@ $0 clean
 mycflags=(
 	# ensures correct linking into libmpv.so
 	-fPIC
-	# bionic is missing decimal_point in localeconv [src/llex.c]
-	-Dgetlocaledecpoint\\\(\\\)=\\\(46\\\)
-	# force fallback as ftello/fseeko are not defined [src/liolib.c]
-	-Dlua_fseek
 )
+plat=linux
+if [ "$target_os" == "android" ]; then
+	mycflags+=(
+		# bionic is missing decimal_point in localeconv [src/llex.c]
+		-Dgetlocaledecpoint\\\(\\\)=\\\(46\\\)
+		# force fallback as ftello/fseeko are not defined [src/liolib.c]
+		-Dlua_fseek
+	)
+else
+	# The platform flags ride in MYCFLAGS, because the makefile sets CFLAGS itself.
+	mycflags+=($CFLAGS)
+	[ "$target_os" == "macos" ] && plat=macosx
+	# Lua's mingw target builds a DLL; a static tree needs the archive.
+	[ "$target_os" == "windows" ] && plat=generic
+fi
 
 # LUA_T= and LUAC_T= to disable building lua & luac
 # -Dgetlocaledecpoint()=('.') fixes bionic missing decimal_point in localeconv
 make CC="$CC" AR="$AR rc" RANLIB="$RANLIB" \
 	MYCFLAGS="${mycflags[*]}" \
-	PLAT=linux LUA_T= LUAC_T= -j$cores
+	PLAT=$plat LUA_T= LUAC_T= -j$cores
 
 # TO_BIN=/dev/null disables installing lua & luac
 make INSTALL=${INSTALL:-install} INSTALL_TOP="$prefix_dir" TO_BIN=/dev/null install

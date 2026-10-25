@@ -3,7 +3,7 @@ set -eo pipefail  # also when run as "bash script.sh", which ignores the flags i
 
 . ../../include/path.sh
 
-build=_build$ndk_suffix
+build=_build$dir_suffix
 
 if [ "$1" == "build" ]; then
 	true
@@ -18,7 +18,7 @@ mkdir -p $build
 cd $build
 
 ../configure \
-	--host=$ndk_triple --with-pic \
+	--host=$host_triple --with-pic \
 	--enable-static --disable-shared
 
 make -j$cores

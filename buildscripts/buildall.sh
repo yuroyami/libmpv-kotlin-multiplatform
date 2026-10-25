@@ -3,12 +3,14 @@ set -eo pipefail  # also when run as "bash script.sh", which ignores the flags i
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 . ./include/depinfo.sh
+. ./include/platforms.sh
 
 cleanbuild=0
 nodeps=0
 depsonly=0
-target=jni
+target=
 arch=arm64
+platform=
 
 getdeps () {
 	varname="dep_${1//-/_}[*]"
@@ -48,6 +50,9 @@ loadarch () {
 		exit 1
 	fi
 	export prefix_dir="$PWD/prefix/$prefix_name"
+	export dir_suffix=$ndk_suffix
+	export host_triple=$ndk_triple
+	export target_os=android link_mode=shared licence=gpl
 	export CC=$cc_triple-clang
 	export CXX=$cc_triple-clang++
 	# 16 KB page alignment on every shared library, as Google's page-size guidance asks.
@@ -137,7 +142,8 @@ usage () {
 		"-n             Do not build dependencies" \
 		"--deps-only    Build everything mpv needs, then stop (CI caches this)" \
 		"--clean        Clean build dirs before compiling" \
-		"--arch <arch>  Build for specified architecture (default: $arch; supported: armv7l, arm64, x86, x86_64)"
+		"--arch <arch>  Build for specified architecture (default: $arch; supported: armv7l, arm64, x86, x86_64)" \
+		"--platform <p> Build a static LGPL mpv tree instead (macos-arm64). The default target is then mpv"
 	exit 0
 }
 
@@ -156,6 +162,10 @@ while [ $# -gt 0 ]; do
 		shift
 		arch=$1
 		;;
+		--platform)
+		shift
+		platform=$1
+		;;
 		-h|--help)
 		usage
 		;;
@@ -170,8 +180,19 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-loadarch $arch
-setup_prefix
+if [ -n "$platform" ]; then
+	loadplatform $platform
+	setup_platform_prefix
+	target=${target:-mpv}
+	if [ "$target" == "jni" ]; then
+		echo "A platform tree has no jni target: the toolchain links the desktop JNI library from the tree." >&2
+		exit 1
+	fi
+else
+	loadarch $arch
+	setup_prefix
+	target=${target:-jni}
+fi
 
 if [ $depsonly -eq 1 ]; then
 	for dep in ${dep_mpv[@]}; do

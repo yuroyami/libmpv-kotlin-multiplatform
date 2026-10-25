@@ -29,7 +29,9 @@ fun renderInteropDef(headersDir: File, source: InteropSource): String = buildStr
             appendLine("$INTEROP_SOURCE_MARKER prefix")
             appendLine("staticLibraries = ${source.line.archives.joinToString(" ")}")
             appendLine("libraryPaths = ${source.line.libraryPaths.joinToString(" ")}")
-            appendLine("linkerOpts = ${source.line.systemFlags.joinToString(" ")}")
+            // Kotlin/Native passes linkerOpts to ld itself, which rejects the driver flag -pthread. On Apple,
+            // pthreads are part of libSystem anyway.
+            appendLine("linkerOpts = ${source.line.systemFlags.filter { it != "-pthread" }.joinToString(" ")}")
         }
         is InteropSource.Dev -> {
             appendLine("$INTEROP_SOURCE_MARKER dev")

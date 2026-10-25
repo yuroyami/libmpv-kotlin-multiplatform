@@ -1,4 +1,4 @@
-# Every push and pull request: the gate, the JVM, macOS and iOS core on macOS, the natives with their packaging
+# Every push and pull request: the gate, the static mpv trees, the JVM, macOS and iOS core on macOS, the natives with their packaging
 # and the sample, and the device tests on an emulator.
 #
 # Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
@@ -38,8 +38,12 @@ jobs:
       # The same script as the local gate, so CI and a laptop run one list of commands.
       - run: scripts/check-gate.sh tier1
 
+  trees:
+    uses: ./.github/workflows/build-trees.yml
+
   desktop:
     name: JVM, macOS and iOS core on macOS
+    needs: trees
     runs-on: macos-15
     timeout-minutes: 30
     steps:
@@ -50,8 +54,11 @@ jobs:
           key: kotlin-desktop-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
           restore-keys: |
             kotlin-desktop-
-      # No static mpv tree exists for macOS yet, so the JNI library links Homebrew's mpv (dev mode).
-      - run: brew install mpv
+      # The JNI library and the macOS klib link the static tree, never Homebrew's mpv.
+      - uses: actions/download-artifact@v4
+        with:
+          name: tree-macos-arm64
+      - run: mkdir -p buildscripts/prefix && tar -xzf tree-macos-arm64.tar.gz -C buildscripts/prefix
       # mpv returns no core under a numeric locale other than C. The JVM takes the user's locale, so test a decimal comma.
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
         env:

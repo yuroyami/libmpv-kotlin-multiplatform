@@ -3,7 +3,7 @@ set -eo pipefail  # also when run as "bash script.sh", which ignores the flags i
 
 . ../../include/path.sh
 
-build=_build$ndk_suffix
+build=_build$dir_suffix
 
 if [ "$1" == "build" ]; then
 	true
@@ -17,7 +17,7 @@ fi
 unset CC CXX # meson wants these unset
 
 meson setup $build --cross-file "$prefix_dir"/crossfile.txt \
-	-Denable_tests=false -Db_lto=true -Dstack_alignment=16
+	-Denable_tests=false -Db_lto=$([ "$link_mode" == shared ] && echo true || echo false) -Dstack_alignment=16
 
 ninja -C $build -j$cores
 DESTDIR="$prefix_dir" ninja -C $build install

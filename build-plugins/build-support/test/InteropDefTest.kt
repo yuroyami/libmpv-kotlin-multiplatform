@@ -43,6 +43,12 @@ class InteropDefTest {
     }
 
     @Test
+    fun aPthreadFlagIsDroppedBecauseLdRejectsIt() {
+        val def = renderInteropDef(headers, InteropSource.Prefix(LinkLine(listOf("/t/lib"), listOf("libmpv.a"), listOf("-pthread", "-lz", "-pthread", "-framework", "CoreAudio"))))
+        assertTrue("linkerOpts = -lz -framework CoreAudio" in def.lines())
+    }
+
+    @Test
     fun onlyPrefixDefsPassTheReleaseCheck() {
         val dir = createTempDirectory().toFile()
         val prefix = dir.resolve("a.def").apply { writeText(renderInteropDef(headers, InteropSource.Prefix(LinkLine(emptyList(), emptyList(), emptyList())))) }
