@@ -108,6 +108,8 @@ fun desktopLinkCommand(
             add("-Wl,--no-undefined")
         }
     }
+    // The archives carry debug sections. Without this the Linux library is 93 MB and the Windows DLL 134 MB.
+    if (!platform.isMac) add("-Wl,--strip-debug")
     addAll(listOf("-o", output.path))
 }
 
