@@ -16,8 +16,10 @@ fi
 
 unset CC CXX # meson wants these unset
 
+# A static tree needs the library only. The dav1d tool also needs a resource compiler on Windows.
+tools=$([ "$link_mode" == shared ] && echo true || echo false)
 meson setup $build --cross-file "$prefix_dir"/crossfile.txt \
-	-Denable_tests=false -Db_lto=$([ "$link_mode" == shared ] && echo true || echo false) -Dstack_alignment=16
+	-Denable_tests=false -Denable_tools=$tools -Db_lto=$([ "$link_mode" == shared ] && echo true || echo false) -Dstack_alignment=16
 
 ninja -C $build -j$cores
 DESTDIR="$prefix_dir" ninja -C $build install

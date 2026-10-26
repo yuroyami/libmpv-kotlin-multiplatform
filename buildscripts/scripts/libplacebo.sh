@@ -23,7 +23,7 @@ DESTDIR="$prefix_dir" ninja -C $build install
 
 # add missing library for static linking
 # this isn't "-lstdc++" due to a meson bug: https://github.com/mesonbuild/meson/issues/11300
-# Linux and Windows link GNU libstdc++, the C++ library of the Kotlin/Native sysroots.
+# Linux links GNU libstdc++, the C++ library of the Kotlin/Native sysroots. Apple and llvm-mingw use libc++.
 cxxlib=-lc++
-[[ "$target_os" == "linux" || "$target_os" == "windows" ]] && cxxlib=-lstdc++
+[ "$target_os" == "linux" ] && cxxlib=-lstdc++
 ${SED:-sed} "/^Libs:/ s|\$| $cxxlib|" "$prefix_dir/lib/pkgconfig/libplacebo.pc" -i

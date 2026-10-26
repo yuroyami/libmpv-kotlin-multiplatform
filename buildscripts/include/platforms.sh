@@ -20,6 +20,7 @@ loadplatform () {
 	export licence=lgpl
 	# Meson runs test programs only where the host can run them. An iOS binary does not run on a Mac.
 	meson_needs_wrapper=false
+	meson_windres= meson_dlltool=
 
 	case "$1" in
 	macos-arm64)
@@ -78,6 +79,27 @@ loadplatform () {
 		meson_needs_wrapper=true
 		dep_mpv=(ffmpeg libass lua libplacebo alsa)
 		;;
+	windows-x64)
+		export target_os=windows
+		# llvm-mingw, fetched by download-deps.sh. Its clang knows the target, links with lld and
+		# brings the resource compiler (freetype, mpv) and dlltool (libplacebo) that Meson asks for.
+		local mingw="$PWD/deps/llvm-mingw/bin"
+		if [ ! -x "$mingw/x86_64-w64-mingw32-clang" ]; then
+			echo "No llvm-mingw at $mingw. Run buildscripts/download-deps.sh first." >&2
+			exit 1
+		fi
+		export host_triple=x86_64-w64-mingw32
+		export CC=$mingw/x86_64-w64-mingw32-clang CXX=$mingw/x86_64-w64-mingw32-clang++
+		export AR=$mingw/llvm-ar RANLIB=$mingw/llvm-ranlib NM=$mingw/llvm-nm
+		export STRIP=/usr/bin/true
+		aim_flags= cxx_aim_flags= link_flags=
+		meson_system=windows meson_subsystem=windows meson_cpu_family=x86_64 meson_cpu=x86_64
+		meson_needs_wrapper=true
+		meson_windres=$mingw/x86_64-w64-mingw32-windres meson_dlltool=$mingw/x86_64-w64-mingw32-dlltool
+		# llvm-mingw has no zlib, so the tree builds it before FFmpeg and FreeType.
+		dep_ffmpeg=(zlib mbedtls dav1d)
+		dep_freetype2=(zlib)
+		;;
 	*)
 		echo "Invalid or not yet supported platform: $1" >&2
 		exit 1
@@ -122,6 +144,8 @@ nm = '$NM'
 strip = '$STRIP'
 pkgconfig = 'pkg-config'
 pkg-config = 'pkg-config'
+${meson_windres:+windres = '$meson_windres'}
+${meson_dlltool:+dlltool = '$meson_dlltool'}
 [properties]
 needs_exe_wrapper = $meson_needs_wrapper
 [host_machine]

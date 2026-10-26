@@ -41,6 +41,8 @@ object BuildInfoSource {
             |    public const val LUA: String = "${pin("lua")}"
             |    /** alsa-lib, linked into the Linux libraries only. */
             |    public const val ALSA_LIB: String = "${pin("alsa")}"
+            |    /** zlib, built into the Windows library only. The other platforms link the system's. */
+            |    public const val ZLIB: String = "${pin("zlib")}"
             |    /** The Android NDK the libraries were compiled with. */
             |    public const val NDK: String = "${pin("ndk")}"
             |    /** The lowest Android API level the libraries were compiled for. */

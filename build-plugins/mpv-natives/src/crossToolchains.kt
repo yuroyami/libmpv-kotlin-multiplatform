@@ -9,7 +9,7 @@ import org.jetbrains.amper.plugins.TaskAction
 import java.io.File
 
 /**
- * Writes `<prefixRoot>/<platform>/toolchain.env` for each Linux and Windows platform, which the build scripts
+ * Writes `<prefixRoot>/<platform>/toolchain.env` for each Linux platform, which the build scripts
  * source. The Kotlin/Native distribution, its LLVM and the sysroots are fetched first when they are missing,
  * so a fresh CI runner needs no Kotlin/Native build before this task.
  */
@@ -32,7 +32,7 @@ fun writeCrossToolchains(platforms: List<String>, kotlinVersion: String, prefixR
     platforms.map(DesktopPlatform::of).forEach { platform ->
         val env = File(prefixRoot).resolve("${platform.directory}/toolchain.env")
         env.parentFile.mkdirs()
-        env.writeText(crossEnv(platform, KonanCross.resolve(platform.konanTarget)))
+        env.writeText(crossEnv(KonanCross.resolve(platform.konanTarget)))
         println("[libmpv-kotlin-multiplatform] wrote $env")
     }
 }

@@ -1,5 +1,6 @@
 # Builds the static LGPL mpv trees (buildall.sh --platform), one macOS job each, and uploads each as
-# the tree-<platform> artifact. The Linux trees cross compile with Kotlin/Native's clang and sysroots. A desktop platform also links its JNI library from the tree and
+# the tree-<platform> artifact. The Linux trees cross compile with Kotlin/Native's clang and sysroots, the Windows tree with
+# llvm-mingw, which download-deps.sh fetches with the sources. A desktop platform also links its JNI library from the tree and
 # uploads it as jni-<platform>. Called by ci.yml on every push.
 #
 # Everything below mpv is cached under tree_id and the hash of the scripts, as build-natives.yml
@@ -26,6 +27,7 @@ jobs:
           - { platform: ios-simulator-arm64, jni: false }
           - { platform: linux-x64, jni: true, cross: true }
           - { platform: linux-arm64, jni: true, cross: true }
+          - { platform: windows-x64, jni: true }
     steps:
       - uses: actions/checkout@v4
 

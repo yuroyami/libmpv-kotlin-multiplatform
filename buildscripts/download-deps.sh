@@ -28,9 +28,11 @@ clone () { # <dir> <url> <tag> [extra git args]
 fetch_tar () { # <dir> <url>
 	local dir=$1 url=$2
 	[ -f "$dir/.libmpv-kmp-commit" ] && [ "$(cat "$dir/.libmpv-kmp-commit")" = "$url" ] && return 0
+	local unpack=-z
+	[[ "$url" == *.xz ]] && unpack=-J
 	rm -rf "$dir"
 	mkdir "$dir"
-	curl -fL --retry 3 "$url" | tar -xz -C "$dir" --strip-components=1
+	curl -fL --retry 3 "$url" | tar -x $unpack -C "$dir" --strip-components=1
 	echo "$url" > "$dir/.libmpv-kmp-commit"
 }
 
@@ -45,7 +47,12 @@ clone libass     https://github.com/libass/libass.git                 "$v_libass
 fetch_tar lua    "https://www.lua.org/ftp/lua-$v_lua.tar.gz"
 clone libplacebo https://code.videolan.org/videolan/libplacebo.git    "v$v_libplacebo" --recurse-submodules --shallow-submodules
 clone alsa       https://github.com/alsa-project/alsa-lib.git         "v$v_alsa"
+clone zlib       https://github.com/madler/zlib.git                   "v$v_zlib"
 clone mpv        https://github.com/mpv-player/mpv.git                "v$v_mpv"
+# Only a Mac builds the trees, so only a Mac needs the Windows toolchain.
+if [ "$(uname -s)" = Darwin ]; then
+	fetch_tar llvm-mingw "https://github.com/mstorsjo/llvm-mingw/releases/download/$tool_llvm_mingw/llvm-mingw-$tool_llvm_mingw-ucrt-macos-universal.tar.xz"
+fi
 
 cd ..
 echo "deps ready"

@@ -15,6 +15,7 @@ public final class io/github/yuroyami/libmpv/BuildInfo {
 	public static final field MIN_SDK I
 	public static final field MPV Ljava/lang/String;
 	public static final field NDK Ljava/lang/String;
+	public static final field ZLIB Ljava/lang/String;
 	public final fun getABIS ()Ljava/util/List;
 }
 

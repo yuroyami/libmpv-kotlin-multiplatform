@@ -1,6 +1,5 @@
-# Every push and pull request: the gate, the static mpv trees, the JVM, macOS and iOS core on macOS, the JVM core on Linux,
-# the natives with their packaging
-# and the sample, and the device tests on an emulator.
+# Every push and pull request: the gate, the static mpv trees, the JVM, macOS and iOS core on macOS, the JVM core on Linux
+# and Windows, the natives with their packaging and the sample, and the device tests on an emulator.
 #
 # Every job builds with the Kotlin toolchain (`./kotlin`), which downloads its own JDK. The Android
 # SDK comes from the runner image (ANDROID_HOME). The device tests are a separate Gradle build
@@ -102,6 +101,23 @@ jobs:
         env:
           JAVA_TOOL_OPTIONS: -Dlibmpv-kmp.jni.path=${{ github.workspace }}/jni/libmpv_kmp_jni.so
           ALSA_CONFIG_PATH: ${{ runner.temp }}/asound.conf
+
+  windows:
+    name: JVM core on Windows
+    needs: trees
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      # The trees job links the Windows library on macOS. This job has no tree, so the build here links nothing.
+      - uses: actions/download-artifact@v4
+        with:
+          name: jni-windows-x64
+          path: jni
+      # The runner has no sound device. The core tests use ao=null.
+      - run: ./kotlin.bat test -m libmpv-kmp-native -m libmpv-kmp -p jvm
+        env:
+          JAVA_TOOL_OPTIONS: -Dlibmpv-kmp.jni.path=${{ github.workspace }}\jni\mpv_kmp_jni.dll
 
   natives:
     uses: ./.github/workflows/build-natives.yml

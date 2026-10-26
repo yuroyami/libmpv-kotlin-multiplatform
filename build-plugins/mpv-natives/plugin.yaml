@@ -88,7 +88,7 @@ tasks:
 
   crossToolchains:
     action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.writeCrossToolchains
-      platforms: [ linux-x64, linux-arm64, windows-x64 ]
+      platforms: [ linux-x64, linux-arm64 ]
       kotlinVersion: ${pluginSettings.kotlinVersion}
       prefixRoot: ${project.rootDir}/buildscripts/prefix
 

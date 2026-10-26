@@ -53,7 +53,12 @@ fun linkDesktopJni(
     }
     if (mpv is DesktopMpv.Dev) log("$platform: dev link against ${mpv.homebrewPrefix}")
     val work = workDir.toFile().apply { deleteRecursively(); mkdirs() }
-    val cross = if (target.isMac) null else KonanCross.resolve(target.konanTarget)
+    // The Windows DLL links with the llvm-mingw that built its tree, so the C++ runtimes agree.
+    val cross = when {
+        target.isMac -> null
+        target.isWindows -> KonanCross.llvmMingw(prefixTree.toFile().resolve("../../deps/llvm-mingw").normalize())
+        else -> KonanCross.resolve(target.konanTarget)
+    }
     val jniMd = if (target.isMac) null else work.resolve("jni-platform").apply {
         mkdirs()
         resolve("jni_md.h").writeText(jniPlatformHeader(target.isWindows))

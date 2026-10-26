@@ -89,12 +89,15 @@ fun desktopLinkCommand(
             add("-Wl,-install_name,@rpath/${platform.libraryFile}")
         }
         platform.isWindows -> {
-            // -Bstatic takes zlib, iconv and winpthreads from their archives. The MinGW sysroot also has
-            // DLL import libraries for them, and a DLL that imports those does not load without MSYS2.
+            // -Bstatic takes zlib and winpthreads from their archives. The MinGW sysroot also has DLL import
+            // libraries for them, and a DLL that imports those does not load without MinGW.
             add("-Wl,-Bstatic")
             addAll(archives)
             addAll(line!!.systemFlags)
-            addAll(listOf("-static-libstdc++", "-static-libgcc"))
+            // The JNI sources use pthread keys. mpv uses win32 threads and no longer brings winpthreads.
+            add("-lpthread")
+            // libc++ and libunwind of llvm-mingw go into the DLL, so it imports system DLLs only.
+            add("-static")
         }
         else -> {
             addAll(listOf("-static-libstdc++", "-static-libgcc"))

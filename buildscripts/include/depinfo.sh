@@ -19,6 +19,13 @@ v_unibreak=7.0
 v_lua=5.2.4
 # Linux trees only (buildall.sh --platform linux-*): the audio output of mpv there.
 v_alsa=1.2.16.1
+# Windows tree only: llvm-mingw has no zlib, which FFmpeg and mpv link.
+v_zlib=1.3.2
+
+## Build tools. Not part of BuildInfo.
+# The Windows tree and its JNI library compile with llvm-mingw. Kotlin/Native's MinGW sysroot is
+# from 2019 and lacks import libraries that mpv links, pathcch among them.
+tool_llvm_mingw=20261020
 
 ## Dependency tree. buildall.sh builds a target's dependencies first, in this order.
 
@@ -32,6 +39,7 @@ dep_unibreak=()
 dep_libass=(freetype2 fribidi harfbuzz unibreak)
 dep_lua=()
 dep_alsa=()
+dep_zlib=()
 dep_libplacebo=()
 dep_mpv=(ffmpeg libass lua libplacebo)
 dep_jni=(mpv)
@@ -42,4 +50,4 @@ prefix_id="ndk${v_ndk}-ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo
 
 ## The cache identity of everything below mpv in a static platform tree (buildall.sh --platform), as
 ## prefix_id is for Android: the pins and every build tool pin, without the NDK.
-tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-alsa${v_alsa}"
+tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-alsa${v_alsa}-zlib${v_zlib}-llvmmingw${tool_llvm_mingw}"

@@ -3,8 +3,8 @@ package io.github.yuroyami.libmpv.buildtools
 import java.io.File
 
 /**
- * Kotlin/Native's clang and sysroot for a Linux or Windows link, found inside `~/.konan`. Adapted from
- * KiteFFmpeg's `KonanCrossTools.kt`, which links its JNI library for the same platforms.
+ * A clang and sysroot for a Linux or Windows link. Linux uses Kotlin/Native's, found inside `~/.konan` and adapted
+ * from KiteFFmpeg's `KonanCrossTools.kt`. Windows uses llvm-mingw ([llvmMingw]), which built the Windows tree.
  */
 data class KonanCross(
     val clangxx: String,
@@ -33,7 +33,17 @@ data class KonanCross(
         private val SYSROOTS = mapOf(
             "linux_x64" to ("x86_64-unknown-linux-gnu" to "x86_64-unknown-linux-gnu-gcc-8.3.0-glibc-2.19-kernel-4.9-2/x86_64-unknown-linux-gnu/sysroot"),
             "linux_arm64" to ("aarch64-unknown-linux-gnu" to "aarch64-unknown-linux-gnu-gcc-8.3.0-glibc-2.25-kernel-4.9-2/aarch64-unknown-linux-gnu/sysroot"),
-            "mingw_x64" to ("x86_64-pc-windows-gnu" to "msys2-mingw-w64-x86_64-2"),
+        )
+
+        /** llvm-mingw unpacked at [root] (`buildscripts/deps/llvm-mingw`). Its clang carries its own C++ headers. */
+        fun llvmMingw(root: File): KonanCross = KonanCross(
+            clangxx = root.resolve("bin/x86_64-w64-mingw32-clang++").path,
+            toolchainBin = root.resolve("bin").path,
+            runtimeDir = null,
+            triple = "x86_64-w64-mingw32",
+            sysroot = root.path,
+            cxxIncludeDirs = emptyList(),
+            cxxLibDir = null,
         )
 
         /** Where Kotlin/Native keeps its distributions and dependencies. */

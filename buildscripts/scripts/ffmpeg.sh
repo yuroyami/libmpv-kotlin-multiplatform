@@ -75,7 +75,8 @@ else
 	case "$target_os" in
 		macos|ios*) args+=(--enable-{videotoolbox,audiotoolbox}) ;;
 		linux) args+=(--enable-pic) ;;
-		windows) args+=(--disable-pthreads --enable-w32threads) ;;
+		# mbedtls has no .pc to name its Windows libraries, so its configure probe needs them here.
+		windows) args+=(--disable-pthreads --enable-w32threads --extra-libs="-lws2_32 -lbcrypt") ;;
 	esac
 fi
 ../configure "${args[@]}"

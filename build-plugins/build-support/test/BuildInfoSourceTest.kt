@@ -21,6 +21,7 @@ class BuildInfoSourceTest {
         v_unibreak=7.0
         v_lua=5.2.4
         v_alsa=1.2.16.1
+        v_zlib=1.3.2
         dep_mpv=(ffmpeg libass lua libplacebo)
     """.trimIndent()
 
@@ -29,7 +30,7 @@ class BuildInfoSourceTest {
         val pins = BuildInfoSource.parsePins(depinfo)
         assertEquals("0.41.0", pins["mpv"])
         assertEquals("9.0.1", pins["ffmpeg"])
-        assertEquals(13, pins.size)
+        assertEquals(14, pins.size)
     }
 
     @Test
@@ -80,6 +81,8 @@ class BuildInfoSourceTest {
             |    public const val LUA: String = "5.2.4"
             |    /** alsa-lib, linked into the Linux libraries only. */
             |    public const val ALSA_LIB: String = "1.2.16.1"
+            |    /** zlib, built into the Windows library only. The other platforms link the system's. */
+            |    public const val ZLIB: String = "1.3.2"
             |    /** The Android NDK the libraries were compiled with. */
             |    public const val NDK: String = "29.0.14206865"
             |    /** The lowest Android API level the libraries were compiled for. */

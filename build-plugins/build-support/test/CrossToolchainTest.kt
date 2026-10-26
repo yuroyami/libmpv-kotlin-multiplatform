@@ -1,7 +1,7 @@
 package io.github.yuroyami.libmpv.buildtools
 
 import kotlin.test.Test
-import kotlin.test.assertFalse
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class CrossToolchainTest {
@@ -20,7 +20,7 @@ class CrossToolchainTest {
 
     @Test
     fun linuxEnvAimsKonanClangAtTheSysroot() {
-        val env = crossEnv(DesktopPlatform.LinuxX64, cross("x86_64-unknown-linux-gnu"))
+        val env = crossEnv(cross("x86_64-unknown-linux-gnu"))
         assertTrue("export CROSS_CC='/k/llvm/bin/clang'" in env.lines())
         assertTrue("export CROSS_CXX='/k/llvm/bin/clang++'" in env.lines())
         assertTrue("export CROSS_AR='/k/llvm/bin/llvm-ar'" in env.lines())
@@ -32,10 +32,9 @@ class CrossToolchainTest {
     }
 
     @Test
-    fun windowsEnvAddsTheGnuDialect() {
-        val env = crossEnv(DesktopPlatform.WindowsX64, cross("x86_64-pc-windows-gnu"))
-        assertTrue(line(env, "CROSS_CFLAGS").endsWith("-std=gnu11'"))
-        // clang++ refuses every program when it is given a C dialect.
-        assertFalse("gnu11" in line(env, "CROSS_CXXFLAGS"))
+    fun llvmMingwLinksWithItsOwnClangAndSysroot() {
+        val cross = KonanCross.llvmMingw(java.io.File("/m"))
+        assertEquals("/m/bin/x86_64-w64-mingw32-clang++", cross.clangxx)
+        assertEquals(listOf("-target", "x86_64-w64-mingw32", "--sysroot=/m", "-fuse-ld=lld", "-B/m/bin"), cross.args())
     }
 }
