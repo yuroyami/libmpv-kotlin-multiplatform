@@ -36,7 +36,7 @@ settings:
   publishing:
     pom:
       name: libmpv-kmp
-      description: "The typed Kotlin API for libmpv on Android: Mpv, one class per mpv core. It brings libmpv-kmp-native, which holds mpv, FFmpeg, libass, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64. The native libraries are GPL."
+      description: "The typed Kotlin API for libmpv on Android, the desktop JVM, macOS and iOS: Mpv, one class per mpv core. It brings libmpv-kmp-native, which holds mpv, FFmpeg, libass, dav1d and their dependencies, prebuilt for each platform. The Android native libraries are GPL, the others LGPL."
 
 # -Xexport-kdoc keeps the KDoc in the native klibs.
 settings@native:

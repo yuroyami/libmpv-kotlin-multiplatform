@@ -129,5 +129,29 @@ Each line is something that bit someone. Delete a line when it stops being true.
   stay within C++17, or only Android builds them.
 - The Linux and macOS JNI libraries export only the JNI functions (`exports.map`, `exports.macos`).
   The Windows DLL also exports mpv's own dllexport functions, which is harmless there.
+- FFmpeg's configure reads an exported `build_suffix` as its own `--build-suffix` and renames every library.
+  The build scripts call their folder suffix `dir_suffix` for that reason.
+- mpv's `gl` feature defaults to enabled, not auto, so `--auto-features=disabled` leaves it on. The trees pass
+  `-Dgl=disabled`.
+- `ao_coreaudio` needs the `cfstr_*` helpers of `osdep/utils-mac.c`, which mpv compiles only with cocoa, and cocoa
+  needs Swift. `mpv.sh` compiles that one file into the macOS `libmpv.a`.
+- `ao_audiounit` uses `AVAudioSession`, but mpv names no AVFoundation, so `mpv.sh` adds it to the iOS `mpv.pc`.
+- Exporting `IPHONEOS_DEPLOYMENT_TARGET` makes Apple clang build FFmpeg's host tools for iOS, and macOS kills
+  them. The iOS flags carry `-mios-version-min` instead.
+- The iOS trees have no Lua (iOS has no `system()`), so the catalog test skips the Lua properties there.
+- Kotlin/Native's `ld` rejects `-pthread`, so the cinterop def drops it from the link line.
+- libstdc++ 8 of the Kotlin/Native Linux sysroots has no `<version>`. `buildscripts/include/compat/libstdcxx8`
+  holds a shim for libplacebo.
+- alsa-lib's configure reads the symbol prefix from a bare `$CC -E`, which answers for the Mac. `alsa.sh` passes
+  `CPP` with the target flags, or the static archive misses `snd_pcm_forward` and the other aliases.
+- The Linux link line carries `-lstdc++` from `libplacebo.pc`, so the Linux library loads the system
+  `libstdc++.so.6` despite `-static-libstdc++`.
+- The Windows tree uses llvm-mingw, not Kotlin/Native's MinGW sysroot: that sysroot is from 2019 and has no
+  `pathcch` import library. llvm-mingw has no zlib, so the Windows tree builds one.
+- A Meson build folder keeps the cross file it was configured with. After changing the flags of a platform,
+  delete `buildscripts/deps/*/_build-<platform>`.
+- The trees of a release have no `toolchain.env`. Run `./kotlin do crossToolchains` before rebuilding a Linux tree
+  on top of one.
+- `updateAndroidAbi` copies the dump of the last Android build. Build Android first, or it writes the old API.
 - `MpvPlaybackState.Status.Ended` needs `keep-open=yes`: `eof-reached` is true only while the file stays loaded.
   With `keep-open=no` the state falls back to Idle.

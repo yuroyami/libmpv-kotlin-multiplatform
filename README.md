@@ -4,7 +4,7 @@ Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFm
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.yuroyami/libmpv-kmp?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.yuroyami/libmpv-kmp)
 [![CI](https://img.shields.io/github/actions/workflow/status/yuroyami/libmpv-kotlin-multiplatform/ci.yml?label=CI)](https://github.com/yuroyami/libmpv-kotlin-multiplatform/actions/workflows/ci.yml)
-[![License](https://img.shields.io/badge/License-Apache%202.0%20wrapper%2C%20GPL%20binaries-blue)](NOTICE)
+[![License](https://img.shields.io/badge/License-Apache%202.0%20wrapper%2C%20GPL%20and%20LGPL%20binaries-blue)](docs/licensing.md)
 
 **[Documentation](https://yuroyami.github.io/libmpv-kotlin-multiplatform/)** · [API reference](https://yuroyami.github.io/libmpv-kotlin-multiplatform/api/) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
@@ -16,17 +16,19 @@ Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFm
 - Three ways to show the video: an Android View that also works in XML layouts, Compose surfaces, and an experimental Compose canvas.
 - `Mpv` and the typed API in common Kotlin code, for Android, the desktop JVM, macOS and iOS.
 
-The native libraries are built in public CI from pinned upstream versions. Each GitHub release carries the exact zips that the Maven Central artifacts are made from.
+The native libraries are built in public CI from pinned upstream versions. Each GitHub release carries the exact zips and static trees that the Maven Central artifacts are made from.
 
 ## Platforms
 
-| Platform | What carries mpv | State |
-|---|---|---|
-| Android 5.0 and newer | `libmpv-kmp-android-natives`: ten libraries per ABI | Ready |
-| Desktop JVM: macOS arm64, Linux x64 and arm64, Windows x64 | `mpv_kmp_jni` inside the `libmpv-kmp-native` jar, with mpv linked in | The API is ready. No release carries mpv yet. |
-| macOS arm64, iOS arm64, iOS simulator arm64 | the `libmpv-kmp-native` klibs, with mpv linked in | The API is ready. No release carries mpv yet. |
+| Platform | What carries mpv | Licence | State |
+|---|---|---|---|
+| Android 5.0 and newer | `libmpv-kmp-android-natives`: ten libraries per ABI | GPL-3.0-or-later | Ready |
+| Desktop JVM on macOS arm64, Linux x64 and Windows x64 | `mpv_kmp_jni` inside the `libmpv-kmp-native` jar, with mpv linked in | LGPL-3.0-or-later | Ready from the next release. CI runs the core tests on each. |
+| Desktop JVM on Linux arm64 | the same jar | LGPL-3.0-or-later | Built, not tested on a device |
+| macOS arm64, iOS simulator arm64 | the `libmpv-kmp-native` klibs, with mpv linked in | LGPL-3.0-or-later | Ready from the next release. CI runs the core tests on each. |
+| iOS arm64 | the same klibs | LGPL-3.0-or-later | Built. A device test needs signing, which CI does not have. |
 
-The static builds of mpv for the desktop and Apple platforms do not exist yet, and the release workflow refuses to publish until they do. In a checkout on an arm64 Mac, the JVM and macOS targets already run against Homebrew's mpv (`brew install mpv`). The tests run that way.
+The desktop and Apple artifacts link a static tree: a folder of static libraries for one platform, built in CI and attached to the release. Releases up to 0.3.0 carry no mpv outside Android. In a checkout on an arm64 Mac without trees, the JVM and macOS targets run against Homebrew's mpv (`brew install mpv`).
 
 ## Install
 
@@ -165,21 +167,23 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 
 ## Limits
 
-- The native libraries are GPL, so an app that ships them falls under GPL-3.0-or-later as a whole. [Licensing](docs/licensing.md) explains what that means.
+- The Android native libraries are GPL, so an Android app that ships them falls under GPL-3.0-or-later as a whole. The desktop and Apple libraries are LGPL-3.0-or-later and linked statically, so an app that ships them must let its users relink it. [Licensing](docs/licensing.md) explains both.
 - The native libraries are about 59 MB. Each ABI adds 31 to 41 MB to an APK before compression, so ship an app bundle: each phone then downloads only its own ABI.
 - `libc++_shared.so` comes inside. If another dependency ships one too, the build stops with a merge error. That error protects you, because libmpv crashes at load with an older libc++. If you must choose one, `packaging { jniLibs { pickFirsts += "**/libc++_shared.so" } }` does it, and the copy that wins must come from NDK r29 or newer.
 - Rotation restarts playback, unless the activity declares `android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"` or the core lives somewhere that outlives the activity.
 - The deprecated `MPVLib` allows one core per process. `Mpv` has no such limit.
 - Video shows on Android only for now. On the desktop JVM, macOS and iOS, start the core with `vo=null`: audio, properties, commands, events and the playback state work as on Android.
 - Stream providers (`addStreamProtocol`) work on Android and the desktop JVM, not on macOS or iOS.
-- No release carries mpv for the desktop or Apple platforms yet. See [Platforms](#platforms).
+- On Linux, the JNI library needs `libatomic.so.1`, `libz.so.1` and `libstdc++.so.6` from the system. Most desktop distributions have them; on Debian and Ubuntu, a minimal install may need the `libatomic1` package. Audio goes through ALSA and reads the system's ALSA configuration and plugins, so PulseAudio and PipeWire work through their ALSA plugins.
 
 ## What is inside
 
+The Android build is GPL. The static trees for the other platforms are LGPL builds of the same versions: mpv with `-Dgpl=false`, and FFmpeg without `--enable-gpl`.
+
 | Library | Version | License |
 |---|---|---|
-| mpv | 0.41.0 | GPL-2.0-or-later |
-| FFmpeg | 9.0.1, built with `--enable-gpl --enable-version3` | GPL-3.0-or-later as configured |
+| mpv | 0.41.0 | GPL-2.0-or-later on Android, LGPL-2.1-or-later in the trees |
+| FFmpeg | 9.0.1, with `--enable-version3`, and with `--enable-gpl` on Android only | GPL-3.0-or-later on Android, LGPL-3.0-or-later in the trees |
 | libass | 0.17.5 | ISC |
 | libplacebo | 7.360.1 | LGPL-2.1-or-later |
 | dav1d | 1.5.4 | BSD-2-Clause |
@@ -189,7 +193,10 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 | FriBidi | 1.0.16 | LGPL-2.1-or-later |
 | libunibreak | 7.0 | zlib |
 | Lua | 5.2.4 | MIT |
+| alsa-lib | 1.2.16.1, Linux trees only | LGPL-2.1-or-later |
+| zlib | 1.3.2, Windows tree only | zlib |
 | Android NDK | 29.0.14206865, API 21 | |
+| llvm-mingw | 20261020, Windows tree only | Apache-2.0 with LLVM exception (runtime) |
 
 FFmpeg has its decoders, demuxers and MediaCodec hardware decoding. It has no encoders or muxers, except the few that mpv's screenshots and cache dumps use.
 
@@ -197,8 +204,8 @@ The libraries in the published artifacts are stripped. Every release page also h
 
 ## Building the natives yourself
 
-You do not have to. Every release page has the native zips and the mpv and FFmpeg source code they were built from. To change a build flag or a version, follow [Building the natives](docs/building-natives.md). You need an NDK, meson, ninja and autotools, and between ten minutes and an hour per ABI.
+You do not have to. Every release page has the native zips, the static trees, and the mpv, FFmpeg and alsa-lib source code they were built from. To change a build flag or a version, follow [Building the natives](docs/building-natives.md). You need an NDK (Android) or an arm64 Mac with Xcode (the trees), meson, ninja and autotools, and between ten minutes and an hour per ABI or tree.
 
 ## License
 
-The Kotlin code, the JNI code and the build scripts are Apache-2.0. The native libraries keep their own licenses, and together they make the published artifacts GPL-3.0-or-later. `MPVLib.kt` and the JNI code come from [mpv-android](https://github.com/mpv-android/mpv-android), which is MIT. [NOTICE](NOTICE) lists everything.
+The Kotlin code, the JNI code and the build scripts are Apache-2.0. The native libraries keep their own licenses. Together they make the Android natives GPL-3.0-or-later and the desktop and Apple libraries LGPL-3.0-or-later. `MPVLib.kt` and the JNI code come from [mpv-android](https://github.com/mpv-android/mpv-android), which is MIT. [NOTICE](NOTICE) lists everything.

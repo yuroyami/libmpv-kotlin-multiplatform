@@ -20,10 +20,14 @@ settings:
         # The Kotlin wrapper, the JNI sources and the build scripts.
         - name: Apache License 2.0
           url: https://www.apache.org/licenses/LICENSE-2.0.txt
-        # The native libraries. mpv is GPL-2.0-or-later and its FFmpeg is built with
+        # The Android native libraries. mpv is GPL-2.0-or-later and its FFmpeg is built with
         # --enable-gpl --enable-version3, so the combination is GPL-3.0-or-later. NOTICE lists each library.
         - name: GNU General Public License v3.0 or later
           url: https://www.gnu.org/licenses/gpl-3.0.txt
+        # The static mpv trees of the desktop JVM and Apple libraries: mpv with -Dgpl=false and FFmpeg
+        # without --enable-gpl, so the combination is LGPL-3.0-or-later.
+        - name: GNU Lesser General Public License v3.0 or later
+          url: https://www.gnu.org/licenses/lgpl-3.0.txt
       # Maven Central rejects a bundle with no developer. Identity only, no address.
       developers:
         - id: yuroyami

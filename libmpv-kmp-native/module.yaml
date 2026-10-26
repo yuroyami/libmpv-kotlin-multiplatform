@@ -32,7 +32,7 @@ settings:
   publishing:
     pom:
       name: libmpv-kmp-native
-      description: "The native half of libmpv-kotlin-multiplatform: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for arm64-v8a, armeabi-v7a, x86 and x86_64 with 16 KB page alignment, and MpvNative, the raw binding. The native libraries are GPL."
+      description: "The native half of libmpv-kotlin-multiplatform: mpv, FFmpeg, libass, libplacebo, dav1d and their dependencies, prebuilt for the four Android ABIs with 16 KB page alignment, linked into a JNI library for macOS, Linux and Windows, and into the macOS and iOS klibs, with MpvNative, the raw binding. The Android native libraries are GPL, the others LGPL."
 
 # -Xexport-kdoc keeps the KDoc in the native klibs.
 settings@native:

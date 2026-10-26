@@ -29,10 +29,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
   - `Mpv.create(context)`, `attachSurface`, `detachSurface` and `attachedSurface` (Android only).
   - `addStreamProtocol` (Android and the JVM).
 - `screenshot` and `thumbnail` stay Android extensions, but their JVM class changes from `MpvExtrasKt` to `MpvBitmapsKt`. Java callers update the class name.
-- `libmpv-kmp-native` and `libmpv-kmp` now also build for `macosArm64`, `iosArm64` and `iosSimulatorArm64`. On the desktop JVM, the JNI library `mpv_kmp_jni` ships inside the `libmpv-kmp-native` jar for macOS arm64, Linux x64 and arm64, and Windows x64. No release carries mpv for these platforms yet: the static mpv builds do not exist, and the release refuses to publish without them. These platforms have no video output yet.
+- `libmpv-kmp-native` and `libmpv-kmp` now also build for `macosArm64`, `iosArm64` and `iosSimulatorArm64`. On the desktop JVM, the JNI library `mpv_kmp_jni` ships inside the `libmpv-kmp-native` jar for macOS arm64, Linux x64 and arm64, and Windows x64. These platforms have no video output yet.
 - Stream providers (`addStreamProtocol`, `MpvStreamProvider`, `MpvStream`) work on the desktop JVM.
 - A desktop app that shrinks its build with ProGuard keeps `MpvNative` and the stream types itself. `docs/getting-started.md` has the rules. The Android artifacts bring the same rules by themselves.
 - `sample-desktop` is a small JVM program that plays a file and prints each change of the playback state.
+- The JVM jar and the Apple klibs carry mpv, linked from static mpv trees that CI builds for `macos-arm64`, `ios-arm64`, `ios-simulator-arm64`, `linux-x64`, `linux-arm64` and `windows-x64`. Each release attaches the six trees as `libmpv-kmp-tree-<platform>.tar.gz`.
+- The trees are LGPL builds: mpv with `-Dgpl=false`, and FFmpeg without `--enable-gpl`. The desktop and Apple libraries are therefore LGPL-3.0-or-later, while the Android natives stay GPL-3.0-or-later. The POM names both licences. `docs/licensing.md` explains what each means for an app.
+- The Linux libraries play audio through a static alsa-lib 1.2.16.1, which reads the system's ALSA configuration and plugins. `BuildInfo.ALSA_LIB` names its version.
+- The Windows library is built with llvm-mingw and links a zlib 1.3.2 of its own. `BuildInfo.ZLIB` names its version. The DLL needs only Windows system DLLs and the Universal C Runtime.
+- The iOS trees have no Lua, so the Lua properties and the scripts are missing there.
 - `MpvNative.create` sets the C numeric locale before every `mpv_create`, not only once at `initAndroid`. mpv returns no core under any other numeric locale, and an app can change the locale at any time.
 
 ## [0.3.0] - 2026-09-26

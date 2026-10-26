@@ -1,6 +1,6 @@
 # libmpv-kotlin-multiplatform
 
-libmpv for Android as one Maven artifact: mpv, FFmpeg, libass, libplacebo and their dependencies, prebuilt for `arm64-v8a`, `armeabi-v7a`, `x86` and `x86_64`, behind a typed Kotlin API. The same API also builds for the desktop JVM, macOS and iOS, where no release carries mpv yet.
+libmpv for Android as one Maven artifact: mpv, FFmpeg, libass, libplacebo and their dependencies, prebuilt for `arm64-v8a`, `armeabi-v7a`, `x86` and `x86_64`, behind a typed Kotlin API. The same API also builds for the desktop JVM, macOS and iOS, with mpv linked in from LGPL static trees from the next release on.
 
 The artifacts are on Maven Central:
 
@@ -14,5 +14,5 @@ implementation("io.github.yuroyami:libmpv-kmp:0.4.0")
 - [The Compose canvas](compose-canvas.md): experimental; mpv drawn as a plain Compose image.
 - [Building the natives](building-natives.md): the scripts, the pins, the cache, and how CI runs them.
 - [Releasing](releasing.md): how a version reaches Maven Central.
-- [Licensing](licensing.md): what is Apache-2.0, what is GPL, and what that means for an app.
+- [Licensing](licensing.md): what is Apache-2.0, what is GPL, what is LGPL, and what that means for an app.
 - [API reference](https://yuroyami.github.io/libmpv-kotlin-multiplatform/api/): every public declaration.

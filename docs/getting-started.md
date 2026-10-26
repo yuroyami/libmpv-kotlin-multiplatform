@@ -71,7 +71,7 @@ The deprecated `MPVLib` follows the same order with its own calls; `sample/src/m
 
 `libmpv-kmp` and `libmpv-kmp-native` also build for the desktop JVM and for `macosArm64`, `iosArm64` and `iosSimulatorArm64`. In a Kotlin Multiplatform project, declare `libmpv-kmp` in `commonMain.dependencies`, or under `dependencies:` in a toolchain module.
 
-No release carries mpv for these platforms yet. The README's Platforms table says where that stands.
+From the next release on, the JVM jar and the Apple klibs carry mpv, linked from LGPL static trees ([Licensing](licensing.md)). Releases up to 0.3.0 carry none. The README's Platforms table says which platforms CI tests.
 
 Create a core with `Mpv.create()`, which takes no context. On Android, call `Mpv.create(context)` once first. Until then, `Mpv.create()` throws an `IllegalStateException` that says so.
 
@@ -95,6 +95,8 @@ The JNI library is `mpv_kmp_jni`. On the JVM, the library tries three places, in
 3. The copy in the `libmpv-kmp-native` jar, under `libmpv-kmp-native/<platform>/`. The library extracts it to a temporary folder first.
 
 The jar has a folder for `macos-arm64`, `linux-x64`, `linux-arm64` and `windows-x64`. On any other machine, an Intel Mac for example, the error names the platform and both overrides.
+
+On Linux, the library needs `libatomic.so.1`, `libz.so.1` and `libstdc++.so.6` from the system; a minimal Debian or Ubuntu install may need the `libatomic1` package. Audio goes through ALSA, with the system's ALSA configuration, so PulseAudio and PipeWire play through their ALSA plugins. On Windows, the library needs only system DLLs, and the Universal C Runtime that Windows 10 and newer include.
 
 ### A shrunk desktop release build
 

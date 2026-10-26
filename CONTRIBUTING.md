@@ -20,9 +20,9 @@ The repository builds with the Kotlin toolchain. The `./kotlin` script (`kotlin.
 
 - An Android SDK, in `ANDROID_HOME` or in `sdk.dir` in `local.properties`.
 - JDK 21 for the device tests only. They run in a separate Gradle build under `verification/`.
-- For the natives: NDK 29.0.14206865 in `ANDROID_NDK_HOME`, plus the tools in `docs/building-natives.md`.
+- For the natives: NDK 29.0.14206865 in `ANDROID_NDK_HOME`, plus the tools in `docs/building-natives.md`. The static trees of the other platforms build on an arm64 Mac with Xcode.
 - To work on the Kotlin side without compiling anything native, download a release's libraries into place: `.github/scripts/fetch-natives.sh v0.3.0`.
-- For the JVM and macOS targets on an arm64 Mac: `brew install mpv`. The build links Homebrew's mpv when no static mpv tree exists (dev mode, see `docs/building-natives.md`).
+- For the JVM and macOS targets on an arm64 Mac: the trees of a release, with `.github/scripts/fetch-natives.sh v<version> trees`, or `brew install mpv`. The build links Homebrew's mpv when no static mpv tree exists (dev mode, see `docs/building-natives.md`).
 
 `libmpv-kmp-native` and `libmpv-kmp` build for `android`, `jvm`, `macosArm64`, `iosArm64` and `iosSimulatorArm64`. The other modules are Android only. Pass `-p` to every build and test command, so a command builds only the platforms it needs. A Kotlin/Native build of all three Apple targets is the heaviest job in the repository; run it alone.
 
@@ -47,7 +47,7 @@ The commands you need most:
 
 Two tiers, selected by the paths that changed, never by confidence.
 
-**Tier 1, every change, a few minutes:** `scripts/check-gate.sh tier1`. The host tests, the build, the API dump and `BuildInfo` checks, the build-logic tests and the dash scan. Tier 1 covers Android only. For a change to common or desktop code, also run the JVM and macOS core tests above. CI runs them in its `desktop` job.
+**Tier 1, every change, a few minutes:** `scripts/check-gate.sh tier1`. The host tests, the build, the API dump and `BuildInfo` checks, the build-logic tests and the dash scan. Tier 1 covers Android only. For a change to common or desktop code, also run the JVM and macOS core tests above. CI runs them in its `desktop`, `linux` and `windows` jobs.
 
 **Tier 2, about an hour:** `scripts/check-gate.sh tier2`. Run it for any change under `buildscripts/`, `libmpv-kmp-native/native/`, the canvas C++ sources or `build-plugins/`, and for a change to `project.yaml`, a `module.yaml`, a `*.module-template.yaml` or `libs.versions.toml`. Tier 2 runs tier 1, then builds the arm64 natives, checks them, builds the release sample, and runs every module's device tests.
 
