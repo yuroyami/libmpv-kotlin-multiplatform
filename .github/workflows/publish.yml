@@ -1,14 +1,15 @@
 # Publishes every libmpv-kotlin-multiplatform library module to Maven Central (the Central Portal) with the Kotlin
 # toolchain: `./kotlin publish mavenCentral`. Started by hand.
 #
-# The Android libraries are NOT built here. They are downloaded from the GitHub release named by the
-# version, checksum verified, and checked by checkAndroidNatives before the natives jars are
-# assembled. Run "Release natives" for v<version> first.
+# No native library is compiled from source here. The Android libraries and the six static mpv
+# trees are downloaded from the GitHub release named by the version and checksum verified.
+# checkAndroidNatives checks the libraries before the natives jars are assembled, and checkTrees
+# checks the trees. Run "Release natives" for v<version> first.
 #
 # The job runs on an arm64 Mac, because the macOS JNI library and the Apple klibs build only there.
-# checkDesktopJni and checkNativeInterop refuse a release until every desktop platform and every
-# Apple target links a static mpv tree from buildscripts/prefix/<platform>. No such trees exist yet,
-# so this workflow refuses every version until they do.
+# The Linux and Windows JNI libraries link on the same Mac, from the trees. checkDesktopJni and
+# checkNativeInterop then refuse a release unless every desktop platform and every Apple target links
+# a tree from buildscripts/prefix/<platform>.
 #
 # By default the deployment waits on the Central Portal after validation (publishingMode manual in
 # library.module-template.yaml). Nothing in a deployment is public until a person presses Publish
@@ -25,7 +26,11 @@
 # Publishing from the maintainer's machine works the same way, with the same four values in the
 # KOTLIN_TOOLCHAIN_* variables of the last step:
 #   .github/scripts/fetch-natives.sh v<version>
+#   .github/scripts/fetch-natives.sh v<version> trees
+#   buildscripts/download-deps.sh --tools-only
+#   ./kotlin do crossToolchains
 #   ./kotlin do checkAndroidNatives
+#   ./kotlin do checkTrees
 #   ./kotlin do checkDesktopJni
 #   ./kotlin do checkNativeInterop
 #   ./kotlin publish mavenCentral -m <module> -m <module> ...
@@ -127,6 +132,27 @@ jobs:
           # `do` is a command of the kotlin script here, not the shell keyword.
           # shellcheck disable=SC1010
           ./kotlin do checkAndroidNatives
+
+      - name: Fetch the release's static mpv trees
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+        run: .github/scripts/fetch-natives.sh "v$VERSION" trees
+
+      - name: Check the trees
+        run: |
+          # shellcheck disable=SC1010
+          ./kotlin do checkTrees
+
+      # The Linux libraries link with the clang and sysroots of Kotlin/Native, the Windows library with llvm-mingw.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ hashFiles('libmpv-kmp.module-template.yaml') }}
+      - name: Fetch the cross toolchains
+        run: |
+          buildscripts/download-deps.sh --tools-only
+          # shellcheck disable=SC1010
+          ./kotlin do crossToolchains
 
       # Every desktop platform links a static tree, not Homebrew's mpv, and exports only its JNI functions.
       - name: Check the desktop JNI libraries

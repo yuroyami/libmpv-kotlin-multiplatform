@@ -1,6 +1,7 @@
-# Builds the four ABIs and attaches them, with their checksums and the GPL source offer, to the
-# GitHub release for the tag. Started by hand. publish.yml then assembles the natives jars from
-# exactly these files, so what is on Maven Central is what anyone can inspect on the release page.
+# Builds the four ABIs and the six static mpv trees and attaches them, with their checksums and the
+# source offer, to the GitHub release for the tag. Started by hand. publish.yml then assembles the
+# natives jars from the ABI zips and links the desktop and Apple artifacts from the trees, so what is
+# on Maven Central is what anyone can inspect on the release page.
 name: Release natives
 
 on:
@@ -50,9 +51,13 @@ jobs:
     needs: check-tag
     uses: ./.github/workflows/build-natives.yml
 
+  trees:
+    needs: check-tag
+    uses: ./.github/workflows/build-trees.yml
+
   publish:
     name: attach to the release
-    needs: natives
+    needs: [natives, trees]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
@@ -66,8 +71,13 @@ jobs:
           pattern: natives-*
           path: dist
           merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tree-*
+          path: dist
+          merge-multiple: true
 
-      # The GPL source offer: the exact mpv and FFmpeg sources, beside the binaries, for as long
+      # The source offer: the exact mpv, FFmpeg and alsa-lib sources, beside the binaries, for as long
       # as the binaries are distributed. Every other library is named with its tag and commit.
       - name: Fetch the source tarballs and write SOURCES.txt
         env:
@@ -77,7 +87,8 @@ jobs:
           . buildscripts/include/depinfo.sh
           curl -fL --retry 3 -o "dist/mpv-v${v_mpv}-source.tar.gz" "https://github.com/mpv-player/mpv/archive/refs/tags/v${v_mpv}.tar.gz"
           curl -fL --retry 3 -o "dist/ffmpeg-n${v_ffmpeg}-source.tar.gz" "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n${v_ffmpeg}.tar.gz"
-          ( cd dist && shasum -a 256 mpv-v${v_mpv}-source.tar.gz ffmpeg-n${v_ffmpeg}-source.tar.gz > sources.sha256 )
+          curl -fL --retry 3 -o "dist/alsa-lib-v${v_alsa}-source.tar.gz" "https://github.com/alsa-project/alsa-lib/archive/refs/tags/v${v_alsa}.tar.gz"
+          ( cd dist && shasum -a 256 mpv-v${v_mpv}-source.tar.gz ffmpeg-n${v_ffmpeg}-source.tar.gz alsa-lib-v${v_alsa}-source.tar.gz > sources.sha256 )
           {
             echo "libmpv-kotlin-multiplatform ${TAG}: the sources the native libraries were built from."
             echo
@@ -92,16 +103,21 @@ jobs:
             echo "FriBidi      v${v_fribidi}      https://github.com/fribidi/fribidi/tree/v${v_fribidi}"
             echo "libunibreak  ${v_unibreak}      https://github.com/adah1972/libunibreak/releases/tag/libunibreak_${v_unibreak//./_}"
             echo "Lua          ${v_lua}           https://www.lua.org/ftp/lua-${v_lua}.tar.gz"
+            echo "alsa-lib     v${v_alsa}         https://github.com/alsa-project/alsa-lib/tree/v${v_alsa}   (Linux trees)"
+            echo "zlib         v${v_zlib}         https://github.com/madler/zlib/tree/v${v_zlib}   (Windows tree)"
             echo "NDK          ${v_ndk}"
+            echo "llvm-mingw   ${tool_llvm_mingw}   https://github.com/mstorsjo/llvm-mingw/releases/tag/${tool_llvm_mingw}   (Windows tree)"
             echo
-            echo "Commit hashes per library are in BUILD-INFO.txt inside each zip."
+            echo "Commit hashes per library are in BUILD-INFO.txt inside each zip and each tree."
           } > dist/SOURCES.txt
           ls -l dist
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: dist/*.zip
+          subject-path: |
+            dist/*.zip
+            dist/libmpv-kmp-tree-*.tar.gz
 
       - name: Publish to the ${{ github.event.inputs.tag }} release
         uses: softprops/action-gh-release@v2
@@ -111,7 +127,7 @@ jobs:
           target_commitish: ${{ github.sha }}
           overwrite_files: false
           name: libmpv-kotlin-multiplatform ${{ github.event.inputs.tag }}
-          body: "Native libraries for libmpv-kotlin-multiplatform ${{ github.event.inputs.tag }}. The natives jars on Maven Central are assembled from exactly the libmpv-kmp-natives zips. Each libmpv-kmp-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. SOURCES.txt and the two tarballs are the source offer for the GPL binaries."
+          body: "Native libraries for libmpv-kotlin-multiplatform ${{ github.event.inputs.tag }}. The natives jars on Maven Central are assembled from exactly the libmpv-kmp-natives zips. Each libmpv-kmp-symbols zip holds the unstripped copies of the same libraries, with the same build ids, for crash symbolication. Each libmpv-kmp-tree tarball is the static LGPL mpv tree that the desktop and Apple artifacts link. SOURCES.txt and the source tarballs are the source offer for the binaries."
           fail_on_unmatched_files: true
           files: |
             dist/*.zip

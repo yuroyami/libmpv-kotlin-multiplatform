@@ -92,6 +92,11 @@ tasks:
       kotlinVersion: ${pluginSettings.kotlinVersion}
       prefixRoot: ${project.rootDir}/buildscripts/prefix
 
+  trees:
+    action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.checkTrees
+      platforms: [ macos-arm64, ios-arm64, ios-simulator-arm64, linux-x64, linux-arm64, windows-x64 ]
+      prefixRoot: ${project.rootDir}/buildscripts/prefix
+
   headers:
     action: !io.github.yuroyami.libmpv.buildplugins.mpvnatives.checkMpvHeaders
       vendored: ${module.rootDir}/native/include
@@ -126,9 +131,12 @@ commands:
   # The release gate: every platform has a library linked from a static tree.
   - name: checkDesktopJni
     performedBy: desktopJni
-  # The Kotlin/Native compilers and sysroots of the Linux and Windows trees, as env files for buildscripts/.
+  # The Kotlin/Native compilers and sysroots of the Linux trees, as env files for buildscripts/.
   - name: crossToolchains
     performedBy: crossToolchains
+  # The release gate of the trees a release carries: every file of each manifest, no shared library.
+  - name: checkTrees
+    performedBy: trees
   # The release gate of the Apple klibs: every def binds a static tree.
   - name: checkNativeInterop
     performedBy: nativeInterop

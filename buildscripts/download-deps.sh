@@ -1,5 +1,6 @@
 #!/bin/bash -e
-# Fetches every upstream source at the tag depinfo.sh pins, into buildscripts/deps/.
+# Fetches every upstream source at the tag depinfo.sh pins, into buildscripts/deps/. --tools-only fetches
+# the build toolchains alone.
 # Idempotent: a finished checkout at the pinned tag is left alone, and one at another tag is
 # fetched again. --refresh deletes deps/ first. Each checkout records its commit in
 # .libmpv-kmp-commit, for BUILD-INFO.txt, and its tag in .libmpv-kmp-tag.
@@ -36,6 +37,13 @@ fetch_tar () { # <dir> <url>
 	echo "$url" > "$dir/.libmpv-kmp-commit"
 }
 
+# Only a Mac builds the trees and links the Windows library, so only a Mac needs the Windows toolchain.
+if [ "$(uname -s)" = Darwin ]; then
+	fetch_tar llvm-mingw "https://github.com/mstorsjo/llvm-mingw/releases/download/$tool_llvm_mingw/llvm-mingw-$tool_llvm_mingw-ucrt-macos-universal.tar.xz"
+fi
+# --tools-only: the toolchains alone, for a job that links from release trees and compiles no source.
+[ "${1:-}" == "--tools-only" ] && { echo "tools ready"; exit 0; }
+
 clone mbedtls    https://github.com/Mbed-TLS/mbedtls.git             "v$v_mbedtls" --recurse-submodules --shallow-submodules
 clone dav1d      https://code.videolan.org/videolan/dav1d.git         "$v_dav1d"
 clone ffmpeg     https://github.com/FFmpeg/FFmpeg.git                 "n$v_ffmpeg"
@@ -49,10 +57,6 @@ clone libplacebo https://code.videolan.org/videolan/libplacebo.git    "v$v_libpl
 clone alsa       https://github.com/alsa-project/alsa-lib.git         "v$v_alsa"
 clone zlib       https://github.com/madler/zlib.git                   "v$v_zlib"
 clone mpv        https://github.com/mpv-player/mpv.git                "v$v_mpv"
-# Only a Mac builds the trees, so only a Mac needs the Windows toolchain.
-if [ "$(uname -s)" = Darwin ]; then
-	fetch_tar llvm-mingw "https://github.com/mstorsjo/llvm-mingw/releases/download/$tool_llvm_mingw/llvm-mingw-$tool_llvm_mingw-ucrt-macos-universal.tar.xz"
-fi
 
 cd ..
 echo "deps ready"

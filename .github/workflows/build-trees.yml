@@ -1,7 +1,10 @@
-# Builds the static LGPL mpv trees (buildall.sh --platform), one macOS job each, and uploads each as
-# the tree-<platform> artifact. The Linux trees cross compile with Kotlin/Native's clang and sysroots, the Windows tree with
-# llvm-mingw, which download-deps.sh fetches with the sources. A desktop platform also links its JNI library from the tree and
-# uploads it as jni-<platform>. Called by ci.yml on every push.
+# Builds the static LGPL mpv trees (buildall.sh --platform), one macOS job each. Each job uploads the
+# tree-<platform> artifact: libmpv-kmp-tree-<platform>.tar.gz and its .sha256. A desktop platform also
+# links its JNI library from the tree and uploads it as jni-<platform>. Called by ci.yml, and by
+# release-natives.yml, which attaches the tarballs to the release.
+#
+# The Linux trees cross compile with the clang and sysroots of Kotlin/Native. The Windows tree uses
+# llvm-mingw, which download-deps.sh fetches with the sources.
 #
 # Everything below mpv is cached under tree_id and the hash of the scripts, as build-natives.yml
 # caches the Android prefix. mpv itself is rebuilt on every run, a few minutes.
@@ -105,14 +108,15 @@ jobs:
       - name: Build mpv
         run: buildscripts/buildall.sh --platform ${{ matrix.platform }} -n mpv
 
-      # tar keeps the usr and local links inside the tree, which an artifact upload would follow.
+      # The release asset: archives, headers, BUILD-INFO.txt and MANIFEST.txt, in a tarball that keeps the
+      # usr and local links, which an artifact upload would follow.
       - name: Pack the tree
-        run: tar -czf tree-${{ matrix.platform }}.tar.gz -C buildscripts/prefix ${{ matrix.platform }}
+        run: buildscripts/package-tree.sh ${{ matrix.platform }}
 
       - uses: actions/upload-artifact@v4
         with:
           name: tree-${{ matrix.platform }}
-          path: tree-${{ matrix.platform }}.tar.gz
+          path: dist/libmpv-kmp-tree-${{ matrix.platform }}.tar.gz*
           if-no-files-found: error
           retention-days: 7
 

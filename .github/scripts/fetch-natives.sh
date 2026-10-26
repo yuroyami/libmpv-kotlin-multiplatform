@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Downloads the native library zips of a libmpv-kotlin-multiplatform GitHub release into libmpv-kmp-native/native-libs/,
-# verifying each against its .sha256. Default: all four ABIs.
+# verifying each against its .sha256. Default: all four ABIs. The word trees fetches the six static mpv trees
+# instead, into buildscripts/prefix/<platform>/; `./kotlin do checkTrees` then checks them.
 #
 #   .github/scripts/fetch-natives.sh v0.1.0
 #   .github/scripts/fetch-natives.sh v0.1.0 x86_64
+#   .github/scripts/fetch-natives.sh v0.1.0 trees
 #
 # LIBMPV_KMP_NATIVES_BASE overrides where the files come from; a file:// URL works, which is how
 # CI feeds its own artifacts through the same path as a release.
@@ -19,11 +21,30 @@ base="${LIBMPV_KMP_NATIVES_BASE:-https://github.com/yuroyami/libmpv-kotlin-multi
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
+# Downloads <asset> and its .sha256 into $work and checks one against the other.
+fetch () {
+  curl -fL --retry 3 -o "$work/$1" "$base/$1"
+  curl -fL --retry 3 -o "$work/$1.sha256" "$base/$1.sha256"
+  ( cd "$work" && shasum -a 256 -c "$1.sha256" )
+}
+
+if [ "${abis[*]}" = trees ]; then
+  for platform in macos-arm64 ios-arm64 ios-simulator-arm64 linux-x64 linux-arm64 windows-x64; do
+    asset="libmpv-kmp-tree-$platform.tar.gz"
+    fetch "$asset"
+    rm -rf "buildscripts/prefix/$platform"
+    mkdir -p buildscripts/prefix
+    # tar keeps the usr and local links of the flat layout.
+    tar -xzf "$work/$asset" -C buildscripts/prefix
+    test -f "buildscripts/prefix/$platform/MANIFEST.txt"
+    echo "fetched the $platform tree"
+  done
+  exit 0
+fi
+
 for abi in "${abis[@]}"; do
   asset="libmpv-kmp-natives-$abi.zip"
-  curl -fL --retry 3 -o "$work/$asset" "$base/$asset"
-  curl -fL --retry 3 -o "$work/$asset.sha256" "$base/$asset.sha256"
-  ( cd "$work" && shasum -a 256 -c "$asset.sha256" )
+  fetch "$asset"
   mkdir -p "$work/$abi.unpacked"
   unzip -q "$work/$asset" -d "$work/$abi.unpacked"
   rm -rf "libmpv-kmp-native/native-libs/$abi"

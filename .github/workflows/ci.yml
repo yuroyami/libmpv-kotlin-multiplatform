@@ -61,7 +61,7 @@ jobs:
           merge-multiple: true
       - run: |
           mkdir -p buildscripts/prefix
-          for tree in tree-macos-arm64 tree-ios-arm64 tree-ios-simulator-arm64; do tar -xzf "$tree.tar.gz" -C buildscripts/prefix; done
+          for p in macos-arm64 ios-arm64 ios-simulator-arm64; do tar -xzf "libmpv-kmp-tree-$p.tar.gz" -C buildscripts/prefix; done
       # mpv returns no core under a numeric locale other than C. The JVM takes the user's locale, so test a decimal comma.
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
         env:
