@@ -16,6 +16,7 @@ import org.jetbrains.amper.plugins.ExecutionAvoidance
 import org.jetbrains.amper.plugins.Input
 import org.jetbrains.amper.plugins.Output
 import org.jetbrains.amper.plugins.TaskAction
+import java.io.File
 import java.nio.file.Path
 
 private fun log(message: String) = println("[libmpv-kotlin-multiplatform] $message")
@@ -56,7 +57,9 @@ fun linkDesktopJni(
     // The Windows DLL links with the llvm-mingw that built its tree, so the C++ runtimes agree.
     val cross = when {
         target.isMac -> null
-        target.isWindows -> KonanCross.llvmMingw(prefixTree.toFile().resolve("../../deps/llvm-mingw").normalize())
+        target.isWindows -> KonanCross.llvmMingw(prefixTree.toFile().resolve("../../deps/llvm-mingw").normalize()).also {
+            check(File(it.clangxx).canExecute()) { "No llvm-mingw at ${it.toolchainBin}. Run buildscripts/download-deps.sh --tools-only first." }
+        }
         else -> KonanCross.resolve(target.konanTarget)
     }
     val jniMd = if (target.isMac) null else work.resolve("jni-platform").apply {
