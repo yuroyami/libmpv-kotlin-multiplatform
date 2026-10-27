@@ -28,8 +28,12 @@ mkdir -p "$work/$abi" dist
 cp "$src"/*.so "$work/$abi/"
 cp "$render"/libmpv_kmp_render.so "$work/$abi/"
 
+# settings.publishing.version, as buildscripts/package-tree.sh reads it for the trees.
+version="$(sed -n 's/^    version:[[:space:]]*//p' library.module-template.yaml | tr -d '[:space:]')"
+[ -n "$version" ] || { echo "::error::no version in library.module-template.yaml" >&2; exit 1; }
+
 {
-  echo "libmpv-kmp=$(grep '^VERSION=' gradle.properties | cut -d= -f2)"
+  echo "libmpv-kmp=$version"
   echo "abi=$abi"
   echo "ndk=$v_ndk"
   echo "api=21"
