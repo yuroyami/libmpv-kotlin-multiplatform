@@ -117,9 +117,9 @@ Each line is something that bit someone. Delete a line when it stops being true.
   Put `# shellcheck disable=SC1010` on the line before it.
 - `scripts/run-device-tests.sh` runs on every attached device, a phone included. Pin one with
   `ANDROID_SERIAL`; the script and the tier 2 gate refuse to start otherwise.
-- Everything above `MPVLib` is Phase 2 (`PLAN-2-typed-api.md`, `PLAN-3-surfaces.md`,
-  `PLAN-4-canvas.md`). Do not grow `MPVLib` into a player API; it is the compatibility surface
-  and the typed `Mpv` class is where new capability goes.
+- Do not grow `MPVLib` into a player API. It is the compatibility surface for 0.1.0, and the typed `Mpv`
+  class is where new capability goes.
+- Plans and open work live in GitHub issues, never in files in this tree.
 - Without a static tree in `buildscripts/prefix/<platform>`, the JVM and macOS builds link Homebrew's
   mpv (dev mode, `# dev` in the manifest). Homebrew has 0.40.0 while the pin is 0.41.0, so the catalog
   tests skip themselves there; they run fully only on Android or against a tree.
