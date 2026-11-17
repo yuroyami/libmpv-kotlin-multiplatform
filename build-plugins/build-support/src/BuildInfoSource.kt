@@ -39,6 +39,10 @@ object BuildInfoSource {
             |    public const val FRIBIDI: String = "${pin("fribidi")}"
             |    public const val LIBUNIBREAK: String = "${pin("unibreak")}"
             |    public const val LUA: String = "${pin("lua")}"
+            |    /** libxml2: FFmpeg's DASH demuxer, and fontconfig's configuration parser. */
+            |    public const val LIBXML2: String = "${pin("libxml2")}"
+            |    /** fontconfig, libass's font provider on Android and Linux. macOS and iOS use CoreText, Windows DirectWrite. */
+            |    public const val FONTCONFIG: String = "${pin("fontconfig")}"
             |    /** alsa-lib, linked into the Linux libraries only. */
             |    public const val ALSA_LIB: String = "${pin("alsa")}"
             |    /** zlib, built into the Windows library only. The other platforms link the system's. */

@@ -51,6 +51,8 @@ clone freetype2  https://gitlab.freedesktop.org/freetype/freetype.git "VER-${v_f
 clone fribidi    https://github.com/fribidi/fribidi.git               "v$v_fribidi"
 clone harfbuzz   https://github.com/harfbuzz/harfbuzz.git             "$v_harfbuzz"
 fetch_tar unibreak "https://github.com/adah1972/libunibreak/releases/download/libunibreak_${v_unibreak//./_}/libunibreak-${v_unibreak}.tar.gz"
+clone libxml2    https://gitlab.gnome.org/GNOME/libxml2.git           "v$v_libxml2"
+clone fontconfig https://gitlab.freedesktop.org/fontconfig/fontconfig.git "$v_fontconfig"
 clone libass     https://github.com/libass/libass.git                 "$v_libass"
 fetch_tar lua    "https://www.lua.org/ftp/lua-$v_lua.tar.gz"
 clone libplacebo https://code.videolan.org/videolan/libplacebo.git    "v$v_libplacebo" --recurse-submodules --shallow-submodules

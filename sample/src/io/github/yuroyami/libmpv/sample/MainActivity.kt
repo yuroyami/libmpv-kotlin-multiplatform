@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import io.github.yuroyami.libmpv.MPVLib
-import java.io.File
 
 /** Plays one URL through libmpv on a SurfaceView. Everything a consumer has to do is in this file. */
 class MainActivity : Activity(), SurfaceHolder.Callback {
@@ -43,9 +42,6 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
         // No window until a surface exists, or mpv aborts.
         MPVLib.setOptionString("force-window", "no")
         MPVLib.setOptionString("idle", "yes")
-        // mpv's TLS is Mbed TLS, which cannot see Android's trust store: hand it a CA bundle.
-        MPVLib.setOptionString("tls-verify", "yes")
-        MPVLib.setOptionString("tls-ca-file", installCaBundle().absolutePath)
         // 2. Start it.
         MPVLib.init()
     }
@@ -79,14 +75,6 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
     override fun onDestroy() {
         MPVLib.destroy()
         super.onDestroy()
-    }
-
-    private fun installCaBundle(): File {
-        val dest = File(filesDir, "cacert.pem")
-        if (!dest.exists()) {
-            assets.open("cacert.pem").use { input -> dest.outputStream().use { input.copyTo(it) } }
-        }
-        return dest
     }
 
     private companion object {

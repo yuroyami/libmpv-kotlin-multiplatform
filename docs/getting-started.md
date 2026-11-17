@@ -53,13 +53,22 @@ The deprecated `MPVLib` follows the same order with its own calls; `sample/src/m
 | `hwdec` | `auto` | MediaCodec when the codec allows it, software otherwise. |
 | `ao` | `audiotrack,opensles` | AudioTrack first, OpenSL ES as the fallback. |
 | `force-window` | `no` until a surface exists | mpv aborts if asked for a window it cannot create. |
-| `tls-verify`, `tls-ca-file` | `yes`, a PEM path | mpv checks no certificate by default, and Mbed TLS has no access to Android's trust store. |
 
-## Two things every app supplies
+## Certificates and fonts
 
-**A CA bundle for https.** mpv checks no https certificate unless `tls-verify=yes`, and Mbed TLS has no access to Android's trust store, so checking needs a bundle. Copy a PEM bundle (the sample ships curl's Mozilla bundle as `cacert.pem`) into `filesDir`, then set `tls-verify=yes` and `tls-ca-file` to its path before `initialize`. `MpvOptions(tlsCaFile = ...)` sets both. Without them, https URLs still play, with no certificate check.
+You do not supply either. Every core does both by itself, on every platform.
 
-**A subtitle font.** This libass has no system font provider. Put a TrueType font at `<config-dir>/subfont.ttf`, and start mpv with `config=yes` and `config-dir=<config-dir>`. mpv configures libass fonts at playback start, so the file has to exist before the first `loadfile`.
+**https certificates.** Every new core starts with `tls-verify=yes`, so an https stream with a bad certificate does not play. Mbed TLS, mpv's TLS library here, cannot read the platform's trust store, so the core gets the trusted certificate authorities as a PEM file in `tls-ca-file`:
+
+| Platform | The certificate authorities |
+|---|---|
+| Android | The app's own: its network security config, or the system store when it has none. Written to `noBackupFilesDir`. |
+| Desktop JVM | The JVM's default trust store (`cacerts`). Written to a temporary file that only your user can read. |
+| macOS, iOS | Mozilla's list, from curl, built into the library. `scripts/update-ca-bundle.sh` refreshes it before a release. |
+
+To trust other authorities, set `tls-ca-file` to your own PEM file before `initialize` (`MpvOptions(tlsCaFile = ...)`). To accept any server, set `tls-verify=no` (`MpvOptions(tlsVerify = false)`). An `mpv.conf` read at `initialize` wins over both. Warning: for an https URL with an IP address instead of a host name, only the certificate chain is checked, not the name. FFmpeg gives Mbed TLS no name for an IP address, so any certificate from a trusted authority passes. Use host names for https.
+
+**Subtitle fonts.** libass reads the system fonts: fontconfig on Android and Linux, CoreText on macOS and iOS, DirectWrite on Windows. A character that the subtitle's own font lacks comes from another system font that has it. On Android, `Mpv.create(context)` writes a `fonts.conf` that names `/system/fonts` and sets `FONTCONFIG_FILE` to it, unless your app set that variable first. The first file with subtitles builds fontconfig's cache in the app's cache folder, which takes a moment once.
 
 ## Reading state
 

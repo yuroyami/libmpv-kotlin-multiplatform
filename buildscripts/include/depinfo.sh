@@ -17,6 +17,10 @@ v_freetype=2.14.3
 v_fribidi=1.0.16
 v_unibreak=7.0
 v_lua=5.2.4
+# FFmpeg's DASH demuxer and fontconfig's config parser.
+v_libxml2=2.15.4
+# Android and Linux only: libass's system font provider there.
+v_fontconfig=2.18.3
 # Linux trees only (buildall.sh --platform linux-*): the audio output of mpv there.
 v_alsa=1.2.16.1
 # Windows tree only: llvm-mingw has no zlib, which FFmpeg and mpv link.
@@ -31,12 +35,15 @@ tool_llvm_mingw=20261020
 
 dep_mbedtls=()
 dep_dav1d=()
-dep_ffmpeg=(mbedtls dav1d)
+dep_libxml2=()
+dep_ffmpeg=(mbedtls dav1d libxml2)
 dep_freetype2=()
 dep_fribidi=()
 dep_harfbuzz=()
 dep_unibreak=()
-dep_libass=(freetype2 fribidi harfbuzz unibreak)
+dep_fontconfig=(freetype2 libxml2)
+# platforms.sh drops fontconfig for macOS, iOS and Windows, which have their own font provider.
+dep_libass=(freetype2 fribidi harfbuzz unibreak fontconfig)
 dep_lua=()
 dep_alsa=()
 dep_zlib=()
@@ -46,8 +53,8 @@ dep_jni=(mpv)
 
 ## The cache identity of everything below mpv. CI keys its prefix cache on this string, so a
 ## bump of any dependency invalidates it, and a bump of mpv alone does not.
-prefix_id="ndk${v_ndk}-ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}"
+prefix_id="ndk${v_ndk}-ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-libxml2${v_libxml2}-fontconfig${v_fontconfig}"
 
 ## The cache identity of everything below mpv in a static platform tree (buildall.sh --platform), as
 ## prefix_id is for Android: the pins and every build tool pin, without the NDK.
-tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-alsa${v_alsa}-zlib${v_zlib}-llvmmingw${tool_llvm_mingw}"
+tree_id="ffmpeg${v_ffmpeg}-libass${v_libass}-placebo${v_libplacebo}-dav1d${v_dav1d}-mbedtls${v_mbedtls}-harfbuzz${v_harfbuzz}-freetype${v_freetype}-fribidi${v_fribidi}-unibreak${v_unibreak}-lua${v_lua}-libxml2${v_libxml2}-fontconfig${v_fontconfig}-alsa${v_alsa}-zlib${v_zlib}-llvmmingw${tool_llvm_mingw}"

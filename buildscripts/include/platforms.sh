@@ -33,6 +33,8 @@ loadplatform () {
 		meson_system=darwin meson_subsystem=macos meson_cpu_family=aarch64 meson_cpu=aarch64
 		cxx_aim_flags=$aim_flags
 		link_flags=$aim_flags
+		# CoreText is the font provider here, not fontconfig.
+		dep_libass=(freetype2 fribidi harfbuzz unibreak)
 		;;
 	ios-arm64|ios-simulator-arm64)
 		local sdk min
@@ -52,6 +54,7 @@ loadplatform () {
 		link_flags=$aim_flags
 		# iOS has no system(), which Lua's os.execute needs.
 		dep_mpv=(ffmpeg libass libplacebo)
+		dep_libass=(freetype2 fribidi harfbuzz unibreak)
 		;;
 	linux-x64|linux-arm64)
 		export target_os=linux
@@ -97,8 +100,10 @@ loadplatform () {
 		meson_needs_wrapper=true
 		meson_windres=$mingw/x86_64-w64-mingw32-windres meson_dlltool=$mingw/x86_64-w64-mingw32-dlltool
 		# llvm-mingw has no zlib, so the tree builds it before FFmpeg and FreeType.
-		dep_ffmpeg=(zlib mbedtls dav1d)
+		dep_ffmpeg=(zlib mbedtls dav1d libxml2)
 		dep_freetype2=(zlib)
+		# DirectWrite is the font provider here, not fontconfig.
+		dep_libass=(freetype2 fribidi harfbuzz unibreak)
 		;;
 	*)
 		echo "Invalid or not yet supported platform: $1" >&2

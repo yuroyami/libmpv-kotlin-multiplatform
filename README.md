@@ -11,7 +11,7 @@ Prebuilt [mpv](https://mpv.io) for Android. One dependency gives you libmpv, FFm
 ## What you get
 
 - mpv 0.41.0 and FFmpeg 9.0.1, built for `arm64-v8a`, `armeabi-v7a`, `x86` and `x86_64`, aligned to 16 KB pages.
-- Subtitles through libass, AV1 through dav1d, https through Mbed TLS, scripts through Lua 5.2, and hardware decoding through MediaCodec.
+- Subtitles through libass with the system fonts, AV1 through dav1d, DASH through libxml2, https through Mbed TLS with certificate checks on, scripts through Lua 5.2, and hardware decoding through MediaCodec.
 - A Kotlin API with a type for every property, command and event. Errors come back as values, and events arrive as flows.
 - Three ways to show the video: an Android View that also works in XML layouts, Compose surfaces, and an experimental Compose canvas.
 - `Mpv` and the typed API in common Kotlin code, for Android, the desktop JVM, macOS and iOS.
@@ -160,10 +160,8 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 ## What your app has to add
 
 - The `INTERNET` permission, to play network streams. The library declares no permissions.
-- A CA bundle, to check https certificates. mpv starts with `tls-verify=no`, so https plays with no certificate check, and Mbed TLS cannot read Android's trust store. Ship a PEM bundle and pass its path with `MpvOptions(tlsCaFile = ...)`, which also turns `tls-verify` on.
-- A subtitle font. This libass has no system font provider, so it draws no subtitles until it finds a font. Put a TrueType font at `<config-dir>/subfont.ttf`, and start mpv with `config=yes` and `config-dir` set to that folder.
 
-[Getting started](docs/getting-started.md) explains each one, and the order of calls when you drive `Mpv` yourself.
+Nothing else. Every core checks https certificates against the certificate authorities the platform trusts, and libass reads the system fonts for subtitles. [Getting started](docs/getting-started.md) explains both, how to change them, and the order of calls when you drive `Mpv` yourself.
 
 ## Limits
 
@@ -174,6 +172,7 @@ The catalogs cover 399 properties and 71 commands. Anything missing from them st
 - The deprecated `MPVLib` allows one core per process. `Mpv` has no such limit.
 - Video shows on Android only for now. On the desktop JVM, macOS and iOS, start the core with `vo=null`: audio, properties, commands, events and the playback state work as on Android.
 - Stream providers (`addStreamProtocol`) work on Android and the desktop JVM, not on macOS or iOS.
+- For an https URL with an IP address instead of a host name, only the certificate chain is checked, not the name. FFmpeg gives Mbed TLS no name for an IP address.
 - On Linux, the JNI library needs `libatomic.so.1`, `libz.so.1` and `libstdc++.so.6` from the system. Most desktop distributions have them; on Debian and Ubuntu, a minimal install may need the `libatomic1` package. Audio goes through ALSA and reads the system's ALSA configuration and plugins, so PulseAudio and PipeWire work through their ALSA plugins.
 
 ## What is inside
@@ -193,6 +192,8 @@ The Android build is GPL. The static trees for the other platforms are LGPL buil
 | FriBidi | 1.0.16 | LGPL-2.1-or-later |
 | libunibreak | 7.0 | zlib |
 | Lua | 5.2.4 | MIT |
+| libxml2 | 2.15.4 | MIT |
+| fontconfig | 2.18.3, Android and Linux only | MIT |
 | alsa-lib | 1.2.16.1, Linux trees only | LGPL-2.1-or-later |
 | zlib | 1.3.2, Windows tree only | zlib |
 | Android NDK | 29.0.14206865, API 21 | |

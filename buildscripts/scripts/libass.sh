@@ -14,13 +14,22 @@ fi
 
 [ -f configure ] || ./autogen.sh
 
+# Android and Linux read the system fonts through fontconfig. macOS and iOS use CoreText, Windows
+# DirectWrite. Each platform must find its provider, so a missing one fails the build.
+case "$target_os" in
+	android|linux) provider=(--enable-fontconfig --disable-coretext --disable-directwrite) ;;
+	macos|ios*) provider=(--disable-fontconfig --enable-coretext --disable-directwrite) ;;
+	windows) provider=(--disable-fontconfig --disable-coretext --enable-directwrite) ;;
+esac
+
 mkdir -p _build$dir_suffix
 cd _build$dir_suffix
 
 ../configure \
 	--host=$host_triple --with-pic \
 	--enable-static --disable-shared \
-	--enable-libunibreak --disable-require-system-font-provider
+	--enable-libunibreak --enable-require-system-font-provider \
+	"${provider[@]}"
 
 make -j$cores
 make DESTDIR="$prefix_dir" install

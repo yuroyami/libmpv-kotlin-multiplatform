@@ -38,8 +38,8 @@ fi
   echo "libmpv-kmp=$(sed -n 's/^    version:[[:space:]]*//p' library.module-template.yaml | tr -d '[:space:]')"
   echo "platform=$platform"
   echo "licence=LGPL-3.0-or-later"
-  deps=(mpv ffmpeg libass libplacebo dav1d mbedtls harfbuzz freetype2 fribidi unibreak lua)
-  [[ "$platform" == linux-* ]] && deps+=(alsa)
+  deps=(mpv ffmpeg libass libplacebo dav1d mbedtls harfbuzz freetype2 fribidi unibreak lua libxml2)
+  [[ "$platform" == linux-* ]] && deps+=(fontconfig alsa)
   [ "$platform" == windows-x64 ] && deps+=(zlib)
   for dep in "${deps[@]}"; do
     ver_key="v_${dep/freetype2/freetype}"

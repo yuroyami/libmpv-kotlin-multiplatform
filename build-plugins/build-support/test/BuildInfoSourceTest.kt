@@ -20,6 +20,8 @@ class BuildInfoSourceTest {
         v_fribidi=1.0.16
         v_unibreak=7.0
         v_lua=5.2.4
+        v_libxml2=2.15.4
+        v_fontconfig=2.18.3
         v_alsa=1.2.16.1
         v_zlib=1.3.2
         dep_mpv=(ffmpeg libass lua libplacebo)
@@ -30,7 +32,7 @@ class BuildInfoSourceTest {
         val pins = BuildInfoSource.parsePins(depinfo)
         assertEquals("0.41.0", pins["mpv"])
         assertEquals("9.0.1", pins["ffmpeg"])
-        assertEquals(14, pins.size)
+        assertEquals(16, pins.size)
     }
 
     @Test
@@ -79,6 +81,10 @@ class BuildInfoSourceTest {
             |    public const val FRIBIDI: String = "1.0.16"
             |    public const val LIBUNIBREAK: String = "7.0"
             |    public const val LUA: String = "5.2.4"
+            |    /** libxml2: FFmpeg's DASH demuxer, and fontconfig's configuration parser. */
+            |    public const val LIBXML2: String = "2.15.4"
+            |    /** fontconfig, libass's font provider on Android and Linux. macOS and iOS use CoreText, Windows DirectWrite. */
+            |    public const val FONTCONFIG: String = "2.18.3"
             |    /** alsa-lib, linked into the Linux libraries only. */
             |    public const val ALSA_LIB: String = "1.2.16.1"
             |    /** zlib, built into the Windows library only. The other platforms link the system's. */

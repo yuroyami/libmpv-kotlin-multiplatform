@@ -2,6 +2,7 @@ public final class io/github/yuroyami/libmpv/BuildInfo {
 	public static final field ALSA_LIB Ljava/lang/String;
 	public static final field DAV1D Ljava/lang/String;
 	public static final field FFMPEG Ljava/lang/String;
+	public static final field FONTCONFIG Ljava/lang/String;
 	public static final field FREETYPE Ljava/lang/String;
 	public static final field FRIBIDI Ljava/lang/String;
 	public static final field HARFBUZZ Ljava/lang/String;
@@ -10,6 +11,7 @@ public final class io/github/yuroyami/libmpv/BuildInfo {
 	public static final field LIBMPV_KMP Ljava/lang/String;
 	public static final field LIBPLACEBO Ljava/lang/String;
 	public static final field LIBUNIBREAK Ljava/lang/String;
+	public static final field LIBXML2 Ljava/lang/String;
 	public static final field LUA Ljava/lang/String;
 	public static final field MBEDTLS Ljava/lang/String;
 	public static final field MIN_SDK I

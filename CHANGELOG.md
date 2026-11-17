@@ -38,6 +38,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The Linux libraries play audio through a static alsa-lib 1.2.16.1, which reads the system's ALSA configuration and plugins. `BuildInfo.ALSA_LIB` names its version.
 - The Windows library is built with llvm-mingw and links a zlib 1.3.2 of its own. `BuildInfo.ZLIB` names its version. The DLL needs only Windows system DLLs and the Universal C Runtime.
 - The iOS trees have no Lua, so the Lua properties and the scripts are missing there.
+- Every new core checks https certificates. `Mpv.create()` sets `tls-verify=yes` and `tls-ca-file` to a PEM file of the certificate authorities the platform trusts: the app's network security config on Android, the JVM's trust store on the desktop, and Mozilla's list (from curl, MPL-2.0) on macOS and iOS. A stream whose certificate fails now ends with an error instead of playing. Set `tls-verify=no` before `initialize`, or `MpvOptions(tlsVerify = false)`, to accept any server. `MpvOptions.tlsCaFile` now only names the file, and no longer turns the check on. (#19)
+- Subtitles use the system fonts with nothing from the app: libass reads them through fontconfig on Android and Linux, CoreText on macOS and iOS, and DirectWrite on Windows. On Android, `Mpv.create(context)` writes a `fonts.conf` for `/system/fonts` and sets `FONTCONFIG_FILE`, unless the app set it first. `MpvOptions.subFontProvider` now defaults to `Auto`, and `subfont.ttf` is no longer needed. (#7)
+- FFmpeg has the DASH demuxer, through libxml2 2.15.4. fontconfig 2.18.3 is in the Android and Linux builds. `BuildInfo.LIBXML2` and `BuildInfo.FONTCONFIG` name both versions.
+- The sample no longer ships `cacert.pem`.
 - `MpvNative.create` sets the C numeric locale before every `mpv_create`, not only once at `initAndroid`. mpv returns no core under any other numeric locale, and an app can change the locale at any time.
 
 ## [0.3.0] - 2026-09-26

@@ -103,6 +103,8 @@ jobs:
             echo "FriBidi      v${v_fribidi}      https://github.com/fribidi/fribidi/tree/v${v_fribidi}"
             echo "libunibreak  ${v_unibreak}      https://github.com/adah1972/libunibreak/releases/tag/libunibreak_${v_unibreak//./_}"
             echo "Lua          ${v_lua}           https://www.lua.org/ftp/lua-${v_lua}.tar.gz"
+            echo "libxml2      v${v_libxml2}      https://gitlab.gnome.org/GNOME/libxml2/-/tree/v${v_libxml2}"
+            echo "fontconfig   ${v_fontconfig}    https://gitlab.freedesktop.org/fontconfig/fontconfig/-/tree/${v_fontconfig}   (Android and Linux)"
             echo "alsa-lib     v${v_alsa}         https://github.com/alsa-project/alsa-lib/tree/v${v_alsa}   (Linux trees)"
             echo "zlib         v${v_zlib}         https://github.com/madler/zlib/tree/v${v_zlib}   (Windows tree)"
             echo "NDK          ${v_ndk}"

@@ -5,11 +5,17 @@ import android.view.Surface
 import io.github.yuroyami.libmpv.jni.MpvAndroidNative
 import io.github.yuroyami.libmpv.jni.MpvNativeApi
 
-/** A new core. Nothing runs until [Mpv.initialize]. The first call hands the JVM and the app's context to FFmpeg. */
+/**
+ * A new core. Nothing runs until [Mpv.initialize]. The first call hands the JVM and the app's context to FFmpeg,
+ * and points libass at the system fonts.
+ */
 @OptIn(MpvNativeApi::class)
 public fun Mpv.Companion.create(context: Context): Mpv {
     if (!AndroidPlatform.ready) {
-        MpvAndroidNative.initAndroid(context.applicationContext)
+        val app = context.applicationContext
+        AndroidPlatform.privateDir = app.noBackupFilesDir
+        AndroidFonts.install(app)
+        MpvAndroidNative.initAndroid(app)
         AndroidPlatform.ready = true
     }
     return create()

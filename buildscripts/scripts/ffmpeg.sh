@@ -46,7 +46,7 @@ if [ "$target_os" == "android" ]; then
 		# A build id ties each library to its unstripped copy in the symbols zip of a release.
 		--extra-ldflags="-L$prefix_dir/lib -Wl,--build-id=sha1"
 
-		--enable-{jni,mediacodec,mbedtls,libdav1d} --disable-vulkan
+		--enable-{jni,mediacodec,mbedtls,libdav1d,libxml2} --disable-vulkan
 		--disable-static --enable-shared --enable-{gpl,version3}
 		"${lean[@]}"
 	)
@@ -67,7 +67,7 @@ else
 
 		# Only what is asked for: a library found on this Mac by chance never reaches the tree.
 		--disable-autodetect --enable-zlib
-		--enable-{mbedtls,libdav1d} --disable-{vulkan,vaapi,vdpau}
+		--enable-{mbedtls,libdav1d,libxml2} --disable-{vulkan,vaapi,vdpau}
 		# LGPL: mbedtls is in FFmpeg's version3 list, so the result is LGPL-3.0-or-later.
 		--enable-static --disable-shared --enable-version3
 		"${lean[@]}"

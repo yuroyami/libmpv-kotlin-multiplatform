@@ -55,8 +55,20 @@ An application that ships it is bound by that licence.
   FriBidi       LGPL-2.1-or-later     https://github.com/fribidi/fribidi
   libunibreak   zlib                  https://github.com/adah1972/libunibreak
   Lua           MIT                   https://www.lua.org
+  libxml2       MIT                   https://gitlab.gnome.org/GNOME/libxml2
+  fontconfig    MIT                   https://www.freedesktop.org/wiki/Software/fontconfig/
   libc++        Apache-2.0 with LLVM exception, from the Android NDK
 
 The complete corresponding source of mpv and FFmpeg is attached to every
 libmpv-kotlin-multiplatform GitHub release beside the binaries, and every other project is
 reachable at the tag named in BUILD-INFO.txt inside each release zip.
+
+--------------------------------------------------------------------------------
+Mozilla's list of trusted certificate authorities
+--------------------------------------------------------------------------------
+
+libmpv-kmp/src@native/io/github/yuroyami/libmpv/MozillaCaBundle.kt holds the
+certificates of curl's cacert.pem (https://curl.se/docs/caextract.html), which
+curl extracts from Mozilla's NSS. The list is licensed under the Mozilla Public
+License, version 2.0 (https://www.mozilla.org/MPL/2.0/). The macOS and iOS klibs
+carry it.

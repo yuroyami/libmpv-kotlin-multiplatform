@@ -518,12 +518,23 @@ public class Mpv private constructor(
         /**
          * A new core. Nothing runs until [initialize]. On Android, create the first core with
          * `Mpv.create(context)`, which hands the app's context to FFmpeg first.
+         *
+         * The core checks https certificates: it starts with `tls-verify=yes` and `tls-ca-file` set to the
+         * certificate authorities the platform trusts. Set `tls-verify` to `no` before [initialize] to turn
+         * the check off, or set `tls-ca-file` to a PEM file of your own.
          */
         public fun create(): Mpv {
             requirePlatformReady()
             val h = MpvNative.create()
             check(h != 0L) { "mpv_create failed" }
-            return Mpv(h, ownsCore = true)
+            return Mpv(h, ownsCore = true).also { core ->
+                try {
+                    applyPlatformDefaults(core)
+                } catch (t: Throwable) {
+                    core.close()
+                    throw t
+                }
+            }
         }
 
         /** The libmpv client API version, major in the high 16 bits. */

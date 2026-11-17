@@ -8,7 +8,7 @@ The Kotlin sources, `BuildInfo`, the JNI sources under `libmpv-kmp-native/native
 
 ## Android: GPL-3.0-or-later
 
-The Android natives contain compiled mpv (GPL-2.0-or-later) and an FFmpeg configured with `--enable-gpl --enable-version3` (GPL-3.0-or-later), beside libass (ISC), libplacebo (LGPL-2.1-or-later), dav1d (BSD-2-Clause), Mbed TLS (Apache-2.0), HarfBuzz (MIT), FreeType (FTL), FriBidi (LGPL-2.1-or-later), libunibreak (zlib), Lua (MIT) and the NDK's libc++. The combination can only be redistributed under GPL-3.0-or-later.
+The Android natives contain compiled mpv (GPL-2.0-or-later) and an FFmpeg configured with `--enable-gpl --enable-version3` (GPL-3.0-or-later), beside libass (ISC), libplacebo (LGPL-2.1-or-later), dav1d (BSD-2-Clause), Mbed TLS (Apache-2.0), HarfBuzz (MIT), FreeType (FTL), FriBidi (LGPL-2.1-or-later), libunibreak (zlib), Lua (MIT), libxml2 (MIT), fontconfig (MIT) and the NDK's libc++. The combination can only be redistributed under GPL-3.0-or-later.
 
 For an app this means: shipping the Android natives makes the app subject to the GPL, and the app has to make its own source available under GPL-compatible terms. An LGPL build for Android is possible with the same switches as the other platforms, and is listed as future work.
 
@@ -18,7 +18,9 @@ The desktop JNI libraries (macOS, Linux and Windows) and the Apple klibs link a 
 
 - mpv is built with `-Dgpl=false`, which leaves out its GPL-only parts.
 - FFmpeg is built without `--enable-gpl`, and with `--enable-version3` because Mbed TLS needs it. That makes FFmpeg LGPL-3.0-or-later.
-- The other libraries are the ones of the Android build, without the NDK's libc++. The Linux trees add alsa-lib (LGPL-2.1-or-later). The Windows tree adds zlib (zlib licence) and the runtime of llvm-mingw (libc++ and libunwind under Apache-2.0 with the LLVM exception, the MinGW-w64 runtime and winpthreads under permissive licences).
+- The other libraries are the ones of the Android build, without the NDK's libc++. The Linux trees leave the NDK's libc++ out and add fontconfig (MIT) and alsa-lib (LGPL-2.1-or-later). The macOS and iOS trees leave fontconfig out, because CoreText is their font provider. The Windows tree adds zlib (zlib licence) and the runtime of llvm-mingw (libc++ and libunwind under Apache-2.0 with the LLVM exception, the MinGW-w64 runtime and winpthreads under permissive licences).
+
+- The macOS and iOS klibs also carry Mozilla's list of trusted certificate authorities, as curl publishes it, under MPL-2.0.
 
 The combination can be redistributed under LGPL-3.0-or-later. An app may keep its own code under any licence. Because the libraries are linked statically, the LGPL asks one thing more: the app must let its users relink it against a changed version of the library, for example by offering its object files.
 

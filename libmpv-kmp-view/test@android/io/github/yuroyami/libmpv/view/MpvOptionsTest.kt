@@ -21,7 +21,7 @@ class MpvOptionsTest {
                 "config" to "no", "vo" to "null", "gpu-context" to "android", "opengl-es" to "yes", "hwdec" to "auto",
                 "hwdec-codecs" to "h264,hevc,mpeg4,mpeg2video,vp8,vp9,av1", "ao" to "audiotrack,opensles", "profile" to "fast",
                 "video-sync" to "audio", "demuxer-max-bytes" to "67108864", "demuxer-max-back-bytes" to "67108864",
-                "sub-font-provider" to "none", "input-default-bindings" to "no", "keep-open" to "yes", "force-window" to "no", "idle" to "yes",
+                "sub-font-provider" to "auto", "input-default-bindings" to "no", "keep-open" to "yes", "force-window" to "no", "idle" to "yes",
             ),
             sink.set,
         )
@@ -40,7 +40,7 @@ class MpvOptionsTest {
         assertEquals("/k", sink.set["gpu-shader-cache-dir"])
         assertEquals("/k", sink.set["icc-cache-dir"])
         assertEquals("no", sink.set["hwdec"])
-        assertEquals("yes", sink.set["tls-verify"])
+        assertEquals(null, sink.set["tls-verify"], "the core verifies already")
         assertEquals("/ca.pem", sink.set["tls-ca-file"])
         assertEquals("ja,en", sink.set["alang"])
         assertEquals("en", sink.set["slang"])
@@ -48,6 +48,13 @@ class MpvOptionsTest {
         assertEquals("yes", sink.set["interpolation"])
         assertEquals("120.0", sink.set["display-fps-override"])
         assertEquals("null", sink.set["vo"], "extra wins over the field")
+    }
+
+    @Test
+    fun turningVerificationOffIsExplicit() {
+        val sink = Recorder()
+        MpvOptions(tlsVerify = false).applyTo(sink)
+        assertEquals("no", sink.set["tls-verify"])
     }
 
     /** A file started before the surface or the renderer exists must still open its video output. */

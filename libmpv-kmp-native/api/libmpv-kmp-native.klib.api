@@ -51,10 +51,14 @@ final object io.github.yuroyami.libmpv.jni/MpvNative { // io.github.yuroyami.lib
 }
 
 final object io.github.yuroyami.libmpv/BuildInfo { // io.github.yuroyami.libmpv/BuildInfo|null[0]
+    final const val ALSA_LIB // io.github.yuroyami.libmpv/BuildInfo.ALSA_LIB|{}ALSA_LIB[0]
+        final fun <get-ALSA_LIB>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.ALSA_LIB.<get-ALSA_LIB>|<get-ALSA_LIB>(){}[0]
     final const val DAV1D // io.github.yuroyami.libmpv/BuildInfo.DAV1D|{}DAV1D[0]
         final fun <get-DAV1D>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.DAV1D.<get-DAV1D>|<get-DAV1D>(){}[0]
     final const val FFMPEG // io.github.yuroyami.libmpv/BuildInfo.FFMPEG|{}FFMPEG[0]
         final fun <get-FFMPEG>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.FFMPEG.<get-FFMPEG>|<get-FFMPEG>(){}[0]
+    final const val FONTCONFIG // io.github.yuroyami.libmpv/BuildInfo.FONTCONFIG|{}FONTCONFIG[0]
+        final fun <get-FONTCONFIG>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.FONTCONFIG.<get-FONTCONFIG>|<get-FONTCONFIG>(){}[0]
     final const val FREETYPE // io.github.yuroyami.libmpv/BuildInfo.FREETYPE|{}FREETYPE[0]
         final fun <get-FREETYPE>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.FREETYPE.<get-FREETYPE>|<get-FREETYPE>(){}[0]
     final const val FRIBIDI // io.github.yuroyami.libmpv/BuildInfo.FRIBIDI|{}FRIBIDI[0]
@@ -69,6 +73,8 @@ final object io.github.yuroyami.libmpv/BuildInfo { // io.github.yuroyami.libmpv/
         final fun <get-LIBPLACEBO>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.LIBPLACEBO.<get-LIBPLACEBO>|<get-LIBPLACEBO>(){}[0]
     final const val LIBUNIBREAK // io.github.yuroyami.libmpv/BuildInfo.LIBUNIBREAK|{}LIBUNIBREAK[0]
         final fun <get-LIBUNIBREAK>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.LIBUNIBREAK.<get-LIBUNIBREAK>|<get-LIBUNIBREAK>(){}[0]
+    final const val LIBXML2 // io.github.yuroyami.libmpv/BuildInfo.LIBXML2|{}LIBXML2[0]
+        final fun <get-LIBXML2>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.LIBXML2.<get-LIBXML2>|<get-LIBXML2>(){}[0]
     final const val LUA // io.github.yuroyami.libmpv/BuildInfo.LUA|{}LUA[0]
         final fun <get-LUA>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.LUA.<get-LUA>|<get-LUA>(){}[0]
     final const val MBEDTLS // io.github.yuroyami.libmpv/BuildInfo.MBEDTLS|{}MBEDTLS[0]
@@ -79,6 +85,8 @@ final object io.github.yuroyami.libmpv/BuildInfo { // io.github.yuroyami.libmpv/
         final fun <get-MPV>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.MPV.<get-MPV>|<get-MPV>(){}[0]
     final const val NDK // io.github.yuroyami.libmpv/BuildInfo.NDK|{}NDK[0]
         final fun <get-NDK>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.NDK.<get-NDK>|<get-NDK>(){}[0]
+    final const val ZLIB // io.github.yuroyami.libmpv/BuildInfo.ZLIB|{}ZLIB[0]
+        final fun <get-ZLIB>(): kotlin/String // io.github.yuroyami.libmpv/BuildInfo.ZLIB.<get-ZLIB>|<get-ZLIB>(){}[0]
 
     final val ABIS // io.github.yuroyami.libmpv/BuildInfo.ABIS|{}ABIS[0]
         final fun <get-ABIS>(): kotlin.collections/List<kotlin/String> // io.github.yuroyami.libmpv/BuildInfo.ABIS.<get-ABIS>|<get-ABIS>(){}[0]

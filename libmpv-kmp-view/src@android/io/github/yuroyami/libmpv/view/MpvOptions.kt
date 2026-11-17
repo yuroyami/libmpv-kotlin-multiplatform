@@ -13,7 +13,7 @@ import java.io.File
  * A field left at its default is not sent, so an `mpv.conf` in [configDir] still decides it.
  */
 public data class MpvOptions(
-    /** `config-dir`. When set, mpv reads `mpv.conf`, `input.conf` and `subfont.ttf` there and starts with `config=yes`. */
+    /** `config-dir`. When set, mpv reads `mpv.conf` and `input.conf` there and starts with `config=yes`. */
     val configDir: File? = null,
     /** `gpu-shader-cache-dir` and `icc-cache-dir`. Compiled shaders survive restarts; first play is faster with it. */
     val cacheDir: File? = null,
@@ -38,9 +38,11 @@ public data class MpvOptions(
     /** `interpolation`. Motion interpolation; only meaningful with a `display-*` sync mode. */
     val interpolation: Boolean = false,
     /**
-     * `tls-ca-file`, sent with `tls-verify=yes`. Null keeps mpv's default, `tls-verify=no`, so https plays with no
-     * certificate check. Checking needs this PEM bundle: Mbed TLS cannot see Android's trust store.
+     * `tls-verify`. Every core checks https certificates from the start, against the certificate authorities the
+     * app trusts (its network security config). False turns the check off, so any https server is accepted.
      */
+    val tlsVerify: Boolean = true,
+    /** `tls-ca-file`. A PEM file of certificate authorities to trust instead of the app's. Null keeps the app's. */
     val tlsCaFile: File? = null,
     /** `alang`. Preferred audio languages, first match wins. */
     val audioLanguages: List<String> = emptyList(),
@@ -50,8 +52,8 @@ public data class MpvOptions(
     val demuxerMaxBytes: Long = 64L * 1024 * 1024,
     /** `deband`. Cheap on the GPU and hides banding in dark gradients. */
     val deband: Boolean = false,
-    /** `sub-font-provider`. This libass has no system provider; `None` plus a `subfont.ttf` in [configDir] is the working setup. */
-    val subFontProvider: SubFontProvider = SubFontProvider.None,
+    /** `sub-font-provider`. `Auto` reads the system fonts through fontconfig. `None` uses only the fonts a file brings. */
+    val subFontProvider: SubFontProvider = SubFontProvider.Auto,
     /** `input-default-bindings`. Off: an app draws its own controls. */
     val inputDefaultBindings: Boolean = false,
     /** `keep-open`. `Yes` holds the last frame at the end instead of going idle, which is what a player screen wants. */
@@ -87,7 +89,8 @@ public data class MpvOptions(
         sink.option("video-sync", videoSync.mpvName)
         displayFps?.let { sink.option("display-fps-override", it.toString()) }
         if (interpolation) sink.option("interpolation", "yes")
-        tlsCaFile?.let { sink.option("tls-verify", "yes"); sink.option("tls-ca-file", it.absolutePath) }
+        if (!tlsVerify) sink.option("tls-verify", "no")
+        tlsCaFile?.let { sink.option("tls-ca-file", it.absolutePath) }
         if (audioLanguages.isNotEmpty()) sink.option("alang", audioLanguages.joinToString(","))
         if (subtitleLanguages.isNotEmpty()) sink.option("slang", subtitleLanguages.joinToString(","))
         sink.option("demuxer-max-bytes", demuxerMaxBytes.toString())

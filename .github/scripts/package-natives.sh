@@ -37,7 +37,7 @@ version="$(sed -n 's/^    version:[[:space:]]*//p' library.module-template.yaml 
   echo "abi=$abi"
   echo "ndk=$v_ndk"
   echo "api=21"
-  for dep in mpv ffmpeg libass libplacebo dav1d mbedtls harfbuzz freetype2 fribidi unibreak lua; do
+  for dep in mpv ffmpeg libass libplacebo dav1d mbedtls harfbuzz freetype2 fribidi unibreak lua libxml2 fontconfig; do
     ver_key="v_${dep/freetype2/freetype}"
     commit="$(cat "buildscripts/deps/$dep/.libmpv-kmp-commit" 2>/dev/null || echo unknown)"
     echo "$dep=${!ver_key} $commit"

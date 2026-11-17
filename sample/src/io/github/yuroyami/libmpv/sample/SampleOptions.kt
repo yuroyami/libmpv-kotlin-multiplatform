@@ -3,7 +3,6 @@ package io.github.yuroyami.libmpv.sample
 import android.content.Context
 import io.github.yuroyami.libmpv.view.MpvOptions
 import io.github.yuroyami.libmpv.view.SurfaceType
-import java.io.File
 
 /** The options every sample screen starts from. Only the surface type differs between them. */
 object SampleOptions {
@@ -13,15 +12,5 @@ object SampleOptions {
         configDir = context.filesDir,
         cacheDir = context.cacheDir,
         surfaceType = surfaceType,
-        // mpv's TLS is Mbed TLS, which cannot see Android's trust store.
-        tlsCaFile = installCaBundle(context),
     )
-
-    private fun installCaBundle(context: Context): File {
-        val dest = File(context.filesDir, "cacert.pem")
-        if (!dest.exists()) {
-            context.assets.open("cacert.pem").use { input -> dest.outputStream().use { input.copyTo(it) } }
-        }
-        return dest
-    }
 }
