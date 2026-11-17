@@ -159,6 +159,11 @@ Each line is something that bit someone. Delete a line when it stops being true.
   fontconfig reads the variable at its first use, so it has to happen before any core plays subtitles.
 - FFmpeg's TLS uses `MBEDTLS_SSL_VERIFY_OPTIONAL` and checks the result after the handshake, and sets no host name for an
   IP address. An https URL with an IP address is therefore checked for its chain only.
+- fontconfig needs Meson 1.11 or newer. Ubuntu's apt Meson is older, so the natives job installs Meson with pipx.
+- libxml2's Windows headers declare every function dllimport unless `LIBXML_STATIC` is defined, and its `.pc`
+  does not define it. `libxml2.sh` adds the flag to the `.pc` for the Windows tree.
+- `mbedtls.sh` builds the library alone and copies what `make install` would. The sample programs need test
+  headers that a Python jinja2 script generates, and the macOS runners have no jinja2.
 - `MozillaCaBundle.kt` is generated. Run `scripts/update-ca-bundle.sh` before a release; never edit the file.
 - `MpvPlaybackState.Status.Ended` needs `keep-open=yes`: `eof-reached` is true only while the file stays loaded.
   With `keep-open=no` the state falls back to Idle.

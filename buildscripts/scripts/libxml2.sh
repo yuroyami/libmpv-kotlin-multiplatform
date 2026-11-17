@@ -25,3 +25,9 @@ meson setup $build --cross-file "$prefix_dir"/crossfile.txt \
 
 ninja -C $build -j$cores
 DESTDIR="$prefix_dir" ninja -C $build install
+
+# Without LIBXML_STATIC the Windows headers declare every function dllimport, and a static link fails.
+# The .pc names no such flag, so FFmpeg gets it here.
+if [ "$target_os" == "windows" ]; then
+	${SED:-sed} '/^Cflags:/ s|$| -DLIBXML_STATIC|' "$prefix_dir/lib/pkgconfig/libxml-2.0.pc" -i
+fi
