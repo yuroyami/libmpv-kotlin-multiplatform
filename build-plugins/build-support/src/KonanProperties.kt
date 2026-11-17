@@ -13,15 +13,23 @@ class KonanProperties(private val properties: Properties) {
     /** The LLVM package that a [host] such as `macos_arm64` compiles with. */
     fun llvm(host: String): String = properties.getProperty("llvm.$host.user") ?: error("konan.properties has no llvm.$host.user")
 
-    fun downloadUrl(packageName: String): String = "${properties.getProperty("dependenciesUrl").trimEnd('/')}/$packageName.tar.gz"
+    /**
+     * Where [packageName] downloads from. A package with a `<name>.default=remote:public:<folder>` line, LLVM for
+     * example, lives in that folder under `dependenciesUrl`; the others live in `dependenciesUrl` itself.
+     */
+    fun downloadUrl(packageName: String): String {
+        val base = properties.getProperty("dependenciesUrl").trimEnd('/')
+        val folder = properties.getProperty("$packageName.default")?.removePrefix("remote:public:")?.trim('/')
+        return if (folder.isNullOrEmpty()) "$base/$packageName.tar.gz" else "$base/$folder/$packageName.tar.gz"
+    }
 
     private fun resolve(token: String): String =
         if (token.startsWith("$")) resolve(properties.getProperty(token.drop(1)) ?: error("konan.properties has no ${token.drop(1)}")) else token
 
     companion object {
-        /** The archive of the Kotlin/Native [kotlinVersion] for [host], such as `macos-aarch64`. */
+        /** The archive of the Kotlin/Native [kotlinVersion] for [host], such as `macos-aarch64`, from the Kotlin release on GitHub. */
         fun distributionUrl(kotlinVersion: String, host: String): String =
-            "https://download.jetbrains.com/kotlin/native/builds/releases/$kotlinVersion/$host/kotlin-native-prebuilt-$host-$kotlinVersion.tar.gz"
+            "https://github.com/JetBrains/kotlin/releases/download/v$kotlinVersion/kotlin-native-prebuilt-$host-$kotlinVersion.tar.gz"
 
         fun parse(text: String): KonanProperties = KonanProperties(Properties().apply { load(StringReader(text)) })
 

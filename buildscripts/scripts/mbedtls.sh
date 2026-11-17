@@ -23,5 +23,9 @@ fi
 win=()
 [ "$target_os" == "windows" ] && win=(WINDOWS_BUILD=1)
 
-make -j$cores "${win[@]}" no_test
-make "${win[@]}" DESTDIR="$prefix_dir" install
+# The library only. The sample programs need generated test headers, and their generator needs Python's jinja2.
+make -j$cores "${win[@]}" lib
+# What `make install` copies, without the programs it would build first.
+mkdir -p "$prefix_dir/include" "$prefix_dir/lib"
+cp -rp include/mbedtls include/psa "$prefix_dir/include/"
+cp -RP library/libmbedtls.* library/libmbedx509.* library/libmbedcrypto.* "$prefix_dir/lib/"

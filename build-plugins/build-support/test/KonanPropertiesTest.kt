@@ -13,6 +13,7 @@ class KonanPropertiesTest {
         dependencies.macos_arm64-mingw_x64 = ${'$'}toolchainDependency.mingw_x64
         llvm.macos_arm64.dev=llvm-21-aarch64-macos-dev-97
         llvm.macos_arm64.user=llvm-21-aarch64-macos-essentials-97
+        llvm-21-aarch64-macos-essentials-97.default=remote:public:resources/llvm/21-aarch64-macos
     """.trimIndent()
 
     @Test
@@ -30,6 +31,15 @@ class KonanPropertiesTest {
         )
     }
 
+    /** LLVM lives in a folder of its own, named by its `.default` line. A download from the root answers 404. */
+    @Test
+    fun aPackageWithAFolderDownloadsFromThatFolder() {
+        assertEquals(
+            "https://download.jetbrains.com/kotlin/native/resources/llvm/21-aarch64-macos/llvm-21-aarch64-macos-essentials-97.tar.gz",
+            KonanProperties.parse(properties).downloadUrl("llvm-21-aarch64-macos-essentials-97"),
+        )
+    }
+
     @Test
     fun theHostLlvmIsTheUserPackage() {
         assertEquals("llvm-21-aarch64-macos-essentials-97", KonanProperties.parse(properties).llvm("macos_arm64"))
@@ -38,7 +48,7 @@ class KonanPropertiesTest {
     @Test
     fun theDistributionUrlNamesTheVersionTwice() {
         assertEquals(
-            "https://download.jetbrains.com/kotlin/native/builds/releases/2.4.21/macos-aarch64/kotlin-native-prebuilt-macos-aarch64-2.4.21.tar.gz",
+            "https://github.com/JetBrains/kotlin/releases/download/v2.4.21/kotlin-native-prebuilt-macos-aarch64-2.4.21.tar.gz",
             KonanProperties.distributionUrl("2.4.21", "macos-aarch64"),
         )
     }

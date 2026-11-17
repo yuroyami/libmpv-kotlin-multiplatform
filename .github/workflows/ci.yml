@@ -43,9 +43,9 @@ jobs:
 
   desktop:
     name: JVM, macOS and iOS core on macOS
-    needs: trees
+    needs: [trees, natives]
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v4
@@ -75,6 +75,26 @@ jobs:
           # shellcheck disable=SC1010
           ./kotlin do checkNativeInterop
       - run: ./kotlin check klibAbi -m libmpv-kmp-native -m libmpv-kmp
+      # The artifacts for the emulator jobs. A publish builds every platform, and only a Mac runs the Apple
+      # cinterop, so the Linux emulator jobs take the staged copy from here.
+      - uses: actions/download-artifact@v4
+        with:
+          name: natives-x86_64
+          path: dist
+      - run: LIBMPV_KMP_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local x86_64
+      - name: Stage the artifacts for the device tests
+        env:
+          LIBMPV_KMP_ABIS: x86_64
+        run: |
+          command -v gpg > /dev/null || brew install gnupg
+          scripts/stage-verification-maven.sh libmpv-kmp-native libmpv-kmp-android-natives libmpv-kmp \
+            libmpv-kmp-view libmpv-kmp-compose libmpv-kmp-canvas libmpv-kmp-canvas-android-natives
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verification-maven
+          path: build/verification-maven
+          if-no-files-found: error
+          retention-days: 7
 
   linux:
     name: JVM core on Linux
@@ -96,7 +116,8 @@ jobs:
           name: jni-linux-x64
           path: jni
       # The configuration files of the system alsa-lib. LinuxAudioTest replaces the top file with ALSA_CONFIG_PATH.
-      - run: sudo apt-get update && sudo apt-get install -y libasound2t64
+      # fontconfig's system configuration and DejaVu, which has Latin and Arabic, for SubtitleFontTest.
+      - run: sudo apt-get update && sudo apt-get install -y libasound2t64 fontconfig-config fonts-dejavu-core
       - run: ./kotlin test -m libmpv-kmp-native -m libmpv-kmp -p jvm
         env:
           JAVA_TOOL_OPTIONS: -Dlibmpv-kmp.jni.path=${{ github.workspace }}/jni/libmpv_kmp_jni.so
@@ -202,7 +223,7 @@ jobs:
 
   emulator:
     name: device tests on API ${{ matrix.api }}
-    needs: natives
+    needs: desktop
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     strategy:
@@ -232,17 +253,17 @@ jobs:
           restore-keys: |
             kotlin-emulator-
             kotlin-packaging-
+      # Staged by the macOS job: a publish runs the Apple cinterop, which a Linux host cannot.
       - uses: actions/download-artifact@v4
         with:
-          name: natives-x86_64
-          path: dist
-      - run: LIBMPV_KMP_NATIVES_BASE="file://$PWD/dist" .github/scripts/fetch-natives.sh local x86_64
+          name: verification-maven
+          path: build/verification-maven
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      # The script stages the libraries of this checkout, then runs the device tests on the emulator.
+      # The script runs the device tests on the emulator against the staged artifacts.
       - name: Run the device tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -252,7 +273,7 @@ jobs:
           disable-animations: true
           script: |
             adb logcat -c
-            LIBMPV_KMP_ABIS=x86_64 scripts/run-device-tests.sh ${{ matrix.tasks }} || echo "TESTS_FAILED" > tests-failed
+            scripts/run-device-tests.sh --no-stage ${{ matrix.tasks }} || echo "TESTS_FAILED" > tests-failed
             adb logcat -d -s libmpv-kmp:I mpv:W > canvas-measurements.txt
             adb logcat -d -b crash > crash.txt
             grep -c CANVAS-MEASUREMENT canvas-measurements.txt || true
