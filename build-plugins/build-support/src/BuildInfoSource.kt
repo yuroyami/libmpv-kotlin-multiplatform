@@ -20,7 +20,7 @@ object BuildInfoSource {
             |package io.github.yuroyami.libmpv
             |
             |/**
-            | * What this build of libmpv-kotlin-multiplatform contains. Readable before [MPVLib.create]. Once the core is
+            | * What this build of libmpv-kotlin-multiplatform contains. Readable before any core exists. Once a core is
             | * initialised, mpv reports the same through its `mpv-version` and `ffmpeg-version` properties.
             | */
             |public object BuildInfo {

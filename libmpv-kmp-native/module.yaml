@@ -69,6 +69,16 @@ test-settings@iosSimulatorArm64:
     freeCompilerArgs: [ -module-name=libmpv_kmp_native_test, -Xshort-module-name=libmpv_kmp_native_test ]
 
 plugins:
+  dokka:
+    enabled: true
+    moduleName: libmpv-kmp-native
+    includes: [ Module.md ]
+    # Apple folders need their klibs, which the Linux docs job cannot build, so only the JVM and Android ones.
+    platformSourceDirs: [ src@jvmAndAndroid, src@android ]
+    customStyleSheets: [ ../docs/api-theme/kite.css ]
+    templatesDir: ../dokka-templates
+    footerMessage: Apache-2.0 wrapper, GPL and LGPL native libraries.
+    sourceLinkUrl: https://github.com/yuroyami/libmpv-kotlin-multiplatform/blob/main/libmpv-kmp-native/src
   # The desktop JNI library in the JVM jar, linked from buildscripts/prefix/<platform>. See build-plugins/mpv-natives.
   mpv-natives: enabled
   abi-check:

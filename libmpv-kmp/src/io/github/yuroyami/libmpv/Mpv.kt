@@ -336,17 +336,17 @@ public class Mpv private constructor(
     }
 
     /**
-     * For [MPVLib]: [listener] sees every event synchronously on the event thread, in mpv's order,
+     * For `MPVLib`: [listener] sees every event synchronously on the event thread, in mpv's order,
      * before the flows do. An exception from it is logged.
      */
     internal fun addEventListener(listener: (MpvEvent) -> Unit) {
         listeners.update { it + listener }
     }
 
-    /** For [MPVLib]: observes [name] in [format] under reply id 0, which only the event listeners see. Returns mpv's code. */
+    /** For `MPVLib`: observes [name] in [format] under reply id 0, which only the event listeners see. Returns mpv's code. */
     internal fun observeForListeners(name: String, format: Int): Int = gate.call { MpvNative.observeProperty(handle, 0, name, format) }
 
-    /** For [MPVLib]: log lines at `terminal-default`, which follows `msg-level`, as 0.1.0 asked. */
+    /** For `MPVLib`: log lines at `terminal-default`, which follows `msg-level`, as 0.1.0 asked. */
     internal fun requestTerminalDefaultLogs(): MpvResult<Unit> =
         gate.call { unitResult(MpvNative.requestLogMessages(handle, "terminal-default")) }
 

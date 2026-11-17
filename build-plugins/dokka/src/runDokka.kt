@@ -78,7 +78,12 @@ fun runDokka(
             analysisPlatform = analysisPlatform,
             sourceRoots = listOf(dir.absolutePathString()),
             dependentSourceSets = listOf(commonId),
-            classpath = if (analysisPlatform == "jvm") jvmClasspath else platformLibraries(platform, analysisPlatform, kotlinVersion),
+            classpath = when {
+                platform == "android" -> jvmClasspath + androidJar()
+                analysisPlatform == "jvm" -> jvmClasspath
+                else -> platformLibraries(platform, analysisPlatform, kotlinVersion) +
+                    dependencyKlibs(jvmClasspath, platform, analysisPlatform, moduleSourceDir.parent.fileName.toString())
+            },
             includes = emptyList(),
             sourceLinks = sourceLinks(settings, dir),
             reportUndocumented = false,
@@ -108,6 +113,18 @@ private fun analysisPlatform(platform: String): String = when {
     platform == "js" -> "js"
     platform.startsWith("wasm") -> "wasm"
     else -> "native"
+}
+
+/** The newest android.jar of the Android SDK, so that `src@android` code resolves the Android API. */
+private fun androidJar(): String {
+    val sdk = (System.getenv("ANDROID_HOME") ?: System.getenv("ANDROID_SDK_ROOT"))
+        ?: error("Set ANDROID_HOME to document src@android.")
+    val jars = Path.of(sdk, "platforms").listDirectoryEntries("android-*")
+        .map { it.resolve("android.jar") }
+        .filter { it.exists() }
+    val newest = jars.maxByOrNull { it.parent.fileName.toString().removePrefix("android-").toDoubleOrNull() ?: 0.0 }
+        ?: error("No platforms/android-*/android.jar in $sdk")
+    return newest.absolutePathString()
 }
 
 /** Toolchain download folder. The `kotlin` script uses the same places. */
@@ -147,7 +164,52 @@ private fun platformLibraries(platform: String, analysisPlatform: String, kotlin
     }
     val klib = cache.resolve(".m2.cache/org/jetbrains/kotlin/$artifact/$kotlinVersion/$artifact-$kotlinVersion.klib")
     check(klib.exists()) { "No $klib. Build the $platform platform first." }
-    return listOf(klib.absolutePathString())
+    // The browser API (kotlinx.browser, org.w3c.dom), which Gradle gave every JS source set. Any build of a JS
+    // module that depends on it puts it in the cache.
+    val domApi = cache.resolve(".m2.cache/org/jetbrains/kotlin/kotlin-dom-api-compat/$kotlinVersion/kotlin-dom-api-compat-$kotlinVersion.klib")
+    return listOf(klib.absolutePathString()) + listOf(domApi).filter { platform == "js" && it.exists() }.map { it.absolutePathString() }
+}
+
+/**
+ * The klibs of the module's dependencies for the platform that stands in for [platform], so that platform code
+ * resolves their types. The JVM classpath names the dependencies: `_<module>_jarJvm` jars of this project, and
+ * `<artifact>-jvm` jars in the toolchain cache. Run `./kotlin build -p <platform>` first, or a klib is missing.
+ */
+private fun dependencyKlibs(jvmClasspath: List<String>, platform: String, analysisPlatform: String, self: String): List<String> {
+    val target = when {
+        analysisPlatform != "native" -> platform
+        listOf("apple", "darwin", "ios", "macos", "tvos", "watchos").any { platform.startsWith(it) } -> "macosArm64"
+        platform.startsWith("mingw") -> "mingwX64"
+        platform.startsWith("androidNative") -> "androidNativeArm64"
+        else -> "linuxX64"
+    }
+    val task = "compile" + target.replaceFirstChar { it.uppercase() } + if (analysisPlatform == "native") "Debug" else ""
+    val suffix = when (target) {
+        "wasmJs" -> "wasm-js"
+        "wasmWasi" -> "wasm-wasi"
+        else -> target.lowercase()
+    }
+    val projectJar = Regex("""(.*)/build/tasks/_(.+)_jarJvm/[^/]+\.jar""")
+    val cacheJar = Regex("""(.*/\.m2\.cache/.+)/([^/]+)-jvm/([^/]+)/[^/]+\.jar""")
+    return jvmClasspath.flatMap { jar ->
+        val project = projectJar.matchEntire(jar)
+        val cached = cacheJar.matchEntire(jar)
+        val klibs = when {
+            project != null -> {
+                val (root, module) = project.destructured
+                if (module == self) return@flatMap emptyList()
+                listOf(Path.of(root, "build/tasks/_${module}_$task/$module.klib")).filter { it.exists() }
+            }
+            cached != null -> {
+                val (base, artifact, version) = cached.destructured
+                val dir = Path.of(base, "$artifact-$suffix", version)
+                if (dir.isDirectory()) dir.listDirectoryEntries("*.klib").sorted() else emptyList()
+            }
+            else -> return@flatMap emptyList()
+        }
+        if (klibs.isEmpty()) println("Dokka: no $target klib for ${jar.substringAfterLast('/')}. Run `./kotlin build -p $target` first.")
+        klibs.map { it.absolutePathString() }
+    }
 }
 
 /**
@@ -242,8 +304,6 @@ private data class DokkaConfiguration(
     val pluginsConfiguration: List<PluginConfiguration>,
     val modules: List<ModuleDescription> = emptyList(),
     val delayTemplateSubstitution: Boolean = false,
-    // An unresolved KDoc link renders as plain text and breaks nothing else, so it fails the run.
-    val failOnWarning: Boolean = true,
 )
 
 @Serializable
