@@ -75,7 +75,9 @@ loadplatform () {
 		# Nothing strips a static archive, and Kotlin/Native's LLVM has no strip.
 		export STRIP=/usr/bin/true
 		# The archives end up inside a shared library, so every object is position independent.
-		aim_flags="$CROSS_CFLAGS -fPIC"
+		# The sysroot's glibc 2.19 makes strcspn and other string functions into macros, which break on a
+		# braced argument (mpv 0.42.0's screenshot.c). __NO_STRING_INLINES turns those macros off.
+		aim_flags="$CROSS_CFLAGS -fPIC -D__NO_STRING_INLINES"
 		cxx_aim_flags="$CROSS_CXXFLAGS -fPIC -isystem $PWD/include/compat/libstdcxx8"
 		link_flags="-target $CROSS_TRIPLE --sysroot=$CROSS_SYSROOT $CROSS_LDFLAGS"
 		meson_system=linux meson_subsystem=linux

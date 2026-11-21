@@ -142,6 +142,8 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - Kotlin/Native's `ld` rejects `-pthread`, so the cinterop def drops it from the link line.
 - libstdc++ 8 of the Kotlin/Native Linux sysroots has no `<version>`. `buildscripts/include/compat/libstdcxx8`
   holds a shim for libplacebo.
+- glibc 2.19 of those sysroots turns `strcspn` and other string functions into macros, which break on a braced
+  argument. `platforms.sh` passes `-D__NO_STRING_INLINES` to the Linux trees.
 - alsa-lib's configure reads the symbol prefix from a bare `$CC -E`, which answers for the Mac. `alsa.sh` passes
   `CPP` with the target flags, or the static archive misses `snd_pcm_forward` and the other aliases.
 - The Linux link line carries `-lstdc++` from `libplacebo.pc`, so the Linux library loads the system
