@@ -64,7 +64,7 @@ env:
 jobs:
   check-version:
     name: input matches the publishing version and the changelog
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
       # The tag, not the branch head: Release natives built the zips from this commit.
@@ -94,7 +94,7 @@ jobs:
   publish:
     name: every library module to Maven Central
     needs: check-version
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     steps:
       # The same tagged commit whose natives the next steps download, so Kotlin and C++ match.

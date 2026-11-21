@@ -27,7 +27,8 @@ run() {
 
 scan_dashes() {
     # Em dash and en dash, in every tracked text file. git grep exits 1 on no match, which is the pass.
-    if git grep -n -I -e "$(printf '\342\200\224')" -e "$(printf '\342\200\223')" -- . ; then
+    # The toolchain wrapper scripts are left out: `./kotlin update` writes them, and their comments have em dashes.
+    if git grep -n -I -e "$(printf '\342\200\224')" -e "$(printf '\342\200\223')" -- . ':(exclude)kotlin' ':(exclude)kotlin.bat' ; then
         echo 'An em dash or an en dash is in a tracked file.' >&2
         return 1
     fi

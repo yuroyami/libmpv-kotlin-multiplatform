@@ -19,7 +19,7 @@ env:
 jobs:
   trees:
     name: tree ${{ matrix.platform }}
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 120
     strategy:
       fail-fast: false

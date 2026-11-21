@@ -30,7 +30,7 @@ kotlin {
         namespace = "io.github.yuroyami.libmpv.canvas.devicetests"
         // The package of the test APK, the same as in the Gradle build before the move.
         testNamespace = "io.github.yuroyami.libmpv.canvas.test"
-        compileSdk = 37
+        compileSdk { version = release(37) { minorApiLevel = 2 } }
         // 26, as libmpv-kmp-canvas: AHardwareBuffer starts there.
         minSdk = 26
         withDeviceTestBuilder {

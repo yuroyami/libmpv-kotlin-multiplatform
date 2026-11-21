@@ -15,7 +15,7 @@ kotlin {
         namespace = "io.github.yuroyami.libmpv.jni.devicetests"
         // The package of the test APK, the same as in the Gradle build before the move.
         testNamespace = "io.github.yuroyami.libmpv.jni.test"
-        compileSdk = 37
+        compileSdk { version = release(37) { minorApiLevel = 2 } }
         minSdk = 21
         withDeviceTestBuilder {
             sourceSetTreeName = "test"

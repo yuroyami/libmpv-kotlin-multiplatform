@@ -22,7 +22,7 @@ jobs:
   # Fails in seconds, before four native builds start, on a tag that would publish the wrong thing.
   check-tag:
     name: the tag is v<version>, and free or already on this commit
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
@@ -58,7 +58,7 @@ jobs:
   publish:
     name: attach to the release
     needs: [natives, trees]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:
       contents: write

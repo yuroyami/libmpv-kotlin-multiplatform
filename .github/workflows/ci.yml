@@ -25,7 +25,7 @@ env:
 jobs:
   gate:
     name: host tests, ABI dumps, build logic, dash scan
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
@@ -44,7 +44,7 @@ jobs:
   desktop:
     name: JVM, macOS and iOS core on macOS
     needs: [trees, natives]
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
@@ -99,7 +99,7 @@ jobs:
   linux:
     name: JVM core on Linux
     needs: trees
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
@@ -146,7 +146,7 @@ jobs:
   packaging:
     name: natives jars and sample
     needs: [gate, natives]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
@@ -224,7 +224,7 @@ jobs:
   emulator:
     name: device tests on API ${{ matrix.api }}
     needs: desktop
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 60
     strategy:
       fail-fast: false

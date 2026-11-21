@@ -7,7 +7,7 @@ androidxTestRunner = "1.7.0"
 androidxTestExtJunit = "1.3.0"
 # The Compose FLOOR of libmpv-kmp-compose, not a pin: Gradle raises it to whatever the app uses.
 composeFloor = "1.9.0"
-activityCompose = "1.13.0"
+activityCompose = "1.14.0-alpha03"
 # The ABI dump library of build-plugins/abi-check. Keep it equal to settings.kotlin.version.
 kotlinAbiTools = "2.4.21"
 
