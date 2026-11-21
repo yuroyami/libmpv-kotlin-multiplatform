@@ -28,8 +28,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/JetBrains/Kotlin
           key: kotlin-gate-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
@@ -47,15 +47,15 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
         with:
           path: ~/Library/Caches/JetBrains/Kotlin
           key: kotlin-desktop-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
           restore-keys: |
             kotlin-desktop-
       # The JNI library and the Apple klibs link the static trees, never Homebrew's mpv.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: tree-*
           merge-multiple: true
@@ -77,7 +77,7 @@ jobs:
       - run: ./kotlin check klibAbi -m libmpv-kmp-native -m libmpv-kmp
       # The artifacts for the emulator jobs. A publish builds every platform, and only a Mac runs the Apple
       # cinterop, so the Linux emulator jobs take the staged copy from here.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: natives-x86_64
           path: dist
@@ -89,7 +89,7 @@ jobs:
           command -v gpg > /dev/null || brew install gnupg
           scripts/stage-verification-maven.sh libmpv-kmp-native libmpv-kmp-android-natives libmpv-kmp \
             libmpv-kmp-view libmpv-kmp-compose libmpv-kmp-canvas libmpv-kmp-canvas-android-natives
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: verification-maven
           path: build/verification-maven
@@ -102,8 +102,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/JetBrains/Kotlin
           key: kotlin-linux-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
@@ -111,7 +111,7 @@ jobs:
             kotlin-linux-
             kotlin-gate-
       # The trees job links the Linux library on macOS. This job has no tree, so the build here links nothing.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: jni-linux-x64
           path: jni
@@ -129,9 +129,9 @@ jobs:
     runs-on: windows-2025
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # The trees job links the Windows library on macOS. This job has no tree, so the build here links nothing.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: jni-windows-x64
           path: jni
@@ -149,15 +149,15 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v7
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/JetBrains/Kotlin
           key: kotlin-packaging-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
           restore-keys: |
             kotlin-packaging-
             kotlin-gate-
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: natives-*
           path: dist
@@ -214,7 +214,7 @@ jobs:
             cp "$apk" build/ci-artifacts/
           done
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: libmpv-kmp-packaging
           path: build/ci-artifacts/
@@ -241,12 +241,12 @@ jobs:
           - api: 21
             tasks: ":native:connectedAndroidDeviceTest :core:connectedAndroidDeviceTest :view:connectedAndroidDeviceTest"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 21
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.cache/JetBrains/Kotlin
           key: kotlin-emulator-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
@@ -254,7 +254,7 @@ jobs:
             kotlin-emulator-
             kotlin-packaging-
       # Staged by the macOS job: a publish runs the Apple cinterop, which a Linux host cannot.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: verification-maven
           path: build/verification-maven
@@ -278,7 +278,7 @@ jobs:
             adb logcat -d -b crash > crash.txt
             grep -c CANVAS-MEASUREMENT canvas-measurements.txt || true
             test ! -f tests-failed
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: device-test-report-api-${{ matrix.api }}

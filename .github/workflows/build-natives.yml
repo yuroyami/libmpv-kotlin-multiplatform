@@ -25,7 +25,7 @@ jobs:
           - { arch: x86_64, abi: x86_64 }
           - { arch: x86,    abi: x86 }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install the build tools
         run: |
@@ -54,7 +54,7 @@ jobs:
       - name: Cache the NDK
         id: ndk
         if: steps.pins.outputs.ndk_present != 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ env.SDK_HOME }}/ndk/${{ env.NDK_VERSION }}
           key: ndk-${{ env.NDK_VERSION }}-${{ runner.os }}
@@ -70,7 +70,7 @@ jobs:
       # The sources, before any build writes its _build directories into them.
       - name: Restore the sources
         id: sources
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: buildscripts/deps
           key: sources-${{ steps.pins.outputs.prefix_id }}-mpv${{ steps.pins.outputs.mpv }}-${{ hashFiles('buildscripts/download-deps.sh') }}
@@ -80,7 +80,7 @@ jobs:
 
       - name: Save the sources (cache miss)
         if: steps.sources.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: buildscripts/deps
           key: ${{ steps.sources.outputs.cache-primary-key }}
@@ -89,7 +89,7 @@ jobs:
       # of the key. prefix_id carries the versions of everything inside it.
       - name: Restore the dependency prefix
         id: prefix
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: buildscripts/prefix/${{ matrix.arch }}
           key: prefix-${{ matrix.arch }}-${{ steps.pins.outputs.prefix_id }}-${{ hashFiles('buildscripts/buildall.sh', 'buildscripts/include/path.sh', 'buildscripts/scripts/*.sh', '!buildscripts/scripts/mpv.sh', '!buildscripts/scripts/jni.sh') }}
@@ -100,7 +100,7 @@ jobs:
 
       - name: Save the dependency prefix (cache miss)
         if: steps.prefix.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: buildscripts/prefix/${{ matrix.arch }}
           key: ${{ steps.prefix.outputs.cache-primary-key }}
@@ -114,7 +114,7 @@ jobs:
       - name: Package
         run: .github/scripts/package-natives.sh ${{ matrix.abi }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: natives-${{ matrix.abi }}
           path: dist/*

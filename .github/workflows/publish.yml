@@ -68,7 +68,7 @@ jobs:
     timeout-minutes: 5
     steps:
       # The tag, not the branch head: Release natives built the zips from this commit.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: v${{ github.event.inputs.version }}
       - name: Assert version match
@@ -98,7 +98,7 @@ jobs:
     timeout-minutes: 45
     steps:
       # The same tagged commit whose natives the next steps download, so Kotlin and C++ match.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: v${{ github.event.inputs.version }}
 
@@ -115,7 +115,7 @@ jobs:
             fi
           done
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/Library/Caches/JetBrains/Kotlin
           key: kotlin-publish-${{ hashFiles('kotlin', 'project.yaml', '*.module-template.yaml', '**/module.yaml', 'libs.versions.toml', 'build-plugins/**/plugin.yaml') }}
@@ -144,7 +144,7 @@ jobs:
           ./kotlin do checkTrees
 
       # The Linux libraries link with the clang and sysroots of Kotlin/Native, the Windows library with llvm-mingw.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.konan
           key: konan-${{ hashFiles('libmpv-kmp.module-template.yaml') }}

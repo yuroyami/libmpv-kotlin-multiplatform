@@ -32,7 +32,7 @@ jobs:
           - { platform: linux-arm64, jni: true, cross: true }
           - { platform: windows-x64, jni: true }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install the build tools
         run: brew install automake autoconf libtool pkg-config coreutils gnu-sed meson ninja nasm
@@ -49,7 +49,7 @@ jobs:
 
       - name: Restore the sources
         id: sources
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: buildscripts/deps
           key: sources-${{ steps.pins.outputs.prefix_id }}-mpv${{ steps.pins.outputs.mpv }}-${{ hashFiles('buildscripts/download-deps.sh') }}-macos
@@ -59,12 +59,12 @@ jobs:
 
       - name: Save the sources (cache miss)
         if: steps.sources.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: buildscripts/deps
           key: ${{ steps.sources.outputs.cache-primary-key }}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         if: matrix.jni
         with:
           path: ~/Library/Caches/JetBrains/Kotlin
@@ -74,7 +74,7 @@ jobs:
             kotlin-desktop-
 
       # The Kotlin/Native distribution with its LLVM and the Linux and Windows sysroots, about 1 GB.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         if: matrix.cross
         with:
           path: ~/.konan
@@ -89,7 +89,7 @@ jobs:
 
       - name: Restore the tree below mpv
         id: tree
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: buildscripts/prefix/${{ matrix.platform }}
           key: tree-${{ matrix.platform }}-${{ steps.pins.outputs.tree_id }}-${{ hashFiles('buildscripts/buildall.sh', 'buildscripts/include/*.sh', 'buildscripts/scripts/*.sh', '!buildscripts/scripts/mpv.sh', '!buildscripts/scripts/jni.sh') }}
@@ -100,7 +100,7 @@ jobs:
 
       - name: Save the tree below mpv (cache miss)
         if: steps.tree.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: buildscripts/prefix/${{ matrix.platform }}
           key: ${{ steps.tree.outputs.cache-primary-key }}
@@ -113,7 +113,7 @@ jobs:
       - name: Pack the tree
         run: buildscripts/package-tree.sh ${{ matrix.platform }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: tree-${{ matrix.platform }}
           path: dist/libmpv-kmp-tree-${{ matrix.platform }}.tar.gz*
@@ -129,7 +129,7 @@ jobs:
           if head -1 "$library" | grep -q '^# dev'; then echo "::error::${{ matrix.platform }} linked Homebrew's mpv, not the tree"; exit 1; fi
           mkdir -p jni && cp "$(dirname "$library")"/* jni/
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: matrix.jni
         with:
           name: jni-${{ matrix.platform }}
