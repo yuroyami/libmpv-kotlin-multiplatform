@@ -28,7 +28,7 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - `Mpv` allows several cores per process; `MPVLib` keeps 0.1.0's rule of one. A freed handle is
   still a crash, not an exception, which is why every call goes through `Mpv`'s call gate and
   `close()` waits for the calls already inside native code.
-- libmpv needs the NDK r29 `libc++_shared.so`. An older one lacks `__from_chars_floating_point`
+- libmpv needs the `libc++_shared.so` of NDK r29 or newer. An older one lacks `__from_chars_floating_point`
   and crashes at load; `checkAndroidNatives` greps for the symbol. Two dependencies both shipping
   libc++ make AGP refuse the merge, which is the right outcome.
 - Kotlin block comments nest, so a `/*` inside one (`native-libs/<abi>/*.so` written in a build
@@ -46,7 +46,7 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - `verifyExoOnlyApk` and the exoOnly exclusion list live in Synkplay, not here, but they name
   the ten files of `libmpv-kmp-android-natives`. Adding or renaming a library here means updating
   that list there.
-- The `mpv-version` property answers `mpv v0.41.0`; `BuildInfo.MPV` is `0.41.0`. The device
+- The `mpv-version` property answers `mpv v0.42.0`; `BuildInfo.MPV` is `0.42.0`. The device
   test compares by containment for that reason.
 - `vo=gpu-next` does not work through the render API: mpv ends with no video output and no
   frames. The canvas has the `gpu` renderer only, measured on an Android 15 phone and on Android
@@ -121,7 +121,7 @@ Each line is something that bit someone. Delete a line when it stops being true.
   class is where new capability goes.
 - Plans and open work live in GitHub issues, never in files in this tree.
 - Without a static tree in `buildscripts/prefix/<platform>`, the JVM and macOS builds link Homebrew's
-  mpv (dev mode, `# dev` in the manifest). Homebrew has 0.40.0 while the pin is 0.41.0, so the catalog
+  mpv (dev mode, `# dev` in the manifest). Homebrew has 0.40.0 while the pin is 0.42.0, so the catalog
   tests skip themselves there; they run fully only on Android or against a tree.
 - The vendored headers in `libmpv-kmp-native/native/include/mpv/` move with `v_mpv`. The `mpvHeaders`
   check compares them with `buildscripts/deps/mpv` when that checkout exists.

@@ -21,6 +21,6 @@ class BuildInfoTest {
     fun theAarPromisesFourAbisFromApi21() {
         assertEquals(listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64"), BuildInfo.ABIS)
         assertEquals(21, BuildInfo.MIN_SDK)
-        assertEquals("29.0.14206865", BuildInfo.NDK)
+        assertEquals("30.0.16248370", BuildInfo.NDK)
     }
 }

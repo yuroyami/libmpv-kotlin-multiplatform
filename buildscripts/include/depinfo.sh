@@ -4,32 +4,32 @@
 ## To bump: edit here, run ./download-deps.sh --refresh, run a full build, then CHANGELOG.md.
 ## GenerateBuildInfoTask reads the v_* lines, so the names below are part of the build contract.
 
-v_ndk=29.0.14206865
+v_ndk=30.0.16248370
 
-v_mpv=0.41.0
-v_ffmpeg=9.0.1
+v_mpv=0.42.0
+v_ffmpeg=9.1
 v_libass=0.17.5
-v_libplacebo=7.360.1
-v_dav1d=1.5.4
-v_mbedtls=3.6.7
-v_harfbuzz=14.4.0
-v_freetype=2.14.3
-v_fribidi=1.0.16
-v_unibreak=7.0
+v_libplacebo=7.387.0
+v_dav1d=1.5.5
+v_mbedtls=3.6.8
+v_harfbuzz=15.2.0
+v_freetype=2.15.0
+v_fribidi=1.0.18
+v_unibreak=8.0.1
 v_lua=5.2.4
 # FFmpeg's DASH demuxer and fontconfig's config parser.
 v_libxml2=2.15.4
 # Android and Linux only: libass's system font provider there.
-v_fontconfig=2.18.3
+v_fontconfig=2.18.4
 # Linux trees only (buildall.sh --platform linux-*): the audio output of mpv there.
 v_alsa=1.2.16.1
 # Windows tree only: llvm-mingw has no zlib, which FFmpeg and mpv link.
-v_zlib=1.3.2
+v_zlib=1.4
 
 ## Build tools. Not part of BuildInfo.
 # The Windows tree and its JNI library compile with llvm-mingw. Kotlin/Native's MinGW sysroot is
 # from 2019 and lacks import libraries that mpv links, pathcch among them.
-tool_llvm_mingw=20261020
+tool_llvm_mingw=20261117
 
 ## Dependency tree. buildall.sh builds a target's dependencies first, in this order.
 

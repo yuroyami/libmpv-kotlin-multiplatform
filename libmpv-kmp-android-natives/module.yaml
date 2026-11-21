@@ -32,5 +32,5 @@ plugins:
     minApi: 21
     # Its presence proves that the C side was compiled for this Kotlin package.
     probeSymbol: Java_io_github_yuroyami_libmpv_jni_MpvNative_create
-    # Only the NDK r29 libc++ has __from_chars_floating_point. An older one crashes libmpv at load.
+    # The libc++ of NDK r29 and newer has __from_chars_floating_point. An older one crashes libmpv at load.
     libcxxMarker: from_chars_floating

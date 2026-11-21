@@ -8,7 +8,7 @@ The scripts build the Android libraries, and the static mpv trees that the deskt
 
 - Linux or macOS for the Android libraries. Windows is not supported, WSL included.
 - An arm64 Mac with Xcode for the static trees, the Linux and Windows trees included.
-- Android NDK 29.0.14206865, and `ANDROID_NDK_HOME` pointing at it, for the Android libraries.
+- Android NDK 30.0.16248370, and `ANDROID_NDK_HOME` pointing at it, for the Android libraries.
 - macOS: `brew install automake autoconf libtool pkg-config coreutils gnu-sed meson ninja nasm`. If libplacebo's meson step fails naming `jinja2`: `python3 -m pip install --break-system-packages jinja2`.
 - Ubuntu: `sudo apt-get install autoconf automake libtool pkg-config ninja-build meson nasm python3-jinja2`.
 - A checkout path without a `#` in it. FFmpeg's configure cannot handle one.
