@@ -16,7 +16,9 @@ fi
 
 unset CC CXX # meson wants these unset
 
-meson setup $build --cross-file "$prefix_dir"/crossfile.txt
+# FreeType builds before HarfBuzz, so `auto` becomes `dynamic`: the auto-hinter then looks up HarfBuzz at run
+# time. On Android 5.0 it found the HarfBuzz inside libmpv.so and crashed, so the auto-hinter uses none.
+meson setup $build --cross-file "$prefix_dir"/crossfile.txt -Dharfbuzz=disabled
 
 ninja -C $build -j$cores
 DESTDIR="$prefix_dir" ninja -C $build install

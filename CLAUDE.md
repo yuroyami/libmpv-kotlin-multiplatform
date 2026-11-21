@@ -157,6 +157,9 @@ Each line is something that bit someone. Delete a line when it stops being true.
 - `updateAndroidAbi` copies the dump of the last Android build. Build Android first, or it writes the old API.
 - libass's font provider differs by platform: fontconfig on Android and Linux, CoreText on macOS and iOS, DirectWrite on
   Windows. `libass.sh` names the one each platform must find, so a missing provider fails the build, not the subtitles.
+- FreeType builds before HarfBuzz, so its `auto` HarfBuzz option becomes `dynamic`, and the auto-hinter looks up HarfBuzz
+  at run time. On Android 5.0 it found the HarfBuzz inside `libmpv.so` and crashed (FreeType 2.15.0, HarfBuzz 15.2.0).
+  `freetype2.sh` passes `-Dharfbuzz=disabled`.
 - Android has no `fonts.conf`. `AndroidFonts` writes one at the first `Mpv.create(context)` and sets `FONTCONFIG_FILE`;
   fontconfig reads the variable at its first use, so it has to happen before any core plays subtitles.
 - FFmpeg's TLS uses `MBEDTLS_SSL_VERIFY_OPTIONAL` and checks the result after the handshake, and sets no host name for an
