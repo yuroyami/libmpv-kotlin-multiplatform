@@ -21,7 +21,8 @@ class SubtitleFontTest {
 
     @Test
     fun subtitlesFindASystemFontForLatinAndArabicText(): Unit = runBlocking {
-        val frames = writeTestFile("frame.bmp", Bmp.gray(64, 64)).substringBeforeLast('/')
+        // The folder of a test file. Windows paths use backslashes, and mpv stops the video output if this is a file.
+        val frames = writeTestFile("frame.bmp", Bmp.gray(64, 64)).let { it.take(it.lastIndexOfAny(charArrayOf('/', '\\'))) }
         val image = writeTestFile("picture.bmp", Bmp.gray(64, 64))
         val subtitles = writeTestFile("text.ass", ASS.encodeToByteArray())
         val mpv = createTestCore().apply {
