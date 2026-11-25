@@ -102,8 +102,9 @@ Each line is something that bit someone. Delete a line when it stops being true.
   `vo=null` first, while its render thread still serves mpv (#42).
 - `mpv_terminate_destroy` waits for every client handle of the core, so `Mpv.close()` closes the
   clients `createClient` made before it ends the core (#29).
-- Releases go to Maven Central, which never replaces or deletes a version. `publishingMode: manual`
-  stops each upload on the Central Portal until the owner presses Publish there.
+- Releases go to Maven Central, which never replaces or deletes a version. `publishingMode: auto`
+  releases each upload once the Central Portal has validated it. The publish workflow's `release`
+  input off stops the upload on the portal until the owner presses Publish there.
 - A source alias that names every platform of a module merges into `src/`, and its folder then cannot see
   `src/`. `jvmAndAndroid`, `core` and `appleCore` work only because each leaves a platform out. Never write an
   alias of one platform.

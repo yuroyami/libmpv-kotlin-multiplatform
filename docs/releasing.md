@@ -1,6 +1,6 @@
 # Releasing
 
-Every step is a command or a click that the owner does. Nothing publishes on its own.
+Every step is a command that the owner starts. Once the Central Portal has validated an upload, it releases the upload with no further click.
 
 Releases go to Maven Central under the group `io.github.yuroyami`. Versions 0.3.0 and older stay in the old repository at `https://yuroyami.github.io/maven`, and nothing new goes there.
 
@@ -23,9 +23,9 @@ The `io.github.yuroyami` namespace must be verified on the Central Portal.
 2. **CA list.** Run `scripts/update-ca-bundle.sh`. It refreshes Mozilla's list of certificate authorities that macOS and iOS cores trust. Commit the file if it changed.
 3. **Version and notes.** Set `settings.publishing.version` in `library.module-template.yaml`. Run `./kotlin do updateBuildInfo`, so `BuildInfo` carries the new version. Set the version in the install lines of `README.md`, `docs/index.md` and `docs/getting-started.md`. Add a `## [x.y.z] - YYYY-MM-DD` section to `CHANGELOG.md` that names what changed and the versions inside. Commit with the subject `Release x.y.z`. Push.
 4. **Natives.** Run the "Release natives" workflow with the tag `vx.y.z`. The workflow creates the tag at the current commit if the tag does not exist. It builds the four ABIs and the six static mpv trees. It attaches the zips, the tree tarballs, their checksums, `SOURCES.txt` and the mpv, FFmpeg and alsa-lib source tarballs to the release. Check the release page: eight library assets, twelve tree assets and four source assets.
-5. **Publish.** Run the "Publish release" workflow with `version` set to `x.y.z`. Leave `release` off. The workflow runs on a macOS runner. It refuses a version that does not match `library.module-template.yaml`, has no dated changelog section, or is already on Maven Central. It downloads the release's zips and trees, verifies them, and checks them with `checkAndroidNatives` and `checkTrees`. It links the desktop and Apple libraries from the trees, checks them with `checkDesktopJni` and `checkNativeInterop`, and refuses unsigned files. Then it uploads one deployment to the Central Portal.
-6. **Release on the portal.** Open the deployment on the Central Portal and check the file list. Each of the seven modules is there: `libmpv-kmp-native`, `libmpv-kmp-android-natives`, `libmpv-kmp`, `libmpv-kmp-view`, `libmpv-kmp-compose`, `libmpv-kmp-canvas` and `libmpv-kmp-canvas-android-natives`. Press Publish. If something is wrong, drop the deployment instead, fix the cause, and run step 5 again.
-7. **Check.** For each module, `https://repo1.maven.org/maven2/io/github/yuroyami/<module>/x.y.z/` answers 200. The files can take some time to appear after the Publish click.
+5. **Publish.** Run the "Publish release" workflow with `version` set to `x.y.z`. Leave `release` on. The workflow runs on a macOS runner. It refuses a version that does not match `library.module-template.yaml`, has no dated changelog section, or is already on Maven Central. It downloads the release's zips and trees, verifies them, and checks them with `checkAndroidNatives` and `checkTrees`. It links the desktop and Apple libraries from the trees, checks them with `checkDesktopJni` and `checkNativeInterop`, and refuses unsigned files. Then it uploads one deployment to the Central Portal.
+6. **Portal.** The Central Portal validates the upload and then releases it, because `publishingMode` is `auto` in `library.module-template.yaml`. To look at the files first, run step 5 with `release` off. The upload then waits on the portal. Open it and check that each of the seven modules is there: `libmpv-kmp-native`, `libmpv-kmp-android-natives`, `libmpv-kmp`, `libmpv-kmp-view`, `libmpv-kmp-compose`, `libmpv-kmp-canvas` and `libmpv-kmp-canvas-android-natives`. Press Publish. If something is wrong, drop the upload instead, fix the cause, and run step 5 again.
+7. **Check.** For each module, `https://repo1.maven.org/maven2/io/github/yuroyami/<module>/x.y.z/` answers 200. The files can take some time to appear after the release.
 8. **Docs.** Run the "Docs" workflow to deploy the site for the new version.
 9. **Consumers.** Only now bump the version in consuming projects. A consumer pinned to a version that Maven Central does not serve yet has red CI until it does.
 
@@ -48,7 +48,7 @@ buildscripts/download-deps.sh --tools-only
     -m libmpv-kmp-view -m libmpv-kmp-compose -m libmpv-kmp-canvas -m libmpv-kmp-canvas-android-natives
 ```
 
-Then do steps 6 to 9.
+A machine publish uses the committed `publishingMode: auto`, so the Central Portal releases the upload once it validates. Then do steps 7 to 9.
 
 ## Rebuilding an old version
 

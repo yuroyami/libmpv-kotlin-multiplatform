@@ -11,10 +11,11 @@
 # checkNativeInterop then refuse a release unless every desktop platform and every Apple target links
 # a tree from buildscripts/prefix/<platform>.
 #
-# By default the deployment waits on the Central Portal after validation (publishingMode manual in
-# library.module-template.yaml). Nothing in a deployment is public until a person presses Publish
-# on the portal, and that releases all of it together. Drop a failed or wrong deployment on the
-# portal instead of releasing it. The release input switches this run to auto.
+# By default the deployment goes live on Maven Central once the Central Portal has validated it
+# (publishingMode auto in library.module-template.yaml), with no Publish click. Set the release
+# input off to stop at the portal for a look first: the run then switches this checkout to manual,
+# and nothing is public until a person presses Publish. Drop a failed or wrong deployment on the
+# portal instead of releasing it.
 #
 # Maven Central never replaces a published version. A wrong version is followed by a corrected one.
 #
@@ -43,9 +44,9 @@ on:
         description: "Version to publish (must match settings.publishing.version in library.module-template.yaml), e.g. 0.4.0"
         required: true
       release:
-        description: "Also release the deployment on the Central Portal. Off leaves it validated for a person to publish."
+        description: "Release the deployment once the Central Portal validates it. Off leaves it validated for a person to publish."
         type: boolean
-        default: false
+        default: true
 
 permissions:
   contents: read
@@ -213,10 +214,11 @@ jobs:
           KOTLIN_TOOLCHAIN_SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_IN_MEMORY_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          if [ "$RELEASE" = "true" ]; then
-            # Only in this runner's checkout: the committed default stays manual.
+          if [ "$RELEASE" != "true" ]; then
+            # Only in this runner's checkout: the committed default stays auto.
             # BSD sed on the macOS runner needs the empty backup suffix.
-            sed -i '' 's/publishingMode: manual/publishingMode: auto/' library.module-template.yaml ./*/module.yaml
+            sed -i '' 's/publishingMode: auto/publishingMode: manual/' library.module-template.yaml ./*/module.yaml
+            grep -q 'publishingMode: manual' library.module-template.yaml
           fi
           # One run for every module, so the portal receives one deployment.
           flags=()

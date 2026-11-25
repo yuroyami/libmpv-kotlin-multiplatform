@@ -39,7 +39,8 @@ settings:
         developerConnection: scm:git:ssh://git@github.com/yuroyami/libmpv-kotlin-multiplatform.git
     signArtifacts: true
     publishSources: true
-    # manual uploads and validates the bundle, then waits for Publish on the Central Portal.
+    # auto releases the deployment once the Central Portal has validated it.
+    # publish.yml switches it to manual when its release input is off.
     mavenCentral:
       enabled: true
-      publishingMode: manual
+      publishingMode: auto
